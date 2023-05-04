@@ -3,7 +3,7 @@
 import getopt
 import sys
 
-def gear_wheel_ctrl_points(modul, teeth):
+def gear_wheel_ctrl_points(m, z):
     return []
 
 def usage():
@@ -13,19 +13,20 @@ def usage():
 
 def main():
     try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'm:n:', ['modul=', 'n-teeth='])
+        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:', ['modul=', 'teeth='])
     except getopt.GetoptError as err:
         print(err)
         usage()
         sys.exit(2)
     
     m = 2.0
-    n = 24
+    t = 24
+    n = 2
     output = sys.stdout
     for o, a in optlist:
         if (o in ("-m", "--modul")):
             m = float(a)
-        elif (o in ("-n", "--n-teeth")):
+        elif (o in ("-t", "--teeth")):
             n = int(a)
         else:
             assert False, "unhandled option"
@@ -33,7 +34,7 @@ def main():
         output = open(args[0], 'w')
 
     print(f'modul [mm]      = {m}')
-    print(f'number of teeth = {n}')
+    print(f'number of teeth = {t}')
     print("args = ", args)
     
     print('These are the gear wheel control points: ...', file = output)
