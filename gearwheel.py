@@ -85,13 +85,15 @@ class GearWheel:
             points.append(point)
         return points
 
-def points2path(wheel_points):
-    x, y = wheel_points[0][0]
-    result = f'M {x} {y}'
-    for tooth_points in wheel_points:
-        for x, y in tooth_points:
-            result += f' L {x} {y}'
-    return result + ' C'
+    def svg_line_path(self):
+        wheel_points = self.ctrl_points()
+        result = ''
+        cmd = 'M'
+        for tooth_points in wheel_points:
+            for x, y in tooth_points:
+                result += f'{cmd} {x} {y}'
+                cmd = ' L'
+        return result + ' C'
 
 def usage():
     print(sys.argv[0] + " usage:")
@@ -118,8 +120,7 @@ if __name__ == "__main__":
 
     gear_wheel = GearWheel(m, t)
     print( '<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
-    print(f'    <path id="gearwheel" d="{points2path(gear_wheel.ctrl_points())}" fill="blue" stroke="black" stroke-width="0.5"/>')
-    print(f'    <circle id="headcircle" r="{gear_wheel.r_head()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    print(f'    <path id="gearwheel" d="{gear_wheel.svg_line_path()}" fill="blue" stroke="black" stroke-width="0.5"/>')
     print(f'    <circle id="headcircle" r="{gear_wheel.radius()}" fill="none" stroke="black" stroke-width="0.1"/>')
     print(f'    <circle id="headcircle" r="{gear_wheel.r_base()}" fill="none" stroke="black" stroke-width="0.1"/>')
     print( '</svg>')
