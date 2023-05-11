@@ -96,14 +96,15 @@ class GearWheel:
         return result + ' C'
 
 def usage():
-    print(sys.argv[0] + " usage:")
-    print("    -t, --teeth <int> number of teeth")
-    print("    -m, --modul <float> modul of gear wheel in mm")
+    print("usage:", sys.argv[0])
     print("    -a, --alpha <float> Eingriffswinkel in grad")
+    print("    -h, --help          displays help")
+    print("    -m, --modul <float> modul of gear wheel in mm")
+    print("    -t, --teeth <int>   number of teeth")
 
 if __name__ == "__main__":
     try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:a:', ['modul=', 'teeth=', 'alpha='])
+        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:a:h', ['modul=', 'teeth=', 'alpha=', 'help'])
     except getopt.GetoptError as err:
         print(err)
         usage()
@@ -119,6 +120,9 @@ if __name__ == "__main__":
             teeth = int(a)
         elif (o in ("-a", "--alpha")):
             alpha = float(a)
+        elif (o in ("-h", "--help")):
+            usage()
+            sys.exit(0)
         else:
             assert False, "unhandled option"
 
