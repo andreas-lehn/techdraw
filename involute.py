@@ -29,11 +29,3 @@ if __name__ == "__main__":
         print(f'    <path id="involute" d="{involute_path(r, 2 * math.pi, i * 2 * math.pi / m, n)}" stroke="black" fill="none" stroke-width="0.05"/>')
     print(f'    <circle r="{r}" fill="yellow" stroke="black" stroke-width="0.05"/>')
     print( '</svg>')
-
-
-
-#            label { display: inline-block; width: 6em }
-#            svg   { background-color: white }
-#            body  { background-color: lightgray }
-#            path  { stroke: blue; fill: none; stroke-width: 1; stroke-opacity: 0.8 }
-
