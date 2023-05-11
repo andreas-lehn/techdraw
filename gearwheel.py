@@ -2,16 +2,106 @@
 
 import getopt
 import sys
+import math
 
-def gear_wheel_ctrl_points(m, z):
-    return []
+def involute(alpha):
+    '''
+    Calculates the angle _gamma_ of the involute point and the distance _s_ of it form the center of the base circle.
+        Parameter:
+            alpha: angle on the base circle
+        Returns:
+            involute angle _gamma_ 
+            distance _s_ of the involute point form the center of the base circle
+    '''
+    return alpha - math.atan(alpha), math.sqrt(alpha ** 2 + 1)
+
+def inv_alpha(s):
+    '''
+    Calculates _alpha_ so that _involute(alpha)_ returns (gamma, d).
+    It is a kind of inverse involute funktion.
+        Parameter:
+            r: distance of the involute point from the center of the base circle
+        Returns:
+            alpha: angle that the involure function need to calculate (gamma, r)
+    '''
+    return math.sqrt(s ** 2 - 1)
+
+def polar2xy(r, alpha):
+    return r * math.sin(alpha), r * math.cos(alpha)
+
+class GearWheel:
+    ''' Involute gear wheel'''
+
+    def __init__(self, modul, n_teeth, alpha = 20 * math.pi / 180):
+        self.modul = modul
+        self.n_teeth = n_teeth
+        self.alpha = alpha
+
+    def radius(self):
+        '''returns the radius of the gear wheel (Teilkreisradius)'''
+        return self.modul * self.n_teeth / 2
+
+    def r_head(self):
+        '''return the radius of the tooth heads (Kopfkreisradius)'''
+        return self.radius() + self.modul
+
+    def r_foot(self):
+        '''return the radius of the tooth heads (Kopfkreisradius)'''
+        return self.radius() - self.modul
+
+    def r_base(self):
+        '''returns the radius of the base circle'''
+        return self.radius() * math.cos(self.alpha)
+
+    def alpha_teeth(self):
+        '''returns the angle between two teeth'''
+        return 2 * math.pi / self.n_teeth
+
+    def ctrl_angles(self):
+        '''returns the angle offsets of the characteristc tooth points on Kopfkreis, Teilkreis, Grundkreis'''
+        beta = self.alpha_teeth() / 4
+        gamma = beta + involute(self.alpha)[0]
+        alpha = gamma - involute(inv_alpha(self.r_head() / self.r_base()))[0]
+        return [alpha, beta, gamma]
+
+    def ctrl_points(self):
+        points = []
+        angles = self.ctrl_angles()
+        r0 = self.radius()
+        rh = self.r_head()
+        rb = self.r_base()
+        rf = self.r_foot()
+        for i in range(self.n_teeth):
+            offset = i * self.alpha_teeth()
+            point = []
+            point.append(polar2xy(rb, offset - angles[2]))
+            point.append(polar2xy(r0, offset - angles[1]))
+            point.append(polar2xy(rh, offset - angles[0]))
+            point.append(polar2xy(rh, offset + angles[0]))
+            point.append(polar2xy(r0, offset + angles[1]))
+            point.append(polar2xy(rb, offset + angles[2]))
+            points.append(point)
+        return points
+
+def bezier_tooth(points):
+    result = ''
+    for x, y in points:
+        result += f' L {x} {y}'
+    return result
+
+def bezier_wheel(wheel_points):
+    x, y = wheel_points[0][0]
+    result = f'M {x} {y}'
+    for tooth_points in wheel_points:
+        result += bezier_tooth(tooth_points)
+    return result + ' C'
 
 def usage():
     print(sys.argv[0] + " usage:")
-    print("    -n, --n-teeth <int> number of teeth")
+    print("    -t, --teeth <int> number of teeth")
     print("    -m, --modul <float> modul of gear wheel in mm")
 
-def main():
+if __name__ == "__main__":
     try:
         optlist, args = getopt.getopt(sys.argv[1:], 'm:t:', ['modul=', 'teeth='])
     except getopt.GetoptError as err:
@@ -21,13 +111,12 @@ def main():
     
     m = 2.0
     t = 24
-    n = 2
     output = sys.stdout
     for o, a in optlist:
         if (o in ("-m", "--modul")):
             m = float(a)
         elif (o in ("-t", "--teeth")):
-            n = int(a)
+            t = int(a)
         else:
             assert False, "unhandled option"
     if len(args) > 0:
@@ -37,7 +126,8 @@ def main():
     print(f'number of teeth = {t}')
     print("args = ", args)
     
-    print('These are the gear wheel control points: ...', file = output)
-    
-if __name__ == "__main__":
-    main()
+    gear_wheel = GearWheel(m, t)
+    points = gear_wheel.ctrl_points()
+    print('These are the gear wheel control points:', points)
+    d = bezier_wheel(points)
+    print(f'<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full"><path id="gearwheel" d="{d}"/></svg>''', file=output)
