@@ -99,26 +99,30 @@ def usage():
     print(sys.argv[0] + " usage:")
     print("    -t, --teeth <int> number of teeth")
     print("    -m, --modul <float> modul of gear wheel in mm")
+    print("    -a, --alpha <float> Eingriffswinkel in grad")
 
 if __name__ == "__main__":
     try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:', ['modul=', 'teeth='])
+        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:a:', ['modul=', 'teeth=', 'alpha='])
     except getopt.GetoptError as err:
         print(err)
         usage()
         sys.exit(2)
     
-    m = 2.0
-    t = 30
+    modul = 2.0
+    teeth = 30
+    alpha = 20
     for o, a in optlist:
         if (o in ("-m", "--modul")):
-            m = float(a)
+            modul = float(a)
         elif (o in ("-t", "--teeth")):
-            t = int(a)
+            teeth = int(a)
+        elif (o in ("-a", "--alpha")):
+            alpha = float(a)
         else:
             assert False, "unhandled option"
 
-    gear_wheel = GearWheel(m, t)
+    gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
     print( '<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
     print(f'    <path id="gearwheel" d="{gear_wheel.svg_line_path()}" fill="blue" stroke="black" stroke-width="0.5"/>')
     print(f'    <circle id="headcircle" r="{gear_wheel.radius()}" fill="none" stroke="black" stroke-width="0.1"/>')
