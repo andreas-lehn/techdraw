@@ -74,26 +74,23 @@ class GearWheel:
         for i in range(self.n_teeth):
             offset = i * self.alpha_teeth()
             point = []
+            point.append(polar2xy(rf, offset - angles[2]))
             point.append(polar2xy(rb, offset - angles[2]))
             point.append(polar2xy(r0, offset - angles[1]))
             point.append(polar2xy(rh, offset - angles[0]))
             point.append(polar2xy(rh, offset + angles[0]))
             point.append(polar2xy(r0, offset + angles[1]))
             point.append(polar2xy(rb, offset + angles[2]))
+            point.append(polar2xy(rf, offset + angles[2]))
             points.append(point)
         return points
 
-def bezier_tooth(points):
-    result = ''
-    for x, y in points:
-        result += f' L {x} {y}'
-    return result
-
-def bezier_wheel(wheel_points):
+def points2path(wheel_points):
     x, y = wheel_points[0][0]
     result = f'M {x} {y}'
     for tooth_points in wheel_points:
-        result += bezier_tooth(tooth_points)
+        for x, y in tooth_points:
+            result += f' L {x} {y}'
     return result + ' C'
 
 def usage():
@@ -110,8 +107,7 @@ if __name__ == "__main__":
         sys.exit(2)
     
     m = 2.0
-    t = 24
-    output = sys.stdout
+    t = 30
     for o, a in optlist:
         if (o in ("-m", "--modul")):
             m = float(a)
@@ -119,15 +115,11 @@ if __name__ == "__main__":
             t = int(a)
         else:
             assert False, "unhandled option"
-    if len(args) > 0:
-        output = open(args[0], 'w')
 
-    print(f'modul [mm]      = {m}')
-    print(f'number of teeth = {t}')
-    print("args = ", args)
-    
     gear_wheel = GearWheel(m, t)
-    points = gear_wheel.ctrl_points()
-    print('These are the gear wheel control points:', points)
-    d = bezier_wheel(points)
-    print(f'<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full"><path id="gearwheel" d="{d}"/></svg>''', file=output)
+    print( '<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
+    print(f'    <path id="gearwheel" d="{points2path(gear_wheel.ctrl_points())}" fill="blue" stroke="black" stroke-width="0.5"/>')
+    print(f'    <circle id="headcircle" r="{gear_wheel.r_head()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    print(f'    <circle id="headcircle" r="{gear_wheel.radius()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    print(f'    <circle id="headcircle" r="{gear_wheel.r_base()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    print( '</svg>')
