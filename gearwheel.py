@@ -122,5 +122,5 @@ if __name__ == "__main__":
     print( '<svg width="10cm" height="20cm" viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
     print(f'    <path id="gearwheel" d="{gear_wheel.svg_line_path()}" fill="blue" stroke="black" stroke-width="0.5"/>')
     print(f'    <circle id="headcircle" r="{gear_wheel.radius()}" fill="none" stroke="black" stroke-width="0.1"/>')
-    print(f'    <circle id="headcircle" r="{gear_wheel.r_base()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    print(f'    <circle id="basecircle" r="{gear_wheel.r_base()}" fill="none" stroke="black" stroke-width="0.1"/>')
     print( '</svg>')
