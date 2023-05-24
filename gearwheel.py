@@ -1,7 +1,6 @@
 #!/usr/env python3
 
 import argparse
-import sys
 import math
 import involute
 import svghelper as svg
