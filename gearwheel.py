@@ -3,6 +3,7 @@
 import getopt
 import sys
 import math
+import numpy as np
 
 def involute(alpha):
     '''
@@ -15,19 +16,38 @@ def involute(alpha):
     '''
     return alpha - math.atan(alpha), math.sqrt(alpha ** 2 + 1)
 
-def inv_alpha(s):
+def inv_involute(s):
     '''
-    Calculates _alpha_ so that _involute(alpha)_ returns (gamma, d).
+    Calculates _alpha_ so that _involute(alpha)_ returns (gamma, s).
     It is a kind of inverse involute funktion.
         Parameter:
-            r: distance of the involute point from the center of the base circle
+            s: distance of the involute point from the center of the base circle
         Returns:
-            alpha: angle that the involure function need to calculate (gamma, r)
+            alpha: angle that the involute function needs to calculate (gamma, s)
     '''
     return math.sqrt(s ** 2 - 1)
 
 def polar2xy(r, alpha):
     return r * math.sin(alpha), r * math.cos(alpha)
+
+def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
+    '''returns the intersection point of two lines'''
+    dx0, dy0 = math.sin(alpha0), math.cos(alpha0)
+    dx1, dy1 = math.sin(alpha1), math.cos(alpha1)
+    '''
+    x0 + r0 * dx0 = x1 + r1 * dx1
+    y0 + r0 * dy0 = y1 + r1 * dy1
+    -----------------------------
+    r0 * dx0 - r1 * dx1 = x1 - x0
+    r0 * dy0 - r1 * dy1 = y1 - y0
+    '''
+    a = np.array([[dx0, -dx1], [dy0, -dy1]])
+    b = np.array([x1 - x0, y1 - y0])
+    r = np.linalg.solve(a, b)
+    return x0 + dx0 * r[0], y0 + dy0 * r[0]
+
+def intersect_x(x, y, alpha):
+    return intersection_point(0, 0, math.pi / 2, x, y, alpha)
 
 class GearWheel:
     ''' Involute gear wheel'''
@@ -37,62 +57,68 @@ class GearWheel:
         self.n_teeth = n_teeth
         self.alpha = alpha
 
-    def radius(self):
+    def r_0(self):
         '''returns the radius of the gear wheel (Teilkreisradius)'''
         return self.modul * self.n_teeth / 2
 
     def r_head(self):
-        '''return the radius of the tooth heads (Kopfkreisradius)'''
-        return self.radius() + self.modul
+        '''returns the radius of the tooth heads (Kopfkreisradius)'''
+        return self.r_0() + self.modul
 
     def r_foot(self):
-        '''return the radius of the tooth heads (Kopfkreisradius)'''
-        return self.radius() - self.modul
+        '''returns the radius of the tooth foot (Fußkreisradius)'''
+        c = 0.167 # Magische Konstante, siehe: https://www.tec-science.com/de/getriebe-technik/evolventenverzahnung/evolventen-zahnrad-geometrie/
+        return self.r_0() - (1 + c) * self.modul
 
     def r_base(self):
         '''returns the radius of the base circle'''
-        return self.radius() * math.cos(self.alpha)
+        return self.r_0() * math.cos(self.alpha)
 
-    def alpha_teeth(self):
+    def r_c(self):
+        alpha = self.theta() / 2 - self.beta_base()
+        return self.r_base() * math.sin(alpha)
+    
+    def theta(self):
         '''returns the angle between two teeth'''
         return 2 * math.pi / self.n_teeth
 
-    def ctrl_angles(self):
-        '''returns the angle offsets of the characteristc tooth points on Kopfkreis, Teilkreis, Grundkreis'''
-        beta = self.alpha_teeth() / 4
-        gamma = beta + involute(self.alpha)[0]
-        alpha = gamma - involute(inv_alpha(self.r_head() / self.r_base()))[0]
-        return [alpha, beta, gamma]
+    def beta_0(self):
+        '''returns the angle offsets of the intesection of the tooth with the Teilkreis'''
+        return self.theta() / 4
+    
+    def beta_base(self):
+        '''returns the angle offsets of the tooth base point'''
+        return self.beta_0() + involute(self.alpha)[0]
 
-    def ctrl_points(self):
-        points = []
-        angles = self.ctrl_angles()
-        r0 = self.radius()
-        rh = self.r_head()
-        rb = self.r_base()
-        rf = self.r_foot()
+    def beta_head(self):
+        '''returns the angle offsets of the tooths head point'''
+        return self.beta_base() - involute(inv_involute(self.r_head() / self.r_base()))[0]
+    
+    def svg_path(self):
+        r_0, r_h, r_b, r_c = self.r_0(), self.r_head(), self.r_base(), self.r_c()
+        b_0, b_h, b_b = self.beta_0(), self.beta_head(), self.beta_base()
+
+        x0, y0 = polar2xy(r_b, -self.theta() + b_b)
+        result = f'M {x0} {y0}'
+        
         for i in range(self.n_teeth):
-            offset = i * self.alpha_teeth()
-            point = []
-            point.append(polar2xy(rf, offset - angles[2]))
-            point.append(polar2xy(rb, offset - angles[2]))
-            point.append(polar2xy(r0, offset - angles[1]))
-            point.append(polar2xy(rh, offset - angles[0]))
-            point.append(polar2xy(rh, offset + angles[0]))
-            point.append(polar2xy(r0, offset + angles[1]))
-            point.append(polar2xy(rb, offset + angles[2]))
-            point.append(polar2xy(rf, offset + angles[2]))
-            points.append(point)
-        return points
-
-    def svg_line_path(self):
-        wheel_points = self.ctrl_points()
-        result = ''
-        cmd = 'M'
-        for tooth_points in wheel_points:
-            for x, y in tooth_points:
-                result += f'{cmd} {x} {y}'
-                cmd = ' L'
+            offset = i * self.theta()
+            x0, y0 = polar2xy(r_b, offset - b_b)
+            result += f' A {r_c:.3f} {r_c:.3f} 0 0 1 {x0:.3f} {y0:.3f}'
+            x1, y1 = polar2xy(r_0, offset - b_0)
+            x0, y0 = intersection_point(x0, y0, offset - b_b, x1, y1, offset - b_0 + self.alpha)
+            result += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+            x0, y0 = polar2xy(r_h, offset - b_h)
+            x1, y1 = intersection_point(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + inv_involute(r_h / r_b))
+            result += f' Q {x1:.3f} {y1:.3f} {x0:.3f} {y0:.3f}'
+            x0, y0 = polar2xy(r_h, offset + b_h)
+            result += f' A {r_h:.3f} {r_h:.3f} 0 0 0 {x0:.3f} {y0:.3f}'
+            x1, y1 = polar2xy(r_0, offset + b_0)
+            x0, y0 = intersection_point(x0, y0, offset + b_h - inv_involute(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
+            result += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+            x0, y0 = polar2xy(r_b, offset + b_b)
+            x1, y1 = intersection_point(x1, y1, offset + b_0 - self.alpha, x0, y0, offset + b_b)
+            result += f' Q {x1:.3f} {y1:.3f} {x0:.3f} {y0:.3f}'
         return result + ' C'
 
 def usage():
@@ -127,9 +153,20 @@ if __name__ == "__main__":
             assert False, "unhandled option"
 
     gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
-    size = int(gear_wheel.r_head() * 1.1) * 2
-    print(f'<svg width="{size}mm" height="{size}mm" viewBox="{-size / 2} {-size /2} {size} {size}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
-    print(f'    <path id="gearwheel" d="{gear_wheel.svg_line_path()}" fill="blue" stroke="black" stroke-width="0.5"/>')
-    print(f'    <circle id="headcircle" r="{gear_wheel.radius()}" fill="none" stroke="black" stroke-width="0.1"/>')
-    print(f'    <circle id="basecircle" r="{gear_wheel.r_base()}" fill="none" stroke="black" stroke-width="0.1"/>')
+    r_max = int(gear_wheel.r_head() * 1.1)
+    size = r_max * 2
+    print(f'<svg width="{size}mm" height="{size}mm" viewBox="{-size / 2} {-size / 2} {size} {size}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
+    print( '    <style>')
+    print( '        path { fill: lightgrey; stroke: black; stroke-width: 0.2}')
+    print( '        .helpline  { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 1 0.8 }')
+    print( '        .dotline   { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 0.1 0.1 }')
+    print( '        .symline   { fill: none; stroke: black; stroke-width: 0.1; stroke-dasharray: 1.1 0.5 0.1 0.5; stroke-dashoffset: -0.55 }')
+    print( '    </style>')
+    print( '    <g transform="scale(1 -1)">')
+    print(f'        <path d="{gear_wheel.svg_path()}"/>')
+    print(f'        <circle class="helpline" r="{gear_wheel.r_head()}"/>')
+    print(f'        <circle class="symline"  r="{gear_wheel.r_0()}"/>')
+    print(f'        <circle class="dotline"  r="{gear_wheel.r_base()}"/>')
+    print(f'        <circle class="helpline" r="{gear_wheel.r_foot()}"/>')
+    print( '    </g>')
     print( '</svg>')
