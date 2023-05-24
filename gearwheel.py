@@ -68,7 +68,7 @@ class GearWheel:
     def r_foot(self):
         '''returns the radius of the tooth foot (Fußkreisradius)'''
         c = 0.167 # Magische Konstante, siehe: https://www.tec-science.com/de/getriebe-technik/evolventenverzahnung/evolventen-zahnrad-geometrie/
-        return self.r_0() - (1 + c) * self.modul
+        return min(self.r_0() - self.modul, self.r_base()) - c * self.modul
 
     def r_base(self):
         '''returns the radius of the base circle'''
