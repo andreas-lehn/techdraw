@@ -1,6 +1,6 @@
 #!/usr/env python3
 
-import getopt
+import argparse
 import sys
 import math
 import involute
@@ -65,38 +65,15 @@ class GearWheel:
         path.close()
         return path.d
 
-def usage():
-    print("usage:", sys.argv[0])
-    print("    -a, --alpha <float> Eingriffswinkel in grad")
-    print("    -h, --help          displays help")
-    print("    -m, --modul <float> modul of gear wheel in mm")
-    print("    -t, --teeth <int>   number of teeth")
-
 if __name__ == "__main__":
-    try:
-        optlist, args = getopt.getopt(sys.argv[1:], 'm:t:a:h', ['modul=', 'teeth=', 'alpha=', 'help'])
-    except getopt.GetoptError as err:
-        print(err)
-        usage()
-        sys.exit(2)
-    
-    modul = 2.0
-    teeth = 30
-    alpha = 20
-    for o, a in optlist:
-        if (o in ("-m", "--modul")):
-            modul = float(a)
-        elif (o in ("-t", "--teeth")):
-            teeth = int(a)
-        elif (o in ("-a", "--alpha")):
-            alpha = float(a)
-        elif (o in ("-h", "--help")):
-            usage()
-            sys.exit(0)
-        else:
-            assert False, "unhandled option"
+    parser = argparse.ArgumentParser(description='Generates an SVG image with a gear wheel.')
+    parser.add_argument('-m', '--modul', type=float, help='modul in mm', default=2.0)
+    parser.add_argument('-t', '--teeth', type=int, help='number of teeth', default=30)
+    parser.add_argument('-a', '--alpha', type=float, help='Eingriffswinkel', default=20.0)
+    args = parser.parse_args()
 
-    gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
+    gear_wheel = GearWheel(args.modul, args.teeth, args.alpha * math.pi / 180)
+
     c = int(gear_wheel.r_head() + 1)
     w = int(c * 2)
     print(f'<svg width="{w}mm" height="{w}mm" viewBox="{-c} {-c} {w} {w}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
