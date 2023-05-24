@@ -97,9 +97,9 @@ if __name__ == "__main__":
             assert False, "unhandled option"
 
     gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
-    r_max = int(gear_wheel.r_head() * 1.1)
-    size = r_max * 2
-    print(f'<svg width="{size}mm" height="{size}mm" viewBox="{-size / 2} {-size / 2} {size} {size}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
+    c = int(gear_wheel.r_head() + 1)
+    w = int(c * 2)
+    print(f'<svg width="{w}mm" height="{w}mm" viewBox="{-c} {-c} {w} {w}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
     print( '    <style>')
     print( '        .gearwheel { fill: lightgrey; stroke: black; stroke-width: 0.2}')
     print( '        .helpline  { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 1 0.8 }')
