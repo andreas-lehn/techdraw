@@ -3,9 +3,6 @@
         .base      { fill: lightgrey; stroke: black; stroke-width: 0.2}
         .involute  { fill: none; stroke: black; stroke-width: 0.2}
         .arcline   { fill: none; stroke: red;   stroke-width: 0.2}
-        .radius    { fill: none; stroke: black;   stroke-width: 0.2}
-        .s         { fill: none; stroke: blue;   stroke-width: 0.2}
-        .helpline  { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 1 0.8 }
         .dotline   { fill: none; stroke: black; stroke-width: 0.05 }
         .symline   { fill: none; stroke: black; stroke-width: 0.1; stroke-dasharray: 2.0 0.8 0.1 0.8; stroke-dashoffset: -1.0 }
     </style>
@@ -21,20 +18,20 @@
         <circle cx="17.32050807568877" cy="10.000000000000002" r="0.4" fill="black"/>
         <line class="dotline" x1="1.612544807739802" y1="37.206990463513264" x2="22.55649583167176" y2="0.9310031788289148"/>
         <line class="dotline" x1="24.986526206064966" y1="38.60996915430815" x2="-11.289461078619382" y2="17.666018130376195"/>
+        <path class="dotline" d="M 11.178659582644984 30.637993642342174 A 5 5 0 0 0 9.348532563722792 23.807866623419983"/>
+        <circle cx="9.263347129445462" cy="27.49094602958587" r="0.25" fill="black"/>
+        <path class="dotline" d="M 21.650635094610962 12.500000000000004 A 5 5 0 0 1 14.820508075688771 14.330127018922195"/>
+        <circle cx="17.967555688445074" cy="12.414814565722672" r="0.25" fill="black"/>
         <line class="arcline" x1="6.848532563722792" y1="28.137993642342174" x2="17.32050807568877" y2="10.000000000000002"/>
         <g transform="translate(12.084520319705781 19.068996821171087)"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>
         <path class="arcline" d="M 0 20 A 20 20 0 0 0 17.32050807568877 10.000000000000002"/>
-        <line class="radius"  x2="17.32050807568877" y2="10.000000000000002"/>
+        <line stroke="black" stroke-width="0.2" x2="17.32050807568877" y2="10.000000000000002"/>
         <g transform="translate(10.392304845413262 7.000000000000001)"><text transform="scale(0.25 -0.25)" fill="black">r</text></g>
-        <line class="s"       x1="6.848532563722792" y1="28.137993642342174"/>
+        <line stroke="blue" stroke-width="0.2" x1="6.848532563722792" y1="28.137993642342174"/>
         <g transform="translate(3.478826050978234 22.51039491387374)"><text transform="scale(0.25 -0.25)" fill="blue">s</text></g>
         <path stroke="blue" stroke-width="0.1" fill="none" d="M 0.0 10.0 A 10 10 0 0 0 2.3648706235007415 9.716346377836846"/>
         <g transform="translate(0.0 11)"><text transform="scale(0.25 -0.25)" fill="blue">&#x03B3;</text></g>
         <path stroke="red" stroke-width="0.1" fill="none" d="M 0.0 5.0 A 5 5 0 0 0 4.330127018922193 2.5000000000000004"/>
         <g transform="translate(3 4)"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>
-        <path class="dotline" d="M 11.178659582644984 30.637993642342174 A 5 5 0 0 0 9.348532563722792 23.807866623419983"/>
-        <circle cx="9.263347129445462" cy="27.49094602958587" r="0.25" fill="black"/>
-        <path class="dotline" d="M 21.650635094610962 12.500000000000004 A 5 5 0 0 1 14.820508075688771 14.330127018922195"/>
-        <circle cx="17.967555688445074" cy="12.414814565722672" r="0.25" fill="black"/>
     </g>
 </svg>
