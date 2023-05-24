@@ -3,7 +3,6 @@
 import getopt
 import sys
 import math
-import numpy as np
 import involute
 import svghelper as svg
 
@@ -52,26 +51,19 @@ class GearWheel:
         r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b = self.beta_0(), self.beta_head(), self.beta_base()
 
-        x1, y1 = involute.polar2xy(r_f, -self.theta() / 2)
-        result = f'M {x1} {y1}'
-        
+        path = svg.Path(involute.polar2xy(r_f, -self.theta() / 2), - self.theta() / 2 + math.pi / 2)
         for i in range(self.n_teeth):
             offset = i * self.theta()
-            x0, y0 = involute.polar2xy(r_b, offset - b_b)
-            result += svg.bezier_segment(x1, y1, offset - self.theta() / 2 + math.pi / 2, x0, y0, offset - b_b)
-            x1, y1 = involute.polar2xy(r_0, offset - b_0)
-            result += svg.bezier_segment(x0, y0, offset - b_b, x1, y1, offset - b_0 + self.alpha)
-            x0, y0 = involute.polar2xy(r_h, offset - b_h)
-            result += svg.bezier_segment(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + involute.inverse(r_h / r_b))
-            x0, y0 = involute.polar2xy(r_h, offset + b_h)
-            result += f' A {r_h:.3f} {r_h:.3f} 0 0 0 {x0:.3f} {y0:.3f}'
-            x1, y1 = involute.polar2xy(r_0, offset + b_0)
-            result += svg.bezier_segment(x0, y0, offset + b_h - involute.inverse(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
-            x0, y0 = involute.polar2xy(r_b, offset + b_b)
-            result += svg.bezier_segment(x1, y1, offset + b_0 - self.alpha, x0, y0, offset + b_b)
-            x1, y1 = involute.polar2xy(r_f, offset + self.theta() / 2)
-            result += svg.bezier_segment(x0, y0, offset + b_b, x1, y1, offset + self.theta() / 2 + math.pi / 2)
-        return result + ' C'
+            path.bezierTo(involute.polar2xy(r_b, offset - b_b), offset - b_b)
+            path.bezierTo(involute.polar2xy(r_0, offset - b_0), offset - b_0 + self.alpha)
+            path.bezierTo(involute.polar2xy(r_h, offset - b_h), offset - b_h + involute.inverse(r_h / r_b))
+            path.arcTo(involute.polar2xy(r_h, offset + b_h), r_h)
+            path.alpha = offset + b_h - involute.inverse(r_h / r_b)
+            path.bezierTo(involute.polar2xy(r_0, offset + b_0), offset + b_0 - self.alpha)
+            path.bezierTo(involute.polar2xy(r_b, offset + b_b), offset + b_b)
+            path.bezierTo(involute.polar2xy(r_f, offset + self.theta() / 2), offset + self.theta() / 2 + math.pi / 2)
+        path.close()
+        return path.d
 
 def usage():
     print("usage:", sys.argv[0])
@@ -109,16 +101,16 @@ if __name__ == "__main__":
     size = r_max * 2
     print(f'<svg width="{size}mm" height="{size}mm" viewBox="{-size / 2} {-size / 2} {size} {size}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
     print( '    <style>')
-    print( '        path { fill: lightgrey; stroke: black; stroke-width: 0.2}')
+    print( '        .gearwheel { fill: lightgrey; stroke: black; stroke-width: 0.2}')
     print( '        .helpline  { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 1 0.8 }')
     print( '        .dotline   { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 0.1 0.1 }')
     print( '        .symline   { fill: none; stroke: black; stroke-width: 0.1; stroke-dasharray: 1.1 0.5 0.1 0.5; stroke-dashoffset: -0.55 }')
     print( '    </style>')
     print( '    <g transform="scale(1 -1)">')
-    print(f'        <path d="{gear_wheel.svg_path()}"/>')
-    print(f'        <circle class="helpline" r="{gear_wheel.r_head()}"/>')
-    print(f'        <circle class="symline"  r="{gear_wheel.r_0()}"/>')
-    print(f'        <circle class="dotline"  r="{gear_wheel.r_base()}"/>')
-    print(f'        <circle class="helpline" r="{gear_wheel.r_foot()}"/>')
+    print(f'        <path   class="gearwheel" d="{gear_wheel.svg_path()}"/>')
+    print(f'        <circle class="helpline"  r="{gear_wheel.r_head()}"/>')
+    print(f'        <circle class="symline"   r="{gear_wheel.r_0()}"/>')
+    print(f'        <circle class="dotline"   r="{gear_wheel.r_base()}"/>')
+    print(f'        <circle class="helpline"  r="{gear_wheel.r_foot()}"/>')
     print( '    </g>')
     print( '</svg>')

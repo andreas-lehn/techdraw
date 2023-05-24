@@ -19,6 +19,22 @@ def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     r = np.linalg.solve(a, b)
     return x0 + dx0 * r[0], y0 + dy0 * r[0]
 
-def bezier_segment(x0, y0, alpha0, x1, y1, alpha1):
-    x0, y0 = intersection_point(x0, y0, alpha0, x1, y1, alpha1)
-    return f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+class Path:
+
+    def __init__(self, p, alpha):
+        self.x, self.y = p
+        self.alpha = alpha
+        self.d = f'M {self.x:.3f} {self.y:.3f}'
+
+    def bezierTo(self, p, alpha):
+        x1, y1 = p
+        x0, y0 = intersection_point(self.x, self.y, self.alpha, x1, y1, alpha)
+        self.d += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+        self.x, self.y, self.alpha = x1, y1, alpha
+
+    def arcTo(self, p, r):
+        self.x, self.y = p
+        self.d += f' A {r:.3f} {r:.3f} 0 0 0 {self.x:.3f} {self.y:.3f}'
+
+    def close(self):
+        self.d += ' C'
