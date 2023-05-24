@@ -36,5 +36,9 @@ class Path:
         self.x, self.y = p
         self.d += f' A {r:.3f} {r:.3f} 0 0 0 {self.x:.3f} {self.y:.3f}'
 
+    def lineTo(self, p):
+        self.x, self.y = p
+        self.d += f' L {self.x:.3f} {self.y:.3f}'
+
     def close(self):
         self.d += ' C'
