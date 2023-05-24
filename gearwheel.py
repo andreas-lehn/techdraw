@@ -4,31 +4,7 @@ import getopt
 import sys
 import math
 import numpy as np
-
-def involute(alpha):
-    '''
-    Calculates the angle _gamma_ of the involute point and the distance _s_ of it form the center of the base circle.
-        Parameter:
-            alpha: angle on the base circle
-        Returns:
-            involute angle _gamma_ 
-            distance _s_ of the involute point form the center of the base circle
-    '''
-    return alpha - math.atan(alpha), math.sqrt(alpha ** 2 + 1)
-
-def inv_involute(s):
-    '''
-    Calculates _alpha_ so that _involute(alpha)_ returns (gamma, s).
-    It is a kind of inverse involute funktion.
-        Parameter:
-            s: distance of the involute point from the center of the base circle
-        Returns:
-            alpha: angle that the involute function needs to calculate (gamma, s)
-    '''
-    return math.sqrt(s ** 2 - 1)
-
-def polar2xy(r, alpha):
-    return r * math.sin(alpha), r * math.cos(alpha)
+import involute
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     '''returns the intersection point of two lines'''
@@ -50,8 +26,8 @@ def bezier_segment(x0, y0, alpha0, x1, y1, alpha1):
     x0, y0 = intersection_point(x0, y0, alpha0, x1, y1, alpha1)
     return f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
 
-def intersect_x(x, y, alpha):
-    return intersection_point(0, 0, math.pi / 2, x, y, alpha)
+#def intersect_x(x, y, alpha):
+#    return intersection_point(0, 0, math.pi / 2, x, y, alpha)
 
 class GearWheel:
     ''' Involute gear wheel'''
@@ -78,10 +54,6 @@ class GearWheel:
         '''returns the radius of the base circle'''
         return self.r_0() * math.cos(self.alpha)
 
-    def r_c(self):
-        alpha = self.theta() / 2 - self.beta_base()
-        return self.r_base() * math.sin(alpha)
-    
     def theta(self):
         '''returns the angle between two teeth'''
         return 2 * math.pi / self.n_teeth
@@ -92,34 +64,34 @@ class GearWheel:
     
     def beta_base(self):
         '''returns the angle offsets of the tooth base point'''
-        return self.beta_0() + involute(self.alpha)[0]
+        return self.beta_0() + involute.gamma(self.alpha)
 
     def beta_head(self):
         '''returns the angle offsets of the tooths head point'''
-        return self.beta_base() - involute(inv_involute(self.r_head() / self.r_base()))[0]
+        return self.beta_base() - involute.gamma(involute.inverse(self.r_head() / self.r_base()))
     
     def svg_path(self):
         r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b = self.beta_0(), self.beta_head(), self.beta_base()
 
-        x1, y1 = polar2xy(r_f, -self.theta() / 2)
+        x1, y1 = involute.polar2xy(r_f, -self.theta() / 2)
         result = f'M {x1} {y1}'
         
         for i in range(self.n_teeth):
             offset = i * self.theta()
-            x0, y0 = polar2xy(r_b, offset - b_b)
+            x0, y0 = involute.polar2xy(r_b, offset - b_b)
             result += bezier_segment(x1, y1, offset - self.theta() / 2 + math.pi / 2, x0, y0, offset - b_b)
-            x1, y1 = polar2xy(r_0, offset - b_0)
+            x1, y1 = involute.polar2xy(r_0, offset - b_0)
             result += bezier_segment(x0, y0, offset - b_b, x1, y1, offset - b_0 + self.alpha)
-            x0, y0 = polar2xy(r_h, offset - b_h)
-            result += bezier_segment(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + inv_involute(r_h / r_b))
-            x0, y0 = polar2xy(r_h, offset + b_h)
+            x0, y0 = involute.polar2xy(r_h, offset - b_h)
+            result += bezier_segment(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + involute.inverse(r_h / r_b))
+            x0, y0 = involute.polar2xy(r_h, offset + b_h)
             result += f' A {r_h:.3f} {r_h:.3f} 0 0 0 {x0:.3f} {y0:.3f}'
-            x1, y1 = polar2xy(r_0, offset + b_0)
-            result += bezier_segment(x0, y0, offset + b_h - inv_involute(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
-            x0, y0 = polar2xy(r_b, offset + b_b)
+            x1, y1 = involute.polar2xy(r_0, offset + b_0)
+            result += bezier_segment(x0, y0, offset + b_h - involute.inverse(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
+            x0, y0 = involute.polar2xy(r_b, offset + b_b)
             result += bezier_segment(x1, y1, offset + b_0 - self.alpha, x0, y0, offset + b_b)
-            x1, y1 = polar2xy(r_f, offset + self.theta() / 2)
+            x1, y1 = involute.polar2xy(r_f, offset + self.theta() / 2)
             result += bezier_segment(x0, y0, offset + b_b, x1, y1, offset + self.theta() / 2 + math.pi / 2)
         return result + ' C'
 
