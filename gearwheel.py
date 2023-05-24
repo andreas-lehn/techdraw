@@ -46,6 +46,10 @@ def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     r = np.linalg.solve(a, b)
     return x0 + dx0 * r[0], y0 + dy0 * r[0]
 
+def bezier_segment(x0, y0, alpha0, x1, y1, alpha1):
+    x0, y0 = intersection_point(x0, y0, alpha0, x1, y1, alpha1)
+    return f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+
 def intersect_x(x, y, alpha):
     return intersection_point(0, 0, math.pi / 2, x, y, alpha)
 
@@ -95,30 +99,28 @@ class GearWheel:
         return self.beta_base() - involute(inv_involute(self.r_head() / self.r_base()))[0]
     
     def svg_path(self):
-        r_0, r_h, r_b, r_c = self.r_0(), self.r_head(), self.r_base(), self.r_c()
+        r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b = self.beta_0(), self.beta_head(), self.beta_base()
 
-        x0, y0 = polar2xy(r_b, -self.theta() + b_b)
-        result = f'M {x0} {y0}'
+        x1, y1 = polar2xy(r_f, -self.theta() / 2)
+        result = f'M {x1} {y1}'
         
         for i in range(self.n_teeth):
             offset = i * self.theta()
             x0, y0 = polar2xy(r_b, offset - b_b)
-            result += f' A {r_c:.3f} {r_c:.3f} 0 0 1 {x0:.3f} {y0:.3f}'
+            result += bezier_segment(x1, y1, offset - self.theta() / 2 + math.pi / 2, x0, y0, offset - b_b)
             x1, y1 = polar2xy(r_0, offset - b_0)
-            x0, y0 = intersection_point(x0, y0, offset - b_b, x1, y1, offset - b_0 + self.alpha)
-            result += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+            result += bezier_segment(x0, y0, offset - b_b, x1, y1, offset - b_0 + self.alpha)
             x0, y0 = polar2xy(r_h, offset - b_h)
-            x1, y1 = intersection_point(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + inv_involute(r_h / r_b))
-            result += f' Q {x1:.3f} {y1:.3f} {x0:.3f} {y0:.3f}'
+            result += bezier_segment(x1, y1, offset - b_0 + self.alpha, x0, y0, offset - b_h + inv_involute(r_h / r_b))
             x0, y0 = polar2xy(r_h, offset + b_h)
             result += f' A {r_h:.3f} {r_h:.3f} 0 0 0 {x0:.3f} {y0:.3f}'
             x1, y1 = polar2xy(r_0, offset + b_0)
-            x0, y0 = intersection_point(x0, y0, offset + b_h - inv_involute(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
-            result += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
+            result += bezier_segment(x0, y0, offset + b_h - inv_involute(r_h / r_b), x1, y1, offset + b_0 - self.alpha)
             x0, y0 = polar2xy(r_b, offset + b_b)
-            x1, y1 = intersection_point(x1, y1, offset + b_0 - self.alpha, x0, y0, offset + b_b)
-            result += f' Q {x1:.3f} {y1:.3f} {x0:.3f} {y0:.3f}'
+            result += bezier_segment(x1, y1, offset + b_0 - self.alpha, x0, y0, offset + b_b)
+            x1, y1 = polar2xy(r_f, offset + self.theta() / 2)
+            result += bezier_segment(x0, y0, offset + b_b, x1, y1, offset + self.theta() / 2 + math.pi / 2)
         return result + ' C'
 
 def usage():
