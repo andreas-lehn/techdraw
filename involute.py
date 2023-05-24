@@ -93,7 +93,7 @@ if __name__ == "__main__":
     print(f'        <line class="dotline" x1="{px - dx / 2}" y1="{py - dy / 2}" x2="{qx + dx / 2}" y2="{qy + dy / 2}"/>')
     print(f'        <line class="dotline" x1="{px - dy}" y1="{py + dx}" x2="{px + dy}" y2="{py - dx}"/>')
     print(f'        <line class="arcline" x1="{px}" y1="{py}" x2="{qx}" y2="{qy}"/>')
-    print(f'        <g transform="translate({(px + qx) * 0.5 + 1} {(py + qy) * 0.5})"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>')
+    print(f'        <g transform="translate({(px + qx) * 0.5} {(py + qy) * 0.5})"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>')
     print(f'        <path class="arcline" d="M 0 {r} A {r} {r} 0 0 0 {qx} {qy}"/>')
     print(f'        <line class="radius"  x2="{qx}" y2="{qy}"/>')
     print(f'        <g transform="translate({qx * 0.6} {qy * 0.6 + 1})"><text transform="scale(0.25 -0.25)" fill="black">r</text></g>')
