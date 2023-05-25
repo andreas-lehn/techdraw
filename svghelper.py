@@ -7,49 +7,52 @@ import xml.etree.ElementTree as etree
 class Image(etree.Element):
 
     def __init__(self, size, center, attrib = {}):
-        w, h = size
-        cx, cy = center
-        attrib.update({'width': f'{w}mm', 'height': f'{h}mm', 'viewBox': f'{-cx} {-cy} {w} {h}', 'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1'})
-        super().__init__('svg', attrib)
+        my_attrs = {
+            'width': f'{size[0]}mm', 'height': f'{size[1]}mm',
+            'viewBox': f'{-center[0]} {-center[1]} {size[0]} {size[1]}',
+            'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1'}
+        my_attrs.update(attrib)
+        super().__init__('svg', my_attrs)
         self.style = etree.SubElement(self, 'style')
         self.content = etree.SubElement(self, 'g', {'transform': 'scale(1, -1)'})
 
     def write(self, file):
         tree = etree.ElementTree(self)
         tree.write(file)
-        
 
 class Element(etree.Element):
 
-    def __init__(self, parent, tag, attrib = {}):
-        super().__init__(tag, attrib)
+    def __init__(self, parent, tag, elem_attrs = {}, user_attrs = {}):
+        elem_attrs.update(user_attrs) # User attributes overwrite element attributes
+        super().__init__(tag, elem_attrs)
         parent.append(self)
 
 def str(f):
     return f'{f:.3f}'
 
+def normalize(p):
+    x, y = p
+    l = math.sqrt(x ** 2, y ** 2)
+    return x / l, y / l
+
 class Line(Element):
 
-    def __init__(self, parent, p1, p2, attrib = {}):
+    def __init__(self, parent, p1, p2, user_attrs = {}):
         x1, y1 = p1
         x2, y2 = p2
-        attrib.update({'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2)})
-        super().__init__(parent, 'line', attrib)
+        super().__init__(parent, 'line', {'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2)}, user_attrs)
 
 class Circle(Element):
 
-    def __init__(self, parent, c, r, attrib = {}):
+    def __init__(self, parent, c, r, user_attrs = {}):
         cx, cy = c
-        attrib.update({'cx': str(cx), 'cy': str(cy), 'r': str(r)})
-        super().__init__(parent, 'circle', attrib)
+        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': str(r)}, user_attrs)
 
 class Point(Element):
     
-    def __init__(self, parent, c, attrib = {}):
+    def __init__(self, parent, c, user_attrs = {}):
         cx, cy = c
-        attrib.update({'cx': str(cx), 'cy': str(cy), 'r': '0.5'})
-        super().__init__(parent, 'circle', attrib)
-
+        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': '0.5'}, user_attrs)
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     '''returns the intersection point of two lines'''
@@ -96,7 +99,7 @@ if __name__ == "__main__":
     r = 20
     alpha = math.pi / 3
     P = (r * math.sin(alpha), r * math.cos(alpha))
-    img = Image((150, 100), (50, 50))
+    img = Image((150, 100), (50, 50), { 'version': '1.2' })
     base_circle = Circle(img.content, M, r, { 'fill': 'lightgrey', 'stroke': 'black', 'stroke-width': '0.35'})
     m_point = Point(img.content, M, {'fill': 'black'})
     p_point = Point(img.content, P, {'fill': 'black'})
