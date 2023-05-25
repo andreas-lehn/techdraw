@@ -50,17 +50,17 @@ class GearWheel:
         r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b, b_f = self.beta_0(), self.beta_head(), self.beta_base(), self.theta() / 2
 
-        path = svg.Path(involute.polar2xy(r_f, -b_f), -b_f / 2 + math.pi / 2)
+        path = svg.PathCreator(involute.polar2xy(r_f, -b_f), -b_f / 2 + math.pi / 2)
         for i in range(self.n_teeth):
             offset = i * self.theta()
-            path.bezierTo(involute.polar2xy(r_b, offset - b_b), offset - b_b)
-            path.bezierTo(involute.polar2xy(r_0, offset - b_0), offset - b_0 + self.alpha)
-            path.bezierTo(involute.polar2xy(r_h, offset - b_h), offset - b_h + involute.inverse(r_h / r_b))
-            path.arcTo(involute.polar2xy(r_h, offset + b_h), r_h)
+            path.bezier_to(involute.polar2xy(r_b, offset - b_b), offset - b_b)
+            path.bezier_to(involute.polar2xy(r_0, offset - b_0), offset - b_0 + self.alpha)
+            path.bezier_to(involute.polar2xy(r_h, offset - b_h), offset - b_h + involute.inverse(r_h / r_b))
+            path.arc_to(involute.polar2xy(r_h, offset + b_h), r_h)
             path.alpha = offset + b_h - involute.inverse(r_h / r_b)
-            path.bezierTo(involute.polar2xy(r_0, offset + b_0), offset + b_0 - self.alpha)
-            path.bezierTo(involute.polar2xy(r_b, offset + b_b), offset + b_b)
-            path.bezierTo(involute.polar2xy(r_f, offset + b_f), offset + b_f + math.pi / 2)
+            path.bezier_to(involute.polar2xy(r_0, offset + b_0), offset + b_0 - self.alpha)
+            path.bezier_to(involute.polar2xy(r_b, offset + b_b), offset + b_b)
+            path.bezier_to(involute.polar2xy(r_f, offset + b_f), offset + b_f + math.pi / 2)
         path.close()
         return path.d
 

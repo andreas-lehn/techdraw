@@ -4,7 +4,7 @@ import math
 import numpy as np
 import xml.etree.ElementTree as etree
 
-class SVGImage(etree.Element):
+class Image(etree.Element):
 
     def __init__(self, size, center, unit='mm', attrib = {}):
         w, h = size
@@ -19,7 +19,7 @@ class SVGImage(etree.Element):
         tree.write(file)
         
 
-class SVGElement(etree.Element):
+class Element(etree.Element):
 
     def __init__(self, parent, tag, attrib = {}):
         super().__init__(tag, attrib)
@@ -28,7 +28,7 @@ class SVGElement(etree.Element):
 def str(f):
     return f'{f:.3f}'
 
-class Line(SVGElement):
+class Line(Element):
 
     def __init__(self, parent, p1, p2, attrib = {}):
         x1, y1 = p1
@@ -36,14 +36,14 @@ class Line(SVGElement):
         attrib.update({'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2)})
         super().__init__(parent, 'line', attrib)
 
-class Circle(SVGElement):
+class Circle(Element):
 
     def __init__(self, parent, c, r, attrib = {}):
         cx, cy = c
         attrib.update({'cx': str(cx), 'cy': str(cy), 'r': str(r)})
         super().__init__(parent, 'circle', attrib)
 
-class Point(SVGElement):
+class Point(Element):
     
     def __init__(self, parent, c, attrib = {}):
         cx, cy = c
@@ -67,24 +67,24 @@ def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     r = np.linalg.solve(a, b)
     return x0 + dx0 * r[0], y0 + dy0 * r[0]
 
-class Path:
+class PathCreator:
 
     def __init__(self, p, alpha):
         self.x, self.y = p
         self.alpha = alpha
         self.d = f'M {self.x:.3f} {self.y:.3f}'
 
-    def bezierTo(self, p, alpha):
+    def bezier_to(self, p, alpha):
         x1, y1 = p
         x0, y0 = intersection_point(self.x, self.y, self.alpha, x1, y1, alpha)
         self.d += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
         self.x, self.y, self.alpha = x1, y1, alpha
 
-    def arcTo(self, p, r):
+    def arc_to(self, p, r):
         self.x, self.y = p
         self.d += f' A {r:.3f} {r:.3f} 0 0 0 {self.x:.3f} {self.y:.3f}'
 
-    def lineTo(self, p):
+    def line_to(self, p):
         self.x, self.y = p
         self.d += f' L {self.x:.3f} {self.y:.3f}'
 
@@ -96,10 +96,10 @@ if __name__ == "__main__":
     r = 20
     alpha = math.pi / 3
     P = (r * math.sin(alpha), r * math.cos(alpha))
-    img = SVGImage((150, 100), (50, 50))
+    img = Image((150, 100), (50, 50))
     base_circle = Circle(img.content, M, r, { 'fill': 'lightgrey', 'stroke': 'black', 'stroke-width': '0.35'})
     m_point = Point(img.content, M, {'fill': 'black'})
     p_point = Point(img.content, P, {'fill': 'black'})
     h_sym_line = Line(img.content, (-2 * r, 0), (2 * r, 0), { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.1 0.8 0.2 0.8'})
     v_sym_line = Line(img.content, (0, -2 * r), (0, 2 * r), { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.1 0.8 0.2 0.8'})
-    img.write('svghelper-image.svg')
+    img.write('demo-image.svg')

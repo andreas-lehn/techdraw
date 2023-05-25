@@ -15,7 +15,7 @@ def gamma(alpha):
 
 def distance(alpha):
     '''
-    Calculates the distance _s_ to the center of the base circle of an involute point corresponding to _alpha_
+    Calculates the distance _s_ to the center of the base circle with radius 1 of an involute point corresponding to _alpha_
         Parameter:
             alpha: angle on the base circle
         Returns:
@@ -23,20 +23,22 @@ def distance(alpha):
     '''
     return math.sqrt(alpha ** 2 + 1)
 
-def polar(alpha):
+def point_polar(r, alpha):
     '''
     Calculates the polar coordinates of an involute point (angle _gamma_ and the distance _s_ to the center of the base circle)
         Parameter:
+            r: radius of the base circle
             alpha: angle on the base circle
         Returns:
             involute angle _gamma_ 
             distance _s_ of the involute point form the center of the base circle
     '''
-    return gamma(alpha), distance(alpha)
+    return gamma(alpha), r * distance(alpha)
 
 def inverse(s):
     '''
     Calculates _alpha_ so that _gamma(alpha)_ returns s.
+
     It is a kind of inverse involute funktion.
         Parameter:
             s: distance of the involute point from the center of the base circle
@@ -48,15 +50,15 @@ def inverse(s):
 def polar2xy(r, alpha):
     return r * math.sin(alpha), r * math.cos(alpha)
 
-def point(r, alpha, offset = 0):
-    gamma, s = polar(alpha)
-    return polar2xy(r * s, gamma + offset)
+def point_xy(r, alpha, offset = 0):
+    gamma, s = point_polar(r, alpha)
+    return polar2xy(s, gamma + offset)
 
 def path(r, alpha, offset, n):
-    p = svg.Path(point(r, 0, offset), alpha)
+    p = svg.PathCreator(point_xy(r, 0, offset), alpha)
     for i in range(n):
         beta = (i + 1) * alpha / n
-        p.lineTo(point(r, beta, offset))
+        p.line_to(point_xy(r, beta, offset))
     return p.d
 
 if __name__ == "__main__":
@@ -88,7 +90,7 @@ if __name__ == "__main__":
     print(f'        <line class="dotline" x1="{x1}" y1="{y1}"/>')
     x1, y1 = polar2xy(r * 2, gamma(alpha))
     print(f'        <line class="dotline" x1="{x1}" y1="{y1}"/>')
-    px, py = point(r, alpha)
+    px, py = point_xy(r, alpha)
     print(f'        <circle cx="{px}" cy="{py}" r="0.4" fill="black"/>')
     qx, qy = polar2xy(r, alpha)
     print(f'        <circle cx="{qx}" cy="{qy}" r="0.4" fill="black"/>')
