@@ -14,14 +14,13 @@ class Image(etree.Element):
         my_attrs.update(attrib)
         super().__init__('svg', my_attrs)
         self.style = etree.SubElement(self, 'style')
-        self.content = etree.SubElement(self, 'g', {'transform': 'scale(1, -1)'})
+        self.content = etree.SubElement(self, 'g', {'transform': 'scale(1, -1)', 'fill': 'lightgrey', 'stroke': 'black', 'stroke-width': '0.35' })
 
     def write(self, file):
         tree = etree.ElementTree(self)
         tree.write(file)
 
 class Element(etree.Element):
-
     def __init__(self, parent, tag, elem_attrs = {}, user_attrs = {}):
         elem_attrs.update(user_attrs) # User attributes overwrite element attributes
         super().__init__(tag, elem_attrs)
@@ -36,23 +35,36 @@ def normalize(p):
     return x / l, y / l
 
 class Line(Element):
-
     def __init__(self, parent, p1, p2, user_attrs = {}):
         x1, y1 = p1
         x2, y2 = p2
-        super().__init__(parent, 'line', {'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2)}, user_attrs)
+        super().__init__(parent, 'line', {'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2), 'stroke-width': '0.2'}, user_attrs)
 
 class Circle(Element):
-
-    def __init__(self, parent, c, r, user_attrs = {}):
-        cx, cy = c
-        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': str(r)}, user_attrs)
+    def __init__(self, parent, center, radius, user_attrs = {}):
+        cx, cy = center
+        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': str(radius)}, user_attrs)
 
 class Point(Element):
-    
-    def __init__(self, parent, c, user_attrs = {}):
-        cx, cy = c
-        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': '0.5'}, user_attrs)
+    def __init__(self, parent, p, user_attrs = {}):
+        cx, cy = p
+        super().__init__(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black', 'stroke': 'none'}, user_attrs)
+
+class Path(Element):
+    def __init__(self, parent, d, user_attrs = {}):
+        super().__init__(parent, 'path', {'d': d}, user_attrs)
+
+class Group(Element):
+    def __init__(self, parent, origin, attributes = {}):
+        x, y = origin
+        super().__init__(parent, 'g', {f'transform': 'translate({x} {y}) rotate({rotation})'}, attributes)
+
+class Text(Element):
+    def __init__(self, parent, origin, text, attributes = {}):
+        x, y = origin
+        super().__init__(parent, 'g', {f'transform': f'translate({x} {y})'})
+        t = Element(self, 'text', {'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, attributes)
+        t.text = text
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     '''returns the intersection point of two lines'''
@@ -95,14 +107,18 @@ class PathCreator:
         self.d += ' C'
 
 if __name__ == "__main__":
-    M = (0, 0)
     r = 20
     alpha = math.pi / 3
-    P = (r * math.sin(alpha), r * math.cos(alpha))
-    img = Image((150, 100), (50, 50), { 'version': '1.2' })
-    base_circle = Circle(img.content, M, r, { 'fill': 'lightgrey', 'stroke': 'black', 'stroke-width': '0.35'})
-    m_point = Point(img.content, M, {'fill': 'black'})
-    p_point = Point(img.content, P, {'fill': 'black'})
-    h_sym_line = Line(img.content, (-2 * r, 0), (2 * r, 0), { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.1 0.8 0.2 0.8'})
-    v_sym_line = Line(img.content, (0, -2 * r), (0, 2 * r), { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.1 0.8 0.2 0.8'})
+    p = (r * math.sin(alpha), r * math.cos(alpha))
+    img = Image((150, 100), (50, 50))
+    Circle(img.content, (0, 0), r)
+    sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 0.90 0.2 0.90', 'stroke-dashoffset': '1.0'}
+    Line(img.content, (-2 * r, 0), (2 * r, 0), sym_stroke)
+    Line(img.content, (0, -2 * r), (0, 2 * r), sym_stroke)
+    light_stroke = { 'stroke': 'black', 'stroke-width': '0.1' }
+    Line(img.content, (0, 0), (2 * r * math.sin(alpha), 2 * r * math.cos(alpha)), light_stroke)
+    Point(img.content, p, {'fill': 'red'})
+    Line(img.content, (0, 0), p, { 'stroke': 'red'})
+    Point(img.content, (0, 0))
+    Text(img.content, (r * math.sin(alpha) / 2 - 1, r * math.cos(alpha) / 2), 'r', {'fill': 'red'})
     img.write('demo-image.svg')

@@ -74,7 +74,7 @@ if __name__ == "__main__":
     gear_wheel = GearWheel(args.modul, args.teeth, args.alpha * math.pi / 180)
 
     c = int(gear_wheel.r_head() + 1)
-    w = int(c * 2)
+    w = c * 2
     print(f'<svg width="{w}mm" height="{w}mm" viewBox="{-c} {-c} {w} {w}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
     print( '    <style>')
     print( '        .gearwheel { fill: lightgrey; stroke: black; stroke-width: 0.2}')
