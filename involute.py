@@ -108,14 +108,15 @@ if __name__ == "__main__":
     arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
     svg.Line(img.content, p, q, arc_stroke)
     svg.Arc(img.content, (0, r), p, r, arc_stroke)
-    svg.ArcLabel(img.content, (0, 0), r + 0.5, 0.4 * alpha, u'\u03B1', {'fill': 'red'})
+    svg.ArcLabel(img.content, (0, 0), r + 0.5, 0.4 * alpha, u'\u03B1', {'fill': arc_stroke['stroke']})
 
     # gamma
-    svg.Line(img.content, (0, 0), q, {'stroke': 'blue'})
-    svg.LineLabel(img.content, (0, 0), q, 's', 0.5, 0.5, {'fill': 'blue'})
+    gamma_color = 'blue'
+    svg.Line(img.content, (0, 0), q, {'stroke': gamma_color})
+    svg.LineLabel(img.content, (0, 0), q, 's', 0.5, 0.5, {'fill': gamma_color})
     s = math.sqrt((q * q).sum())
-    svg.Arc(img.content, (0, s), q, s, svg.thin_stroke, {'stroke': 'blue'})
-    svg.ArcLabel(img.content, (0, 0), s + 0.5, 0.4 * gamma(alpha), u'\u03B3', {'fill': 'blue'})
+    svg.Arc(img.content, (0, s), q, s, svg.thin_stroke, {'stroke': gamma_color})
+    svg.ArcLabel(img.content, (0, 0), s + 0.5, 0.4 * gamma(alpha), u'\u03B3', {'fill': gamma_color})
 
     # key points
     svg.Point(img.content, (0, 0))
