@@ -69,7 +69,6 @@ def flip(p):
 if __name__ == "__main__":
     r = 20
     n = 60
-    m = 1
     alpha = 60 * math.pi / 180
 
     img = svg.Image((150, 100), (50, 50))
@@ -105,19 +104,20 @@ if __name__ == "__main__":
     svg.Line(img.content, (0, 0), p)
     svg.LineLabel(img.content, (0, 0), p, 'r')
 
-    # alpha angle
+    # alpha
     arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
     svg.Line(img.content, p, q, arc_stroke)
     svg.Arc(img.content, (0, r), p, r, arc_stroke)
     svg.ArcLabel(img.content, (0, 0), r + 0.5, 0.4 * alpha, u'\u03B1', {'fill': 'red'})
 
-    # gamma angle
+    # gamma
     svg.Line(img.content, (0, 0), q, {'stroke': 'blue'})
     svg.LineLabel(img.content, (0, 0), q, 's', 0.5, 0.5, {'fill': 'blue'})
-    d = math.sqrt((q * q).sum())
-    svg.Arc(img.content, (0, d), q, d, svg.thin_stroke, {'stroke': 'blue'})
-    svg.ArcLabel(img.content, (0, 0), d + 0.5, 0.4 * gamma(alpha), u'\u03B3', {'fill': 'blue'})
+    s = math.sqrt((q * q).sum())
+    svg.Arc(img.content, (0, s), q, s, svg.thin_stroke, {'stroke': 'blue'})
+    svg.ArcLabel(img.content, (0, 0), s + 0.5, 0.4 * gamma(alpha), u'\u03B3', {'fill': 'blue'})
 
+    # key points
     svg.Point(img.content, (0, 0))
     svg.Point(img.content, (0, r))
     svg.Point(img.content, p)
