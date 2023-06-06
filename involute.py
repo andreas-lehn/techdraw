@@ -55,12 +55,12 @@ def point_xy(r, alpha, offset = 0):
     gamma, s = point_polar(r, alpha)
     return polar2xy(s, gamma + offset)
 
-def path(r, alpha, offset, n):
-    p = svg.PathCreator(point_xy(r, 0, offset), alpha)
+def points(r, alpha, offset, n):
+    alpha = alpha / n
+    result = []
     for i in range(n):
-        beta = (i + 1) * alpha / n
-        p.line_to(point_xy(r, beta, offset))
-    return p.d
+        result.append(point_xy(r, (i + 1) * alpha, offset))
+    return result
 
 def flip(p):
     x, y = p
@@ -75,8 +75,8 @@ if __name__ == "__main__":
     img = svg.Image((150, 100), (50, 50))
 
     # involutes
-    for i in range(0, m): svg.Path(img.content, path(r, math.pi, i * 2 * math.pi / m, n), { 'fill': 'None'})
-    
+    svg.Path(img.content, svg.PathCreator((r, 0)).line_to(*points(r, math.pi, 0, n)), { 'fill': 'none' })
+
     # base circle
     svg.Circle(img.content, (0, 0), r)
     svg.Line(img.content, (-2 * r, 0), (2 * r, 0), svg.sym_stroke)
