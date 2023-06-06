@@ -90,12 +90,10 @@ def LineLabel(parent, p1, p2, text, pos = 0.5, offset = (0, 0), *attrs):
 def Arc(parent, p, q, r, *attrs):
     return Path(parent, PathCreator(p).arc_to(q, r), merge_attributes({ 'fill': 'none' }, *attrs))
 
-def ArcLabel(parent, p, r, alpha, beta, text, pos = 0.5, offset = (0, 0), *attrs):
+def ArcLabel(parent, p, r, alpha, text, *attrs):
     x, y = p
-    ox, oy = offset
-    gamma = alpha + (beta - alpha) * pos
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + r * math.sin(gamma))} {str(y + r * math.cos(gamma))}) rotate({str(-180 * gamma / math.pi)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(ox)} {str(oy)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + r * math.sin(alpha))} {str(y + r * math.cos(alpha))}) rotate({str(-180 * alpha / math.pi)})'})
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
     t.text = text
     return g
 
@@ -172,5 +170,5 @@ if __name__ == "__main__":
     LineLabel(img.content, (0, 0), p, 'r', 0.6, (0, 0.5), {'fill': 'red'})
     Path(img.content, PathCreator(t).line_to(q, s, t), {'fill' : 'none'}, thin_stroke)
     Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
-    ArcLabel(img.content, (0, 0), 1.5 * r, 0, alpha, u'\u03B1', offset=(0, 0.5))
+    ArcLabel(img.content, (0, 0), 1.5 * r + 0.5, 0.5 * alpha, u'\u03B1')
     img.write('demo-image.svg')
