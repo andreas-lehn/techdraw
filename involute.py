@@ -1,6 +1,7 @@
 #!/usr/env python3
 
 import math
+import numpy as np
 import svghelper as svg
 
 def gamma(alpha):
@@ -33,7 +34,7 @@ def point_polar(r, alpha):
             involute angle _gamma_ 
             distance _s_ of the involute point form the center of the base circle
     '''
-    return gamma(alpha), r * distance(alpha)
+    return np.array([gamma(alpha), r * distance(alpha)])
 
 def inverse(s):
     '''
@@ -48,7 +49,7 @@ def inverse(s):
     return math.sqrt(s ** 2 - 1)
 
 def polar2xy(r, alpha):
-    return r * math.sin(alpha), r * math.cos(alpha)
+    return r * np.array([math.sin(alpha), math.cos(alpha)])
 
 def point_xy(r, alpha, offset = 0):
     gamma, s = point_polar(r, alpha)
@@ -61,78 +62,65 @@ def path(r, alpha, offset, n):
         p.line_to(point_xy(r, beta, offset))
     return p.d
 
+def flip(p):
+    x, y = p
+    return np.array([y, -x])
+
 if __name__ == "__main__":
     r = 20
     n = 60
     m = 1
     alpha = 60 * math.pi / 180
-    print( '<svg width="150mm" height="100mm" viewBox="-50 -50 150 100" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
-    print( '    <style>')
-    print( '        .base      { fill: lightgrey; stroke: black; stroke-width: 0.2}')
-    print( '        .involute  { fill: none; stroke: black; stroke-width: 0.2}')
-    print( '        .arcline   { fill: none; stroke: red;   stroke-width: 0.2}')
-    print( '        .dotline   { fill: none; stroke: black; stroke-width: 0.05 }')
-    print( '        .symline   { fill: none; stroke: black; stroke-width: 0.1; stroke-dasharray: 2.0 0.8 0.1 0.8; stroke-dashoffset: -1.0 }')
-    print( '    </style>')
-    print( '    <g transform="scale(1 -1)">')
+
+    img = svg.Image((150, 100), (50, 50))
 
     # involutes
-    for i in range(0, m): print(f'        <path class="involute" d="{path(r, math.pi, i * 2 * math.pi / m, n)}"/>')
+    for i in range(0, m): svg.Path(img.content, path(r, math.pi, i * 2 * math.pi / m, n), { 'fill': 'None'})
     
     # base circle
-    print(f'        <circle class="base" r="{r}"/>')
-    print(f'        <circle r="0.4" fill="black"/>')
-    print(f'        <line class="symline" x1="{r * 2}" x2="{-r * 2}"/>')
-    print(f'        <line class="symline" y1="{r * 2}" y2="{-r * 2}"/>')
+    svg.Circle(img.content, (0, 0), r)
+    svg.Line(img.content, (-2 * r, 0), (2 * r, 0), svg.sym_stroke)
+    svg.Line(img.content, (0, -2 * r), (0, 2 * r), svg.sym_stroke)
 
     # construction lines
-    x1, y1 = polar2xy(r * 2, alpha)
-    print(f'        <line class="dotline" x1="{x1}" y1="{y1}"/>')
-    x1, y1 = polar2xy(r * 2, gamma(alpha))
-    print(f'        <line class="dotline" x1="{x1}" y1="{y1}"/>')
-    px, py = point_xy(r, alpha)
-    print(f'        <circle cx="{px}" cy="{py}" r="0.4" fill="black"/>')
-    qx, qy = polar2xy(r, alpha)
-    print(f'        <circle cx="{qx}" cy="{qy}" r="0.4" fill="black"/>')
-    dx, dy = qx - px, qy - py
-    print(f'        <line class="dotline" x1="{px - dx / 2}" y1="{py - dy / 2}" x2="{qx + dx / 2}" y2="{qy + dy / 2}"/>')
-    print(f'        <line class="dotline" x1="{px - dy}" y1="{py + dx}" x2="{px + dy}" y2="{py - dx}"/>')
+    svg.Line(img.content, (0, 0), polar2xy(2 * r, alpha), svg.thin_stroke)
+    svg.Line(img.content, (0, 0), polar2xy(2 * r, gamma(alpha)), svg.thin_stroke)
+    q = point_xy(r, alpha)
+    p = polar2xy(r, alpha)
+    svg.Line(img.content, q - p, q + p, svg.thin_stroke)
+    o = flip(p)
+    svg.Line(img.content, q - o / 2, p + o / 2, svg.thin_stroke)
 
     # rechte Winkel
-    l = math.sqrt(dx ** 2 + dy ** 2)
-    ra = 5
-    dx, dy = dx / l * ra, dy / l * ra
-    c = math.sqrt(2) * 2
-    print(f'        <path class="dotline" d="M {px - dy} {py + dx} A {ra} {ra} 0 0 0 {px + dx} {py + dy}"/>')
-    print(f'        <circle cx="{px + (dx - dy) / c}" cy="{py + (dy + dx) / c}" r="0.25" fill="black"/>')
-    print(f'        <path class="dotline" d="M {qx - dy} {qy + dx} A {ra} {ra} 0 0 1 {qx - dx} {qy - dy}"/>')
-    print(f'        <circle cx="{qx - (dy + dx) / c}" cy="{qy + (dx - dy) / c}" r="0.25" fill="black"/>')
+    #l = math.sqrt(dx ** 2 + dy ** 2)
+    #ra = 5
+    #dx, dy = dx / l * ra, dy / l * ra
+    #c = math.sqrt(2) * 2
+    #print(f'        <path class="dotline" d="M {px - dy} {py + dx} A {ra} {ra} 0 0 0 {px + dx} {py + dy}"/>')
+    #print(f'        <circle cx="{px + (dx - dy) / c}" cy="{py + (dy + dx) / c}" r="0.25" fill="black"/>')
+    #print(f'        <path class="dotline" d="M {qx - dy} {qy + dx} A {ra} {ra} 0 0 1 {qx - dx} {qy - dy}"/>')
+    #print(f'        <circle cx="{qx - (dy + dx) / c}" cy="{qy + (dx - dy) / c}" r="0.25" fill="black"/>')
+
+    # r
+    svg.Line(img.content, (0, 0), p)
+    svg.LineLabel(img.content, (0, 0), p, 'r', 0.5, (0, 0.5))
 
     # alpha angle
-    print(f'        <line class="arcline" x1="{px}" y1="{py}" x2="{qx}" y2="{qy}"/>')
-    print(f'        <g transform="translate({(px + qx) * 0.5} {(py + qy) * 0.5})"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>')
-    print(f'        <path class="arcline" d="M 0 {r} A {r} {r} 0 0 0 {qx} {qy}"/>')
-    print(f'        <line stroke="black" stroke-width="0.2" x2="{qx}" y2="{qy}"/>')
-    print(f'        <g transform="translate({qx * 0.6} {qy * 0.6 + 1})"><text transform="scale(0.25 -0.25)" fill="black">r</text></g>')
-
-    # distance s
-    print(f'        <line stroke="blue" stroke-width="0.2" x1="{px}" y1="{py}"/>')
-    print(f'        <g transform="translate({px * 0.8 - 2} {py * 0.8})"><text transform="scale(0.25 -0.25)" fill="blue">s</text></g>')
+    arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
+    svg.Line(img.content, p, q, arc_stroke)
+    svg.Path(img.content, svg.PathCreator((0, r)).arc_to(p, r), arc_stroke)
+    svg.ArcLabel(img.content, (0, 0), r, 0, alpha, u'\u03B1', 0.4, (-0.5, 0.5), {'fill': 'red'})
 
     # gamma angle
-    ra = 10
-    ax, ay = polar2xy(ra, 0.0)
-    bx, by = polar2xy(ra, gamma(alpha))
-    print(f'        <path stroke="blue" stroke-width="0.1" fill="none" d="M {ax} {ay} A {ra} {ra} 0 0 0 {bx} {by}"/>')
-    print(f'        <g transform="translate({0.0} {ra + 1})"><text transform="scale(0.25 -0.25)" fill="blue">&#x03B3;</text></g>')
+    svg.Line(img.content, (0, 0), q, {'stroke': 'blue'})
+    svg.LineLabel(img.content, (0, 0), q, 's', 0.5, (0, 0.5), {'fill': 'blue'})
+    d = math.sqrt((q * q).sum())
+    svg.Arc(img.content, (0, 0), d, 0, gamma(alpha), svg.thin_stroke, {'stroke': 'blue'})
+    svg.ArcLabel(img.content, (0, 0), d, 0, gamma(alpha), u'\u03B3', 0.5, (-0.5, 0.5), {'fill': 'blue'})
 
-    # second alpha angle
-    ra = 5
-    ax, ay = polar2xy(ra, 0.0)
-    bx, by = polar2xy(ra, alpha)
-    print(f'        <path stroke="red" stroke-width="0.1" fill="none" d="M {ax} {ay} A {ra} {ra} 0 0 0 {bx} {by}"/>')
-    print(f'        <g transform="translate({ra - 2} {ra - 1})"><text transform="scale(0.25 -0.25)" fill="red">&#x03B1;</text></g>')
+    svg.Point(img.content, (0, 0))
+    svg.Point(img.content, (0, r))
+    svg.Point(img.content, p)
+    svg.Point(img.content, q)
 
-    # SVG end
-    print( '    </g>')
-    print( '</svg>')
+    img.write('involute-sample.svg')
