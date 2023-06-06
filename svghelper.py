@@ -77,13 +77,12 @@ def angle(p):
     p = np.array(p)
     return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
 
-def LineLabel(parent, p1, p2, text, pos = 0.5, offset = (0, 0), *attrs):
+def LineLabel(parent, p1, p2, text, pos = 0.5, offset = 0.5, *attrs):
     p1, p2, offset = np.array(p1), np.array(p2), np.array(offset)
     x, y = p1 + (p2 - p1) * pos
-    ox, oy = offset
     alpha = -180 * (angle(p2 - p1) - math.pi / 2) / math.pi
     g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(alpha)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(ox)} {str(oy)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate(0 {str(offset)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
     t.text = text
     return g
 
@@ -167,7 +166,7 @@ if __name__ == "__main__":
     Point(img.content, p, {'fill': 'red'})
     Line(img.content, (0, 0), p, { 'stroke': 'red'})
     Point(img.content, (0, 0))
-    LineLabel(img.content, (0, 0), p, 'r', 0.6, (0, 0.5), {'fill': 'red'})
+    LineLabel(img.content, (0, 0), p, 'r', 0.6, 0.5, {'fill': 'red'})
     Path(img.content, PathCreator(t).line_to(q, s, t), {'fill' : 'none'}, thin_stroke)
     Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
     ArcLabel(img.content, (0, 0), 1.5 * r + 0.5, 0.5 * alpha, u'\u03B1')

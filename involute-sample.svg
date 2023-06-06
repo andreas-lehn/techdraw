@@ -11,7 +11,7 @@
         <line x1="1.849" y1="36.798" x2="22.321" y2="1.340" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <line x1="0.000" y1="0.000" x2="17.321" y2="10.000" stroke="black" stroke-width="0.2" stroke-linecap="round" />
         <g transform="translate(8.660 5.000) rotate(30.000)">
-            <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="black" stroke="none">r</text>
+            <text transform="translate(0 0.500) scale(0.25, -0.25)" fill="black" stroke="none">r</text>
         </g>
         <line x1="17.321" y1="10.000" x2="6.849" y2="28.138" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
         <path d="M 0.000 20.000 A 20.000 20.000 0 0 0 17.321 10.000" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
@@ -20,7 +20,7 @@
         </g>
         <line x1="0.000" y1="0.000" x2="6.849" y2="28.138" stroke="blue" stroke-width="0.2" stroke-linecap="round" />
         <g transform="translate(3.424 14.069) rotate(76.321)">
-            <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">s</text>
+            <text transform="translate(0 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">s</text>
         </g>
         <path d="M 0.000 28.959 A 28.959 28.959 0 0 0 6.849 28.138" stroke="blue" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(2.809 29.325) rotate(-5.472)">
