@@ -18,6 +18,7 @@ class Image(etree.Element):
 
     def write(self, file):
         tree = etree.ElementTree(self)
+        etree.indent(tree, '    ')
         tree.write(file)
 
 class Element(etree.Element):
@@ -58,15 +59,46 @@ def Path(parent, d, *user_attrs):
 
 def Translation(parent, origin, *attrs):
     tx, ty = origin
-    return etree.SubElement(parent, 'g', merge_attributes({f'transform': 'translate({tx} {ty})'}, *attrs))
+    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'translate({str(tx)} {str(ty)})'}, *attrs))
 
 def Rotation(parent, rotation, *attrs):
-    return etree.SubElement(parent, 'g', merge_attributes({f'transform': 'rotate({rotation})'}, *attrs))
+    rotation = -180 * rotation / math.pi
+    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'rotate({str(rotation)})'}, *attrs))
 
-def Text(parent, pos, text, *attrs):
+def Text(parent, pos, text, rotation = 0, *attrs):
     x, y = pos
-    g = etree.SubElement(parent, 'g', {f'transform': f'translate({x} {y})'})
+    rotation = -180 * rotation / math.pi
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(rotation)})'})
     t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    t.text = text
+    return g
+
+def angle(p):
+    p = np.array(p)
+    return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
+
+def LineLabel(parent, p1, p2, text, pos = 0.5, offset = (0, 0), *attrs):
+    p1, p2, offset = np.array(p1), np.array(p2), np.array(offset)
+    x, y = p1 + (p2 - p1) * pos
+    ox, oy = offset
+    alpha = -180 * (angle(p2 - p1) - math.pi / 2) / math.pi
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(alpha)})'})
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(ox)} {str(oy)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    t.text = text
+    return g
+
+def Arc(parent, p, r, alpha, beta, *attrs):
+    x, y = p
+    path = PathCreator((x + r * math.sin(alpha), y + r * math.cos(alpha)))
+    path.arc_to((x + r * math.sin(beta), y + r * math.cos(beta)), r)
+    return Path(parent, path.d, merge_attributes({ 'fill': 'none' }, *attrs))
+
+def ArcLabel(parent, p, r, alpha, beta, text, pos = 0.5, offset = (0, 0), *attrs):
+    x, y = p
+    ox, oy = offset
+    gamma = alpha + (beta - alpha) * pos
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + r * math.sin(gamma))} {str(y + r * math.cos(gamma))}) rotate({str(-180 * gamma / math.pi)})'})
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(ox)} {str(oy)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
     t.text = text
     return g
 
@@ -114,10 +146,10 @@ class PathCreator:
         self.d += ' C'
         return self.d
 
-thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35' }
-mid_stroke = { 'stroke': 'black', 'stroke-width': '0.2' }
-thin_stroke = { 'stroke': 'black', 'stroke-width': '0.1'}
-sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 0.90 0.2 0.90', 'stroke-dashoffset': '1.0'}
+thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
+mid_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
+thin_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-linecap': 'round'}
+sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 1.0 0.0 1.0', 'stroke-dashoffset': '1.0', 'stroke-linecap': 'round' }
 
 if __name__ == "__main__":
     r = 20
@@ -140,6 +172,8 @@ if __name__ == "__main__":
     Point(img.content, p, {'fill': 'red'})
     Line(img.content, (0, 0), p, { 'stroke': 'red'})
     Point(img.content, (0, 0))
-    Text(img.content, (r * math.sin(alpha) / 2 - 1, r * math.cos(alpha) / 2), 'r', {'fill': 'red'})
+    LineLabel(img.content, (0, 0), p, 'r', 0.6, (0, 0.5), {'fill': 'red'})
     Path(img.content, PathCreator(t).line_to(q, s, t), {'fill' : 'none'}, thin_stroke)
+    Arc(img.content, (0, 0), 1.5 * r, 0, alpha, thin_stroke)
+    ArcLabel(img.content, (0, 0), 1.5 * r, 0, alpha, u'\u03B1', offset=(0, 0.5))
     img.write('demo-image.svg')
