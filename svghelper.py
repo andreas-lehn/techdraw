@@ -87,11 +87,8 @@ def LineLabel(parent, p1, p2, text, pos = 0.5, offset = (0, 0), *attrs):
     t.text = text
     return g
 
-def Arc(parent, p, r, alpha, beta, *attrs):
-    x, y = p
-    path = PathCreator((x + r * math.sin(alpha), y + r * math.cos(alpha)))
-    path.arc_to((x + r * math.sin(beta), y + r * math.cos(beta)), r)
-    return Path(parent, path.d, merge_attributes({ 'fill': 'none' }, *attrs))
+def Arc(parent, p, q, r, *attrs):
+    return Path(parent, PathCreator(p).arc_to(q, r), merge_attributes({ 'fill': 'none' }, *attrs))
 
 def ArcLabel(parent, p, r, alpha, beta, text, pos = 0.5, offset = (0, 0), *attrs):
     x, y = p
@@ -159,10 +156,10 @@ if __name__ == "__main__":
     gamma = -math.pi / 6
     delta = math.pi / 2
 
-    p = (r * math.sin(alpha), r * math.cos(alpha))
-    q = (r * math.sin(beta),  r * math.cos(beta))
-    s = (r * math.sin(gamma), r * math.cos(gamma))
-    t = (r * math.sin(delta), r * math.cos(delta))
+    p = np.array([r * math.sin(alpha), r * math.cos(alpha)])
+    q = np.array([r * math.sin(beta),  r * math.cos(beta)])
+    s = np.array([r * math.sin(gamma), r * math.cos(gamma)])
+    t = np.array([r * math.sin(delta), r * math.cos(delta)])
 
     img = Image((150, 100), (50, 50))
     Circle(img.content, (0, 0), r)
@@ -174,6 +171,6 @@ if __name__ == "__main__":
     Point(img.content, (0, 0))
     LineLabel(img.content, (0, 0), p, 'r', 0.6, (0, 0.5), {'fill': 'red'})
     Path(img.content, PathCreator(t).line_to(q, s, t), {'fill' : 'none'}, thin_stroke)
-    Arc(img.content, (0, 0), 1.5 * r, 0, alpha, thin_stroke)
+    Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
     ArcLabel(img.content, (0, 0), 1.5 * r, 0, alpha, u'\u03B1', offset=(0, 0.5))
     img.write('demo-image.svg')
