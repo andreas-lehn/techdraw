@@ -58,7 +58,3 @@ def points(r, alpha, offset, n):
     for i in range(n):
         result.append(point_xy(r, (i + 1) * alpha, offset))
     return result
-
-def flip(p):
-    x, y = p
-    return np.array([y, -x])

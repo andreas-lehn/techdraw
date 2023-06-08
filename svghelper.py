@@ -32,6 +32,10 @@ def cart2pol(p):
 def pol2cart(r, phi):
     return np.array([r * np.sin(phi), r * np.cos(phi)])
 
+def orth(p):
+    x, y = p
+    return np.array([y, -x])
+
 def str(f):
     return f'{f:.3f}'
 

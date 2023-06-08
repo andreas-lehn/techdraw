@@ -16,7 +16,7 @@ if __name__ == "__main__":
     Q = involute.point_xy(r, alpha) # example point on involute
     d = r * involute.distance(alpha) # length of 
     S = np.array([0, r]) # start point of involute
-    O = involute.flip(P) # orthognal vector of P
+    O = svg.orth(P) # orthognal vector of P
 
     img = svg.Image((150, 100), (50, 50))
 
