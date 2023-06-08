@@ -11,10 +11,11 @@ if __name__ == "__main__":
 
     n = 60 # number of line segements
     max_alpha = math.pi # max alpha of involute
-    alpha = 60 * math.pi / 180 # angle of example point
+    alpha = 60 * math.pi / 180 # angle on the base circle
+    gamma = involute.gamma(alpha) # angle of the involute point
     P = svg.pol2cart(r, alpha) # example point on base circle
     Q = involute.point(r, alpha) # example point on involute
-    d = r * involute.distance(alpha) # length of 
+    d = involute.distance(r, alpha) # length of 
     S = np.array([0, r]) # start point of involute
     O = svg.orth(P) # orthognal vector of P
 
@@ -30,7 +31,7 @@ if __name__ == "__main__":
 
     # construction lines
     svg.Line(img.content, M, svg.pol2cart(2 * r, alpha), svg.thin_stroke)
-    svg.Line(img.content, M, svg.pol2cart(2 * r, involute.gamma(alpha)), svg.thin_stroke)
+    svg.Line(img.content, M, svg.pol2cart(2 * r, gamma), svg.thin_stroke)
     svg.Line(img.content, Q - P, Q + P, svg.thin_stroke)
     svg.Line(img.content, Q - O / 2, P + O / 2, svg.thin_stroke)
 
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     svg.Line(img.content, M, Q, stroke=gamma_color)
     svg.LineLabel(img.content, M, Q, 's', fill=gamma_color)
     svg.Arc(img.content, (0, d), Q, d, svg.thin_stroke, stroke=gamma_color)
-    svg.ArcLabel(img.content, M, d, 0.5 * involute.gamma(alpha), u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
+    svg.ArcLabel(img.content, M, d, 0.5 * gamma, u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
 
     # key points
     svg.Point(img.content, M)

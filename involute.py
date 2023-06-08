@@ -11,15 +11,16 @@ def gamma(alpha):
     '''
     return alpha - math.atan(alpha)
 
-def distance(alpha):
+def distance(r, alpha):
     '''
     Calculates the distance _s_ to the center of the base circle with radius 1 of an involute point corresponding to _alpha_
         Parameter:
+            r:     radius of the base circle
             alpha: angle on the base circle
         Returns:
             distance _s_ of the involute point form the center of the base circle
     '''
-    return math.sqrt(alpha ** 2 + 1)
+    return r * math.sqrt(alpha ** 2 + 1)
 
 def point_polar(r, alpha):
     '''
@@ -31,11 +32,11 @@ def point_polar(r, alpha):
             involute angle _gamma_ 
             distance _s_ of the involute point form the center of the base circle
     '''
-    return np.array([gamma(alpha), r * distance(alpha)])
+    return distance(r, alpha), gamma(alpha)
 
-def inverse(s):
+def inverse(r, s):
     '''
-    Calculates _alpha_ so that _distance(alpha)_ returns s.
+    Calculates _alpha_ so that _distance(r, alpha)_ returns s.
 
     It is a kind of inverse involute funktion.
         Parameter:
@@ -43,10 +44,10 @@ def inverse(s):
         Returns:
             alpha: angle that the involute function needs to calculate (gamma, s)
     '''
-    return math.sqrt(s ** 2 - 1)
+    return math.sqrt((s / r) ** 2 - 1)
 
 def point(r, alpha, offset = 0):
-    gamma, s = point_polar(r, alpha)
+    s, gamma = point_polar(r, alpha)
     return s * np.array([math.sin(gamma + offset), math.cos(gamma + offset)])
 
 def points(r, alpha, offset, n):
