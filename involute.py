@@ -35,7 +35,7 @@ def point_polar(r, alpha):
 
 def inverse(s):
     '''
-    Calculates _alpha_ so that _gamma(alpha)_ returns s.
+    Calculates _alpha_ so that _distance(alpha)_ returns s.
 
     It is a kind of inverse involute funktion.
         Parameter:
@@ -45,12 +45,9 @@ def inverse(s):
     '''
     return math.sqrt(s ** 2 - 1)
 
-def polar2xy(r, alpha):
-    return r * np.array([math.sin(alpha), math.cos(alpha)])
-
 def point(r, alpha, offset = 0):
     gamma, s = point_polar(r, alpha)
-    return polar2xy(s, gamma + offset)
+    return s * np.array([math.sin(gamma + offset), math.cos(gamma + offset)])
 
 def points(r, alpha, offset, n):
     alpha = alpha / n
