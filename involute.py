@@ -48,7 +48,7 @@ def inverse(s):
 def polar2xy(r, alpha):
     return r * np.array([math.sin(alpha), math.cos(alpha)])
 
-def point_xy(r, alpha, offset = 0):
+def point(r, alpha, offset = 0):
     gamma, s = point_polar(r, alpha)
     return polar2xy(s, gamma + offset)
 
@@ -56,5 +56,5 @@ def points(r, alpha, offset, n):
     alpha = alpha / n
     result = []
     for i in range(n):
-        result.append(point_xy(r, (i + 1) * alpha, offset))
+        result.append(point(r, (i + 1) * alpha, offset))
     return result

@@ -13,7 +13,7 @@ if __name__ == "__main__":
     max_alpha = math.pi # max alpha of involute
     alpha = 60 * math.pi / 180 # angle of example point
     P = svg.pol2cart(r, alpha) # example point on base circle
-    Q = involute.point_xy(r, alpha) # example point on involute
+    Q = involute.point(r, alpha) # example point on involute
     d = r * involute.distance(alpha) # length of 
     S = np.array([0, r]) # start point of involute
     O = svg.orth(P) # orthognal vector of P
