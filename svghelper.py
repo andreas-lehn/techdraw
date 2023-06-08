@@ -20,13 +20,6 @@ class Image(etree.Element):
         etree.indent(tree, '    ')
         tree.write(file)
 
-class Element(etree.Element):
-    def __init__(self, parent, tag, *attr_list):
-        attributes = dict()
-        for attrs in attr_list: attributes.update(attrs)
-        super().__init__(tag, attributes)
-        parent.append(self)
-
 def merge_attributes(*attr_list):
         result = dict()
         for attrs in attr_list: result.update(attrs)
