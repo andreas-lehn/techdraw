@@ -6,13 +6,12 @@ import xml.etree.ElementTree as etree
 
 class Image(etree.Element):
 
-    def __init__(self, size, center, attrib = {}):
-        my_attrs = {
+    def __init__(self, size, center, *attrib, **extra):
+        my_attrib = {
             'width': f'{size[0]}mm', 'height': f'{size[1]}mm',
             'viewBox': f'{-center[0]} {-center[1]} {size[0]} {size[1]}',
             'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1'}
-        my_attrs.update(attrib)
-        super().__init__('svg', my_attrs)
+        super().__init__('svg', merge_attributes(my_attrib, *attrib), **extra)
         self.style = etree.SubElement(self, 'style')
         self.content = etree.SubElement(self, 'g', { 'transform': 'scale(1, -1)', 'fill': 'lightgrey'})
 
