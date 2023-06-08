@@ -69,8 +69,8 @@ if __name__ == "__main__":
     c -= 0.05
     svg.Arc(img.content, c * M0, c * M2, c * r, svg.thin_stroke)
     theta2 = gear_wheel.theta() / 4
-    svg.ArcLabel(img.content, M, c * r, -theta2, u'\u03C4/2', offset=(-1.5, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  theta2, u'\u03C4/2', offset=(-1.5, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -theta2, u'\u03C4/2', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  theta2, u'\u03C4/2', offset=(-2.3, 0.5))
 
     #draw base angles
     c -= 0.05
@@ -79,8 +79,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.thin_stroke)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -phi), svg.pol2cart(c * r, phi), c * r, svg.thin_stroke)
-    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B2', offset=(-0.5, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B2', offset=(-0.5, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B2', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B2', offset=(-0.9, 0.5))
 
     # draw Teilkreis angles
     c -= 0.05
@@ -88,8 +88,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  gear_wheel.beta_0()), svg.thin_stroke)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -gear_wheel.beta_0()), svg.pol2cart(c * r, gear_wheel.beta_0()), c * r, svg.thin_stroke)
-    svg.ArcLabel(img.content, M, c * r, -theta2 / 2, u'\u03C4/4', offset=(-1.5, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  theta2 / 2, u'\u03C4/4', offset=(-1.5, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -theta2 / 2, u'\u03C4/4', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  theta2 / 2, u'\u03C4/4', offset=(-2.3, 0.5))
 
     # draw head angles
     c -= 0.05
@@ -98,8 +98,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.thin_stroke)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -phi), svg.pol2cart(c * r, phi), c * r, svg.thin_stroke)
-    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B3', offset=(-0.5, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B3', offset=(-0.5, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B3', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B3', offset=(-0.9, 0.5))
 
     # Mittelpunkt und Controllpunkte
     svg.Point(img.content, M)

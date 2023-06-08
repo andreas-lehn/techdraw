@@ -15,37 +15,37 @@
         <line x1="0.000" y1="0.000" x2="0.000" y2="99.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
         <path d="M -24.847 92.729 A 96.000 96.000 0 0 0 24.847 92.729" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(-12.531 95.179) rotate(7.500)">
-            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
+            <text transform="translate(-2.300 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
         </g>
         <g transform="translate(12.531 95.179) rotate(-7.500)">
-            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
+            <text transform="translate(-2.300 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
         </g>
         <line x1="0.000" y1="0.000" x2="-13.357" y2="92.036" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <line x1="0.000" y1="0.000" x2="13.357" y2="92.036" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <path d="M -12.926 89.067 A 90.000 90.000 0 0 0 12.926 89.067" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(-6.480 89.766) rotate(4.129)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
+            <text transform="translate(-0.900 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
         </g>
         <g transform="translate(6.480 89.766) rotate(-4.129)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
+            <text transform="translate(-0.900 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
         </g>
         <line x1="0.000" y1="0.000" x2="-11.356" y2="86.256" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <line x1="0.000" y1="0.000" x2="11.356" y2="86.256" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <path d="M -10.964 83.281 A 84.000 84.000 0 0 0 10.964 83.281" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(-5.494 83.820) rotate(3.750)">
-            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
+            <text transform="translate(-2.300 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
         </g>
         <g transform="translate(5.494 83.820) rotate(-3.750)">
-            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
+            <text transform="translate(-2.300 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
         </g>
         <line x1="0.000" y1="0.000" x2="-3.455" y2="80.926" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <line x1="0.000" y1="0.000" x2="3.455" y2="80.926" stroke="black" stroke-width="0.1" stroke-linecap="round" />
         <path d="M -3.327 77.929 A 78.000 78.000 0 0 0 3.327 77.929" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(-1.664 77.982) rotate(1.222)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
+            <text transform="translate(-0.900 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
         </g>
         <g transform="translate(1.664 77.982) rotate(-1.222)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
+            <text transform="translate(-0.900 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
         </g>
         <circle cx="0.000" cy="0.000" r="0.5" fill="black" />
         <circle cx="-12.509" cy="46.683" r="0.5" fill="black" />
