@@ -1,5 +1,3 @@
-#!/usr/env python3
-
 import math
 import numpy as np
 import xml.etree.ElementTree as etree
@@ -24,6 +22,15 @@ def merge_attributes(*attr_list):
         result = dict()
         for attrs in attr_list: result.update(attrs)
         return result
+
+def cart2pol(p):
+    p = np.array(p) 
+    r = np.sqrt((p * p).sum())
+    phi = np.arctan2(p[1], p[0])
+    return np.array([r, phi])
+
+def pol2cart(r, phi):
+    return np.array([r * np.sin(phi), r * np.cos(phi)])
 
 def str(f):
     return f'{f:.3f}'
@@ -125,32 +132,3 @@ thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'r
 mid_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
 thin_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-linecap': 'round'}
 sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 1.0 0.0 1.0', 'stroke-dashoffset': '1.0', 'stroke-linecap': 'round' }
-
-if __name__ == "__main__":
-    r = 20
-    
-    alpha = math.pi / 3
-    beta  = math.pi - math.pi / 6
-    gamma = -math.pi / 6
-    delta = math.pi / 2
-
-    p = np.array([r * math.sin(alpha), r * math.cos(alpha)])
-    q = np.array([r * math.sin(beta),  r * math.cos(beta)])
-    s = np.array([r * math.sin(gamma), r * math.cos(gamma)])
-    t = np.array([r * math.sin(delta), r * math.cos(delta)])
-
-    img = Image((150, 100), (50, 50))
-    Circle(img.content, (0, 0), r)
-    Text(img.content, (-1.5, 1), 'M')
-    Line(img.content, (-2 * r, 0), (2 * r, 0), sym_stroke)
-    Line(img.content, (0, -2 * r), (0, 2 * r), sym_stroke)
-    Line(img.content, (0, 0), (2 * r * math.sin(alpha), 2 * r * math.cos(alpha)), thin_stroke)
-    Point(img.content, p, fill='red')
-    Text(img.content, p, 'P', offset=(-1, 1), rotation=alpha, fill='red')
-    Line(img.content, (0, 0), p, stroke='red')
-    Point(img.content, (0, 0))
-    LineLabel(img.content, (0, 0), p, 'r', pos=0.6, fill='red')
-    Path(img.content, PathCreator(t).line_to(q, s, t), thin_stroke, fill='none')
-    Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
-    ArcLabel(img.content, (0, 0), 1.5 * r, 0.5 * alpha, u'\u03B1', offset=(0, 0.5))
-    img.write('demo-image.svg')
