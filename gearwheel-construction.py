@@ -51,8 +51,9 @@ if __name__ == "__main__":
     M0 = svg.pol2cart(r, -phi)
     M1 = svg.pol2cart(r, 0)
     M2 = svg.pol2cart(r, phi)    
-    svg.Arc(img.content, M0, M2, r, svg.sym_stroke)
 
+    phi = math.pi / 2
+    svg.Arc(img.content, svg.pol2cart(r, -phi), svg.pol2cart(r, phi), r, svg.sym_stroke)
     r = gear_wheel.r_base()
     svg.Arc(img.content, svg.pol2cart(r, -phi), svg.pol2cart(r, phi), r, svg.dot_stroke)
 
