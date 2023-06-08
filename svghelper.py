@@ -28,11 +28,6 @@ def merge_attributes(*attr_list):
 def str(f):
     return f'{f:.3f}'
 
-def normalize(p):
-    x, y = p
-    l = math.sqrt(x ** 2, y ** 2)
-    return x / l, y / l
-
 def Line(parent, p1, p2, *user_attrs):
     x1, y1 = p1
     x2, y2 = p2
