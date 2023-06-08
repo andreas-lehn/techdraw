@@ -28,35 +28,35 @@ def merge_attributes(*attr_list):
 def str(f):
     return f'{f:.3f}'
 
-def Line(parent, p1, p2, *user_attrs):
+def Line(parent, p1, p2, *user_attrs, **extra):
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', merge_attributes({ 'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2) }, mid_stroke, *user_attrs))
+    return etree.SubElement(parent, 'line', merge_attributes({ 'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2) }, mid_stroke, *user_attrs), **extra)
 
-def Circle(parent, center, radius, *user_attrs):
+def Circle(parent, center, radius, *user_attrs, **extra):
     cx, cy = center
-    return etree.SubElement(parent, 'circle', merge_attributes({ 'cx': str(cx), 'cy': str(cy), 'r': str(radius) }, thick_stroke, *user_attrs))
+    return etree.SubElement(parent, 'circle', merge_attributes({ 'cx': str(cx), 'cy': str(cy), 'r': str(radius) }, thick_stroke, *user_attrs), **extra)
 
-def Point(parent, p, *user_attrs):
-    cx, cy = p
-    return etree.SubElement(parent, 'circle', merge_attributes({'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black'}, *user_attrs))
+def Point(parent, pos, *user_attrs, **extra):
+    cx, cy = pos
+    return etree.SubElement(parent, 'circle', merge_attributes({'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black'}, *user_attrs), **extra)
 
-def Path(parent, d, *user_attrs):
-    return etree.SubElement(parent, 'path', merge_attributes({'d': d}, thick_stroke, *user_attrs))
+def Path(parent, d, *user_attrs, **extra):
+    return etree.SubElement(parent, 'path', merge_attributes({'d': d}, thick_stroke, *user_attrs), **extra)
 
-def Translation(parent, origin, *attrs):
+def Translation(parent, origin, *attrs, **extra):
     tx, ty = origin
-    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'translate({str(tx)} {str(ty)})'}, *attrs))
+    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'translate({str(tx)} {str(ty)})'}, *attrs), **extra)
 
-def Rotation(parent, rotation, *attrs):
+def Rotation(parent, rotation, *attrs, **extra):
     rotation = -180 * rotation / math.pi
-    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'rotate({str(rotation)})'}, *attrs))
+    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'rotate({str(rotation)})'}, *attrs), **extra)
 
-def Text(parent, pos, text, rotation = 0, *attrs):
+def Text(parent, pos, text, *attrs, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
     rotation = -180 * rotation / math.pi
     g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(rotation)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(offset[0])} {str(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
     t.text = text
     return g
 
@@ -64,22 +64,22 @@ def angle(p):
     p = np.array(p)
     return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
 
-def LineLabel(parent, p1, p2, text, pos = 0.5, offset = 0.5, *attrs):
+def LineLabel(parent, p1, p2, text, *attrs, pos = 0.5, offset = 0.5, **extra):
     p1, p2, offset = np.array(p1), np.array(p2), np.array(offset)
     x, y = p1 + (p2 - p1) * pos
     alpha = -180 * (angle(p2 - p1) - math.pi / 2) / math.pi
     g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(alpha)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate(0 {str(offset)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate(0 {str(offset)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
     t.text = text
     return g
 
-def Arc(parent, p, q, r, *attrs):
-    return Path(parent, PathCreator(p).arc_to(q, r), merge_attributes({ 'fill': 'none' }, *attrs))
+def Arc(parent, p1, p2, r, *attrs, clockwise = True, large = False, **extra):
+    return Path(parent, PathCreator(p1).arc_to(p2, r), merge_attributes({ 'fill': 'none' }, *attrs), **extra)
 
-def ArcLabel(parent, p, r, alpha, text, *attrs):
-    x, y = p
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + r * math.sin(alpha))} {str(y + r * math.cos(alpha))}) rotate({str(-180 * alpha / math.pi)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs))
+def ArcLabel(parent, center, radius, alpha, text, *attrs, **extra):
+    x, y = center
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + radius * math.sin(alpha))} {str(y + radius * math.cos(alpha))}) rotate({str(-180 * alpha / math.pi)})'})
+    t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
     t.text = text
     return g
 
@@ -147,14 +147,16 @@ if __name__ == "__main__":
 
     img = Image((150, 100), (50, 50))
     Circle(img.content, (0, 0), r)
+    Text(img.content, (-1.5, 1), 'M')
     Line(img.content, (-2 * r, 0), (2 * r, 0), sym_stroke)
     Line(img.content, (0, -2 * r), (0, 2 * r), sym_stroke)
     Line(img.content, (0, 0), (2 * r * math.sin(alpha), 2 * r * math.cos(alpha)), thin_stroke)
-    Point(img.content, p, {'fill': 'red'})
-    Line(img.content, (0, 0), p, { 'stroke': 'red'})
+    Point(img.content, p, fill='red')
+    Text(img.content, p, 'P', offset=(-1, 1), rotation=alpha, fill='red')
+    Line(img.content, (0, 0), p, stroke='red')
     Point(img.content, (0, 0))
-    LineLabel(img.content, (0, 0), p, 'r', 0.6, 0.5, {'fill': 'red'})
-    Path(img.content, PathCreator(t).line_to(q, s, t), {'fill' : 'none'}, thin_stroke)
+    LineLabel(img.content, (0, 0), p, 'r', pos=0.6, fill='red')
+    Path(img.content, PathCreator(t).line_to(q, s, t), thin_stroke, fill='none')
     Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
     ArcLabel(img.content, (0, 0), 1.5 * r + 0.5, 0.5 * alpha, u'\u03B1')
     img.write('demo-image.svg')
