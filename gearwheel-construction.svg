@@ -1,0 +1,60 @@
+<svg width="142mm" height="124mm" viewBox="-70 -123 142 124" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <style />
+    <g transform="scale(1, -1)" fill="lightgrey">
+        <path d="M -12.509 46.683 Q -6.883 47.424 -8.098 55.797 Q -8.316 57.301 -7.832 59.487 Q -6.436 65.783 -2.986 69.936 A 70.000 70.000 0 0 0 2.986 69.936 Q 6.436 65.783 7.832 59.487 Q 8.316 57.301 8.098 55.797 Q 6.990 48.162 12.509 46.683 Q 18.028 45.204 20.886 52.371 Q 21.449 53.782 22.961 55.433 Q 27.318 60.188 32.382 62.060 A 70.000 70.000 0 0 0 37.554 59.074 Q 38.465 53.752 36.526 47.601 Q 35.853 45.466 34.911 44.273 Q 30.134 38.215 34.174 34.174 Q 38.215 30.134 44.273 34.911 Q 45.466 35.853 47.601 36.526 Q 53.752 38.465 59.074 37.554 A 70.000 70.000 0 0 0 62.060 32.382 Q 60.188 27.318 55.433 22.961 Q 53.782 21.449 52.371 20.886 Q 45.204 18.028 46.683 12.509 Q 48.162 6.990 55.797 8.098 Q 57.301 8.316 59.487 7.832 Q 65.783 6.436 69.936 2.986 A 70.000 70.000 0 0 0 69.936 -2.986 Q 65.783 -6.436 59.487 -7.832 Q 57.301 -8.316 55.797 -8.098 Q 48.162 -6.990 46.683 -12.509 Q 45.204 -18.028 52.371 -20.886 Q 53.782 -21.449 55.433 -22.961 Q 60.188 -27.318 62.060 -32.382 A 70.000 70.000 0 0 0 59.074 -37.554 Q 53.752 -38.465 47.601 -36.526 Q 45.466 -35.853 44.273 -34.911 Q 38.215 -30.134 34.174 -34.174 Q 30.134 -38.215 34.911 -44.273 Q 35.853 -45.466 36.526 -47.601 Q 38.465 -53.752 37.554 -59.074 A 70.000 70.000 0 0 0 32.382 -62.060 Q 27.318 -60.188 22.961 -55.433 Q 21.449 -53.782 20.886 -52.371 Q 18.028 -45.204 12.509 -46.683 Q 6.990 -48.162 8.098 -55.797 Q 8.316 -57.301 7.832 -59.487 Q 6.436 -65.783 2.986 -69.936 A 70.000 70.000 0 0 0 -2.986 -69.936 Q -6.436 -65.783 -7.832 -59.487 Q -8.316 -57.301 -8.098 -55.797 Q -6.990 -48.162 -12.509 -46.683 Q -18.028 -45.204 -20.886 -52.371 Q -21.449 -53.782 -22.961 -55.433 Q -27.318 -60.188 -32.382 -62.060 A 70.000 70.000 0 0 0 -37.554 -59.074 Q -38.465 -53.752 -36.526 -47.601 Q -35.853 -45.466 -34.911 -44.273 Q -30.134 -38.215 -34.174 -34.174 Q -38.215 -30.134 -44.273 -34.911 Q -45.466 -35.853 -47.601 -36.526 Q -53.752 -38.465 -59.074 -37.554 A 70.000 70.000 0 0 0 -62.060 -32.382 Q -60.188 -27.318 -55.433 -22.961 Q -53.782 -21.449 -52.371 -20.886 Q -45.204 -18.028 -46.683 -12.509 Q -48.162 -6.990 -55.797 -8.098 Q -57.301 -8.316 -59.487 -7.832 Q -65.783 -6.436 -69.936 -2.986 A 70.000 70.000 0 0 0 -69.936 2.986 Q -65.783 6.436 -59.487 7.832 Q -57.301 8.316 -55.797 8.098 Q -48.162 6.990 -46.683 12.509 Q -45.204 18.028 -52.371 20.886 Q -53.782 21.449 -55.433 22.961 Q -60.188 27.318 -62.060 32.382 A 70.000 70.000 0 0 0 -59.074 37.554 Q -53.752 38.465 -47.601 36.526 Q -45.466 35.853 -44.273 34.911 Q -38.215 30.134 -34.174 34.174 Q -30.134 38.215 -34.911 44.273 Q -35.853 45.466 -36.526 47.601 Q -38.465 53.752 -37.554 59.074 A 70.000 70.000 0 0 0 -32.382 62.060 Q -27.318 60.188 -22.961 55.433 Q -21.449 53.782 -20.886 52.371 Q -18.028 45.204 -12.509 46.683 C" stroke="lightgrey" stroke-width="0.35" stroke-linecap="round" fill="none" />
+        <path d="M -12.509 46.683 Q -6.990 48.162 -8.098 55.797 Q -8.316 57.301 -7.832 59.487 Q -6.436 65.783 -2.986 69.936 A 70.000 70.000 0 0 0 2.986 69.936 Q 6.436 65.783 7.832 59.487 Q 8.316 57.301 8.098 55.797 Q 6.990 48.162 12.509 46.683" stroke="black" stroke-width="0.35" stroke-linecap="round" />
+        <path d="M -12.509 46.683 L 12.509 46.683 L 0.000 0.000" stroke="none" stroke-width="0.35" stroke-linecap="round" />
+        <path d="M -15.529 57.956 A 60.000 60.000 0 0 0 15.529 57.956" stroke="black" stroke-width="0.2" stroke-linecap="round" fill="none" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+        <path d="M -14.593 54.460 A 56.382 56.382 0 0 0 14.593 54.460" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" stroke-dasharray="0.0 0.2" />
+        <line x1="0.000" y1="0.000" x2="-27.176" y2="101.422" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+        <line x1="0.000" y1="0.000" x2="27.176" y2="101.422" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+        <path d="M -26.400 98.524 A 102.000 102.000 0 0 0 26.400 98.524" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <g transform="translate(0.000 102.000) rotate(0.000)">
+            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;</text>
+        </g>
+        <line x1="0.000" y1="0.000" x2="0.000" y2="99.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+        <path d="M -24.847 92.729 A 96.000 96.000 0 0 0 24.847 92.729" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <g transform="translate(-12.531 95.179) rotate(7.500)">
+            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
+        </g>
+        <g transform="translate(12.531 95.179) rotate(-7.500)">
+            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/2</text>
+        </g>
+        <line x1="0.000" y1="0.000" x2="-13.357" y2="92.036" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <line x1="0.000" y1="0.000" x2="13.357" y2="92.036" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <path d="M -12.926 89.067 A 90.000 90.000 0 0 0 12.926 89.067" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <g transform="translate(-6.480 89.766) rotate(4.129)">
+            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
+        </g>
+        <g transform="translate(6.480 89.766) rotate(-4.129)">
+            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#946;</text>
+        </g>
+        <line x1="0.000" y1="0.000" x2="-11.356" y2="86.256" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <line x1="0.000" y1="0.000" x2="11.356" y2="86.256" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <path d="M -10.964 83.281 A 84.000 84.000 0 0 0 10.964 83.281" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <g transform="translate(-5.494 83.820) rotate(3.750)">
+            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
+        </g>
+        <g transform="translate(5.494 83.820) rotate(-3.750)">
+            <text transform="translate(-1.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#964;/4</text>
+        </g>
+        <line x1="0.000" y1="0.000" x2="-3.455" y2="80.926" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <line x1="0.000" y1="0.000" x2="3.455" y2="80.926" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+        <path d="M -3.327 77.929 A 78.000 78.000 0 0 0 3.327 77.929" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <g transform="translate(-1.664 77.982) rotate(1.222)">
+            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
+        </g>
+        <g transform="translate(1.664 77.982) rotate(-1.222)">
+            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#947;</text>
+        </g>
+        <circle cx="0.000" cy="0.000" r="0.5" fill="black" />
+        <circle cx="-12.509" cy="46.683" r="0.5" fill="black" />
+        <circle cx="-8.098" cy="55.797" r="0.5" fill="black" />
+        <circle cx="-7.832" cy="59.487" r="0.5" fill="black" />
+        <circle cx="-2.986" cy="69.936" r="0.5" fill="black" />
+        <circle cx="2.986" cy="69.936" r="0.5" fill="black" />
+        <circle cx="7.832" cy="59.487" r="0.5" fill="black" />
+        <circle cx="8.098" cy="55.797" r="0.5" fill="black" />
+        <circle cx="12.509" cy="46.683" r="0.5" fill="black" />
+    </g>
+</svg>

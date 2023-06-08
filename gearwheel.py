@@ -45,6 +45,21 @@ class GearWheel:
         '''returns the angle offsets of the tooths head point'''
         return self.beta_base() - involute.gamma(involute.inverse(self.r_base(), self.r_head()))
     
+    def tooth_ctrl_points(self):
+        '''returns the controls point of a tooth as an array of tupels (r, phi, tangent) starting with the head point down to the foot point
+        
+        r, phi:  polar coordinates of the control point
+        tangent: tangent of the tooth in that control point
+        '''
+
+        r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
+        b_0, b_h, b_b, b_f = self.beta_0(), self.beta_head(), self.beta_base(), self.theta() / 2
+
+        return [(r_h, b_h, b_h - involute.inverse(r_b, r_h)),
+                (r_0, b_0, b_0 - self.alpha),
+                (r_b, b_b, b_b),
+                (r_f, b_f, b_f + math.pi /2)]
+
     def svg_path(self):
         r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b, b_f = self.beta_0(), self.beta_head(), self.beta_base(), self.theta() / 2
