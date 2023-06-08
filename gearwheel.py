@@ -66,6 +66,7 @@ class GearWheel:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generates an SVG image with a gear wheel.')
+    parser.add_argument('filename', type=str, help='file name')
     parser.add_argument('-m', '--modul', type=float, help='modul in mm', default=2.0)
     parser.add_argument('-t', '--teeth', type=int, help='number of teeth', default=30)
     parser.add_argument('-a', '--alpha', type=float, help='Eingriffswinkel', default=20.0)
@@ -73,20 +74,13 @@ if __name__ == "__main__":
 
     gear_wheel = GearWheel(args.modul, args.teeth, args.alpha * math.pi / 180)
 
+    M = (0, 0)
     c = int(gear_wheel.r_head() + 1)
     w = c * 2
-    print(f'<svg width="{w}mm" height="{w}mm" viewBox="{-c} {-c} {w} {w}" xmlns="http://www.w3.org/2000/svg" version="1.1" baseProfile="full">')
-    print( '    <style>')
-    print( '        .gearwheel { fill: lightgrey; stroke: black; stroke-width: 0.2}')
-    print( '        .helpline  { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 1 0.8 }')
-    print( '        .dotline   { fill: none; stroke: black; stroke-width: 0.05; stroke-dasharray: 0.1 0.1 }')
-    print( '        .symline   { fill: none; stroke: black; stroke-width: 0.1; stroke-dasharray: 1.1 0.5 0.1 0.5; stroke-dashoffset: -0.55 }')
-    print( '    </style>')
-    print( '    <g transform="scale(1 -1)">')
-    print(f'        <path   class="gearwheel" d="{gear_wheel.svg_path()}"/>')
-    print(f'        <circle class="helpline"  r="{gear_wheel.r_head()}"/>')
-    print(f'        <circle class="symline"   r="{gear_wheel.r_0()}"/>')
-    print(f'        <circle class="dotline"   r="{gear_wheel.r_base()}"/>')
-    print(f'        <circle class="helpline"  r="{gear_wheel.r_foot()}"/>')
-    print( '    </g>')
-    print( '</svg>')
+    img = svg.Image((w, w), (c, c))
+    svg.Path(img.content, gear_wheel.svg_path())
+    svg.Circle(img.content, M, gear_wheel.r_head(), svg.dash_stroke, fill='none')
+    svg.Circle(img.content, M, gear_wheel.r_0(), svg.sym_stroke, fill='none')
+    svg.Circle(img.content, M, gear_wheel.r_base(), svg.dot_stroke, fill='none')
+    svg.Circle(img.content, M, gear_wheel.r_foot(), svg.dash_stroke, fill='none')
+    img.write(args.filename)
