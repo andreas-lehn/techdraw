@@ -59,8 +59,8 @@ if __name__ == "__main__":
     # draw symetrie lines and theta
     r = gear_wheel.r_0()
     c = 1.75
-    svg.Line(img.content, M, c * M0, svg.sym_stroke)
-    svg.Line(img.content, M, c * M2, svg.sym_stroke)
+    svg.Line(img.content, M, c * M0, svg.thin_stroke)
+    svg.Line(img.content, M, c * M2, svg.thin_stroke)
     c -= 0.05
     svg.Arc(img.content, c * M0, c * M2, c * r, svg.thin_stroke)
     svg.ArcLabel(img.content, M, c * r, 0, u'\u03C4', offset=(-0.5, 0.5))
