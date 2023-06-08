@@ -68,13 +68,13 @@ if __name__ == "__main__":
     svg.Line(img.content, M, c * M1, svg.sym_stroke)
     c -= 0.05
     svg.Arc(img.content, c * M0, c * M2, c * r, svg.thin_stroke)
-    theta2 = gear_wheel.theta() / 4
+    theta2 = gear_wheel.tau() / 4
     svg.ArcLabel(img.content, M, c * r, -theta2, u'\u03C4/2', offset=(-2.3, 0.5))
     svg.ArcLabel(img.content, M, c * r,  theta2, u'\u03C4/2', offset=(-2.3, 0.5))
 
     #draw base angles
     c -= 0.05
-    phi = gear_wheel.beta_base()
+    phi = gear_wheel.beta()
     svg.Line(img.content, M, svg.pol2cart(c * r, -phi), svg.thin_stroke)
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.thin_stroke)
     c -= 0.05
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
     # draw head angles
     c -= 0.05
-    phi = gear_wheel.beta_head()
+    phi = gear_wheel.gamma()
     svg.Line(img.content, M, svg.pol2cart(c * r, -phi), svg.thin_stroke)
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.thin_stroke)
     c -= 0.05
