@@ -65,23 +65,17 @@ def angle(p):
     return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
 
 def LineLabel(parent, p1, p2, text, *attrs, pos = 0.5, offset = 0.5, **extra):
-    p1, p2, offset = np.array(p1), np.array(p2), np.array(offset)
-    x, y = p1 + (p2 - p1) * pos
-    alpha = -180 * (angle(p2 - p1) - math.pi / 2) / math.pi
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(alpha)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate(0 {str(offset)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
-    t.text = text
-    return g
+    p = p1 + (p2 - p1) * pos
+    alpha = angle(p2 - p1) - math.pi / 2
+    return Text(parent, p, text, *attrs, rotation=alpha, offset=(0, offset), **extra)
 
 def Arc(parent, p1, p2, r, *attrs, clockwise = True, large = False, **extra):
     return Path(parent, PathCreator(p1).arc_to(p2, r), merge_attributes({ 'fill': 'none' }, *attrs), **extra)
 
-def ArcLabel(parent, center, radius, alpha, text, *attrs, **extra):
+def ArcLabel(parent, center, radius, alpha, text, *attrs, offset = (0, 0), **extra):
     x, y = center
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x + radius * math.sin(alpha))} {str(y + radius * math.cos(alpha))}) rotate({str(-180 * alpha / math.pi)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': 'scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
-    t.text = text
-    return g
+    pos = (x + radius * math.sin(alpha), y + radius * math.cos(alpha))
+    return Text(parent, pos, text, *attrs, rotation=alpha, offset=offset, **extra)
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     '''returns the intersection point of two lines'''
@@ -158,5 +152,5 @@ if __name__ == "__main__":
     LineLabel(img.content, (0, 0), p, 'r', pos=0.6, fill='red')
     Path(img.content, PathCreator(t).line_to(q, s, t), thin_stroke, fill='none')
     Arc(img.content, (0, 1.5 * r), 1.5 * p, 1.5 * r, thin_stroke)
-    ArcLabel(img.content, (0, 0), 1.5 * r + 0.5, 0.5 * alpha, u'\u03B1')
+    ArcLabel(img.content, (0, 0), 1.5 * r, 0.5 * alpha, u'\u03B1', offset=(0, 0.5))
     img.write('demo-image.svg')

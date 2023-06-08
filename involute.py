@@ -113,14 +113,14 @@ if __name__ == "__main__":
     arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
     svg.Line(img.content, P, Q, arc_stroke)
     svg.Arc(img.content, S, P, r, arc_stroke)
-    svg.ArcLabel(img.content, M, r + 0.5, 0.4 * alpha, u'\u03B1', fill=arc_stroke['stroke'])
+    svg.ArcLabel(img.content, M, r, 0.4 * alpha, u'\u03B1', offset=(-0.5, 0.5), fill=arc_stroke['stroke'])
 
     # gamma
     gamma_color = 'blue'
     svg.Line(img.content, M, Q, stroke=gamma_color)
     svg.LineLabel(img.content, M, Q, 's', fill=gamma_color)
     svg.Arc(img.content, (0, d), Q, d, svg.thin_stroke, stroke=gamma_color)
-    svg.ArcLabel(img.content, M, d + 0.5, 0.4 * gamma(alpha), u'\u03B3', fill=gamma_color)
+    svg.ArcLabel(img.content, M, d, 0.5 * gamma(alpha), u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
 
     # key points
     svg.Point(img.content, M)
