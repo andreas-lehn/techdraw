@@ -47,7 +47,7 @@ def grad2rad(alpha):
 def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', { 'x1': fmt(x1), 'y1': fmt(y1), 'x2': fmt(x2), 'y2': fmt(y2), **mid_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'line', { 'x1': fmt(x1), 'y1': fmt(y1), 'x2': fmt(x2), 'y2': fmt(y2), **medium_stroke, **attrib }, **extra)
 
 def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
@@ -65,13 +65,11 @@ def Translation(parent, origin, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'translate({fmt(tx)} {fmt(ty)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
-    rotation = -180 * rotation / math.pi
     return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt(rad2grad(-rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
-    rotation = -180 * rotation / math.pi
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rotation)})'})
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rad2grad(-rotation))})'})
     t = etree.SubElement(g, 'text', {'transform': f'translate({fmt(offset[0])} {fmt(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
@@ -134,7 +132,7 @@ class PathCreator:
         return self.d
 
 thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
-mid_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
+medium_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
 thin_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-linecap': 'round'}
 sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 1.0 0.0 1.0', 'stroke-dashoffset': '1.0', 'stroke-linecap': 'round' }
 dash_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-dasharray': '1.0 1.0', 'stroke-dashoffset': '0.5', 'stroke-linecap': 'round' }
