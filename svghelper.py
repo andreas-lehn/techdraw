@@ -19,11 +19,6 @@ class Image(etree.Element):
         etree.indent(tree, '    ')
         tree.write(file)
 
-def merge_attributes(*attr_list):
-        result = dict()
-        for attrs in attr_list: result.update(attrs)
-        return result
-
 def cart2pol(p):
     p = np.array(p) 
     r = np.sqrt((p * p).sum())
@@ -37,44 +32,49 @@ def orth(p):
     x, y = p
     return np.array([y, -x])
 
-def str(f):
+def fmt(f):
     return f'{f:.3f}'
+
+def angle(p):
+    return np.arctan2(p[0], p[1])
+
+def rad2grad(alpha):
+    return 180 * alpha / math.pi
+
+def grad2rad(alpha):
+    return alpha * math.pi / 180
 
 def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', { 'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2), **mid_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'line', { 'x1': fmt(x1), 'y1': fmt(y1), 'x2': fmt(x2), 'y2': fmt(y2), **mid_stroke, **attrib }, **extra)
 
 def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
-    return etree.SubElement(parent, 'circle', { 'cx': str(cx), 'cy': str(cy), 'r': str(radius), **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'circle', { 'cx': fmt(cx), 'cy': fmt(cy), 'r': fmt(radius), **thick_stroke, **attrib }, **extra)
 
 def Point(parent, pos, attrib={}, **extra):
     cx, cy = pos
-    return etree.SubElement(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
+    return etree.SubElement(parent, 'circle', {'cx': fmt(cx), 'cy': fmt(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 
 def Path(parent, d, attrib={}, **extra):
     return etree.SubElement(parent, 'path', {'d': d, **thick_stroke, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
     tx, ty = origin
-    return etree.SubElement(parent, 'g', {'transform': f'translate({str(tx)} {str(ty)}', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'translate({fmt(tx)} {fmt(ty)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
     rotation = -180 * rotation / math.pi
-    return etree.SubElement(parent, 'g', {'transform': f'rotate({str(rotation)})', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt(rad2grad(-rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
     rotation = -180 * rotation / math.pi
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(rotation)})'})
-    t = etree.SubElement(g, 'text', {'transform': f'translate({str(offset[0])} {str(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rotation)})'})
+    t = etree.SubElement(g, 'text', {'transform': f'translate({fmt(offset[0])} {fmt(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
-
-def angle(p):
-    p = np.array(p)
-    return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
 
 def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra):
     p = p1 + (p2 - p1) * pos
