@@ -86,23 +86,7 @@ def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset = (0, 0), **
     x, y = center
     pos = (x + radius * math.sin(alpha), y + radius * math.cos(alpha))
     return Text(parent, pos, text, **attrib, rotation=alpha, offset=offset, **extra)
-
-def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
-    '''returns the intersection point of two lines'''
-    dx0, dy0 = math.sin(alpha0), math.cos(alpha0)
-    dx1, dy1 = math.sin(alpha1), math.cos(alpha1)
-    '''
-    x0 + r0 * dx0 = x1 + r1 * dx1
-    y0 + r0 * dy0 = y1 + r1 * dy1
-    -----------------------------
-    r0 * dx0 - r1 * dx1 = x1 - x0
-    r0 * dy0 - r1 * dy1 = y1 - y0
-    '''
-    a = np.array([[dx0, -dx1], [dy0, -dy1]])
-    b = np.array([x1 - x0, y1 - y0])
-    r = np.linalg.solve(a, b)
-    return x0 + dx0 * r[0], y0 + dy0 * r[0]
-
+    
 class PathCreator:
 
     def __init__(self, p, alpha = 0):
@@ -110,9 +94,25 @@ class PathCreator:
         self.alpha = alpha
         self.d = f'M {self.x:.3f} {self.y:.3f}'
 
+    def intersection_point(self, x1, y1, alpha1):
+        '''returns the intersection point of two lines'''
+        dx0, dy0 = math.sin(self.alpha), math.cos(self.alpha)
+        dx1, dy1 = math.sin(alpha1), math.cos(alpha1)
+        '''
+        x0 + r0 * dx0 = x1 + r1 * dx1
+        y0 + r0 * dy0 = y1 + r1 * dy1
+        -----------------------------
+        r0 * dx0 - r1 * dx1 = x1 - x0
+        r0 * dy0 - r1 * dy1 = y1 - y0
+        '''
+        a = np.array([[dx0, -dx1], [dy0, -dy1]])
+        b = np.array([x1 - self.x, y1 - self.y])
+        r = np.linalg.solve(a, b)
+        return self.x + dx0 * r[0], self.y + dy0 * r[0]
+
     def bezier_to(self, p, alpha = 0):
         x1, y1 = p
-        x0, y0 = intersection_point(self.x, self.y, self.alpha, x1, y1, alpha)
+        x0, y0 = self.intersection_point(x1, y1, alpha)
         self.d += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
         self.x, self.y, self.alpha = x1, y1, alpha
         return self.d
