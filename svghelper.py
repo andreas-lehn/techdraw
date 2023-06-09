@@ -4,12 +4,13 @@ import xml.etree.ElementTree as etree
 
 class Image(etree.Element):
 
-    def __init__(self, size, center, *attrib, **extra):
-        my_attrib = {
+    def __init__(self, size, center, attrib={}, **extra):
+        img_attrib = {
             'width': f'{size[0]}mm', 'height': f'{size[1]}mm',
             'viewBox': f'{-center[0]} {-center[1]} {size[0]} {size[1]}',
-            'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1'}
-        super().__init__('svg', merge_attributes(my_attrib, *attrib), **extra)
+            'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1',
+            **attrib }
+        super().__init__('svg', img_attrib, **extra)
         self.style = etree.SubElement(self, 'style')
         self.content = etree.SubElement(self, 'g', { 'transform': 'scale(1, -1)', 'fill': 'lightgrey'})
 
@@ -39,35 +40,35 @@ def orth(p):
 def str(f):
     return f'{f:.3f}'
 
-def Line(parent, p1, p2, *user_attrs, **extra):
+def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', merge_attributes({ 'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2) }, mid_stroke, *user_attrs), **extra)
+    return etree.SubElement(parent, 'line', { 'x1': str(x1), 'y1': str(y1), 'x2': str(x2), 'y2': str(y2), **mid_stroke, **attrib }, **extra)
 
-def Circle(parent, center, radius, *user_attrs, **extra):
+def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
-    return etree.SubElement(parent, 'circle', merge_attributes({ 'cx': str(cx), 'cy': str(cy), 'r': str(radius) }, thick_stroke, *user_attrs), **extra)
+    return etree.SubElement(parent, 'circle', { 'cx': str(cx), 'cy': str(cy), 'r': str(radius), **thick_stroke, **attrib }, **extra)
 
-def Point(parent, pos, *user_attrs, **extra):
+def Point(parent, pos, attrib={}, **extra):
     cx, cy = pos
-    return etree.SubElement(parent, 'circle', merge_attributes({'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black'}, *user_attrs), **extra)
+    return etree.SubElement(parent, 'circle', {'cx': str(cx), 'cy': str(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 
-def Path(parent, d, *user_attrs, **extra):
-    return etree.SubElement(parent, 'path', merge_attributes({'d': d}, thick_stroke, *user_attrs), **extra)
+def Path(parent, d, attrib={}, **extra):
+    return etree.SubElement(parent, 'path', {'d': d, **thick_stroke, **attrib }, **extra)
 
-def Translation(parent, origin, *attrs, **extra):
+def Translation(parent, origin, attrib={}, **extra):
     tx, ty = origin
-    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'translate({str(tx)} {str(ty)})'}, *attrs), **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'translate({str(tx)} {str(ty)}', **attrib }, **extra)
 
-def Rotation(parent, rotation, *attrs, **extra):
+def Rotation(parent, rotation, attrib={}, **extra):
     rotation = -180 * rotation / math.pi
-    return etree.SubElement(parent, 'g', merge_attributes({'transform': f'rotate({str(rotation)})'}, *attrs), **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'rotate({str(rotation)})', **attrib }, **extra)
 
-def Text(parent, pos, text, *attrs, rotation = 0, offset = (0, 0), **extra):
+def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
     rotation = -180 * rotation / math.pi
     g = etree.SubElement(parent, 'g', {'transform': f'translate({str(x)} {str(y)}) rotate({str(rotation)})'})
-    t = etree.SubElement(g, 'text', merge_attributes({'transform': f'translate({str(offset[0])} {str(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none'}, *attrs), **extra)
+    t = etree.SubElement(g, 'text', {'transform': f'translate({str(offset[0])} {str(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
 
@@ -75,18 +76,18 @@ def angle(p):
     p = np.array(p)
     return np.arccos(np.dot(np.array([0, 1]), p) / np.sqrt((p * p).sum()))
 
-def LineLabel(parent, p1, p2, text, *attrs, pos = 0.5, offset = 0.5, **extra):
+def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra):
     p = p1 + (p2 - p1) * pos
     alpha = angle(p2 - p1) - math.pi / 2
-    return Text(parent, p, text, *attrs, rotation=alpha, offset=(0, offset), **extra)
+    return Text(parent, p, text, **attrib, rotation=alpha, offset=(0, offset), **extra)
 
-def Arc(parent, p1, p2, r, *attrs, clockwise = True, large = False, **extra):
-    return Path(parent, PathCreator(p1).arc_to(p2, r), merge_attributes({ 'fill': 'none' }, *attrs), **extra)
+def Arc(parent, p1, p2, r, attrib={}, clockwise = True, large = False, **extra):
+    return Path(parent, PathCreator(p1).arc_to(p2, r), { 'fill': 'none', **attrib }, **extra)
 
-def ArcLabel(parent, center, radius, alpha, text, *attrs, offset = (0, 0), **extra):
+def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset = (0, 0), **extra):
     x, y = center
     pos = (x + radius * math.sin(alpha), y + radius * math.cos(alpha))
-    return Text(parent, pos, text, *attrs, rotation=alpha, offset=offset, **extra)
+    return Text(parent, pos, text, **attrib, rotation=alpha, offset=offset, **extra)
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     '''returns the intersection point of two lines'''
