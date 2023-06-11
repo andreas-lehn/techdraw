@@ -19,24 +19,24 @@ class Image(etree.Element):
         etree.indent(tree, '    ')
         tree.write(file)
 
+def len(p):
+    return math.sqrt(p[0]**2 + p[1]**2)
+
 def cart2pol(p):
-    p = np.array(p) 
-    r = np.sqrt((p * p).sum())
-    phi = np.arctan2(p[1], p[0])
-    return np.array([r, phi])
+    return np.array([len(p), angle(p)])
 
 def pol2cart(r, phi):
-    return np.array([r * np.sin(phi), r * np.cos(phi)])
+    return np.array([r * np.cos(phi), r * np.sin(phi)])
 
 def orth(p):
     x, y = p
-    return np.array([y, -x])
+    return np.array([-y, x])
 
 def fmt(f):
     return f'{f:.3f}'
 
 def angle(p):
-    return np.arctan2(p[0], p[1])
+    return np.arctan2(p[1], p[0])
 
 def rad2grad(alpha):
     return 180 * alpha / math.pi
