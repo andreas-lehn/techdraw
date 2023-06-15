@@ -11,6 +11,7 @@ class Image(etree.Element):
             'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1',
             **attrib }
         super().__init__('svg', img_attrib, **extra)
+        #TODO: Description hinzufügen
         self.style = etree.SubElement(self, 'style')
         self.content = etree.SubElement(self, 'g', { 'transform': 'scale(1, -1)', 'fill': 'lightgrey'})
 
@@ -38,11 +39,11 @@ def fmt_f(f):
 def angle(p):
     return np.arctan2(p[1], p[0])
 
-def rad2grad(alpha):
-    return 180 * alpha / math.pi
+def degrees(alpha):
+    return np.degrees(alpha)
 
-def grad2rad(alpha):
-    return alpha * math.pi / 180
+def radians(alpha):
+    return np.redians(alpha)
 
 def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
@@ -65,11 +66,11 @@ def Translation(parent, origin, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(tx)} {fmt_f(ty)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
-    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(rad2grad(rotation))})', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(degrees(rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(x)} {fmt_f(y)}) rotate({fmt_f(rad2grad(rotation))})'})
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(x)} {fmt_f(y)}) rotate({fmt_f(degrees(rotation))})'})
     t = etree.SubElement(g, 'text', {'transform': f'translate({fmt_f(offset[0])} {fmt_f(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
@@ -81,11 +82,19 @@ def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra)
 def Arc(parent, p1, p2, r, attrib={}, clockwise = False, large = False, **extra):
     return Path(parent, PathCreator(p1).arc_to(p2, r), { 'fill': 'none', **attrib }, **extra)
 
-def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset = (0, 0), **extra):
+def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0, 0), **extra):
     pos = np.array(center) + pol2cart(radius, alpha)
     return Text(parent, pos, text, **attrib, rotation=alpha - math.pi/2, offset=offset, **extra)
 
+def RightAngle(parent, p, alpha, attrib={}, clockwise=False, **extra):
+    #TODO implementieren
+    return parent
+
 class PathCreator:
+# TODO: Formatierung der Fießkommazahlen mit fmt_f machen
+# TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
+# TODO: Zeichenfunktionen sollen den Pfad und nicht d zurück geben, um zu kontakatieren.
+# TODO: Move_to hinzufügen, um komplexere Pfade konstruieren zu können.
 
     def __init__(self, p, alpha = 0):
         self.x, self.y = p

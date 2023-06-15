@@ -10,8 +10,8 @@ if __name__ == "__main__":
     M = np.array([0, 0]) # mid point of base circle
 
     n = 60 # number of line segements
-    max_alpha = svg.grad2rad(-180) # max alpha of involute
-    alpha = svg.grad2rad(-60) # angle on the base circle
+    max_alpha = svg.radians(-180) # max alpha of involute
+    alpha = svg.radians(-60) # angle on the base circle
     gamma = involute.gamma(alpha) # angle of the involute point
     P = svg.pol2cart(r, alpha) # example point on base circle
     Q = involute.point(r, alpha) # example point on involute
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     O = svg.orth(P) # orthognal vector of P
 
     img = svg.Image((150, 100), (50, 50))
-    img.content = svg.Rotation(img.content, svg.grad2rad(90))
+    img.content = svg.Rotation(img.content, svg.radians(90))
 
     # involutes
     svg.Path(img.content, svg.PathCreator(S).line_to(*involute.points(r, max_alpha, 0, n)), fill='none')
