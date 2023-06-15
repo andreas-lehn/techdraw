@@ -32,4 +32,5 @@ if __name__ == "__main__":
     svg.Path(img.content, svg.PathCreator(T).line_to(Q, S, T).path, svg.thin_stroke, fill='none')
     svg.Arc(img.content, svg.pol2cart(1.5 * r, 0), 1.5 * P, 1.5 * r, svg.thin_stroke)
     svg.ArcLabel(img.content, M, 1.5 * r, 0.5 * alpha, u'\u03B1', offset=(0, 0.5))
-    img.write('svg-demo-1.svg')
+    
+    img.write('svg-demo.svg')
