@@ -19,11 +19,11 @@ class Image(etree.Element):
         etree.indent(tree, '    ')
         tree.write(file)
 
-def len(p):
+def length(p):
     return math.sqrt(p[0]**2 + p[1]**2)
 
 def cart2pol(p):
-    return np.array([len(p), angle(p)])
+    return np.array([length(p), angle(p)])
 
 def pol2cart(r, phi):
     return np.array([r * np.cos(phi), r * np.sin(phi)])
