@@ -85,12 +85,19 @@ def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0, 0), **ex
     pos = np.array(center) + pol2cart(radius, alpha)
     return Text(parent, pos, text, **attrib, rotation = alpha - radians(90), offset=offset, **extra)
 
-def RightAngle(parent, p, alpha, attrib={}, clockwise=False, **extra):
-    #TODO implementieren
-    return parent
+def RightAngleSymbol(parent, pos, rotation, attrib={}, clockwise=False, **extra):
+    pos = np.array(pos)
+    v1 = pol2cart(5, rotation)
+    v2 = orth(v1)
+    if clockwise:
+        v1, v2 = -v2, v1
+    g = etree.SubElement(parent, 'g')
+    result = Path(g, PathCreator(pos + v1).arc_to(pos + v2, length(v2)).path, { **thin_stroke, 'fill': 'none', **attrib}, **extra)
+    Dot(g, pos + (v1 + v2) / 2 / np.sqrt(2))
+    return result
 
 class PathCreator:
-# TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
+    #TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
 
     def __init__(self, p, alpha = 0.0):
         self.x, self.y = p

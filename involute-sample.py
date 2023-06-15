@@ -35,16 +35,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(2 * r, gamma), svg.thin_stroke)
     svg.Line(img.content, Q - P, Q + P, svg.thin_stroke)
     svg.Line(img.content, Q - O / 2, P + O / 2, svg.thin_stroke)
-
-    # rechte Winkel
-    #l = math.sqrt(dx ** 2 + dy ** 2)
-    #ra = 5
-    #dx, dy = dx / l * ra, dy / l * ra
-    #c = math.sqrt(2) * 2
-    #print(f'        <path class="dotline" d="M {px - dy} {py + dx} A {ra} {ra} 0 0 0 {px + dx} {py + dy}"/>')
-    #print(f'        <circle cx="{px + (dx - dy) / c}" cy="{py + (dy + dx) / c}" r="0.25" fill="black"/>')
-    #print(f'        <path class="dotline" d="M {qx - dy} {qy + dx} A {ra} {ra} 0 0 1 {qx - dx} {qy - dy}"/>')
-    #print(f'        <circle cx="{qx - (dy + dx) / c}" cy="{qy + (dx - dy) / c}" r="0.25" fill="black"/>')
+    svg.RightAngleSymbol(img.content, P, alpha)
+    svg.RightAngleSymbol(img.content, Q, alpha, clockwise=True)
 
     # r
     svg.Line(img.content, M, P)
