@@ -1,4 +1,3 @@
-import math
 import numpy as np
 import xml.etree.ElementTree as etree
 
@@ -21,7 +20,7 @@ class Image(etree.Element):
         tree.write(file)
 
 def length(p):
-    return math.sqrt(p[0]**2 + p[1]**2)
+    return np.sqrt(p[0]**2 + p[1]**2)
 
 def cart2pol(p):
     return np.array([length(p), angle(p)])
@@ -43,7 +42,7 @@ def degrees(alpha):
     return np.degrees(alpha)
 
 def radians(alpha):
-    return np.redians(alpha)
+    return np.radians(alpha)
 
 def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
@@ -84,7 +83,7 @@ def Arc(parent, p1, p2, r, attrib={}, clockwise = False, large = False, **extra)
 
 def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0, 0), **extra):
     pos = np.array(center) + pol2cart(radius, alpha)
-    return Text(parent, pos, text, **attrib, rotation=alpha - math.pi/2, offset=offset, **extra)
+    return Text(parent, pos, text, **attrib, rotation = alpha - radians(90), offset=offset, **extra)
 
 def RightAngle(parent, p, alpha, attrib={}, clockwise=False, **extra):
     #TODO implementieren
