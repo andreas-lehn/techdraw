@@ -138,6 +138,13 @@ class PathCreator:
         self.x, self.y = p
         self.add(f'A {fmt_f(r, r)} 0 0 1 {fmt_f(self.x, self.y)}')
         return self
+    
+    def arc_to_line(self, p, angle):
+        q = self.intersection_point(*p, angle)
+        r = q + pol2cart(length(q - self.pos()), angle)
+        self.add(f'Q {fmt_f(*q, *r)}') #TODO: Replace this by an arc
+        self.x, self.y, self.alpha = *r, angle
+        return self
 
     def line_to(self, *points):
         for x, y in points:
@@ -155,7 +162,7 @@ class PathCreator:
         return self
 
     def close(self):
-        self.add('C')
+        self.add('Z')
         return self
 
 thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
