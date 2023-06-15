@@ -79,7 +79,7 @@ def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra)
     return Text(parent, p, text, **attrib, rotation=angle(p2 - p1), offset=(0, offset), **extra)
 
 def Arc(parent, p1, p2, r, attrib={}, clockwise = False, large = False, **extra):
-    return Path(parent, PathCreator(p1).arc_to(p2, r), { 'fill': 'none', **attrib }, **extra)
+    return Path(parent, PathCreator(p1).arc_to(p2, r).path, { 'fill': 'none', **attrib }, **extra)
 
 def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0, 0), **extra):
     pos = np.array(center) + pol2cart(radius, alpha)
@@ -91,7 +91,6 @@ def RightAngle(parent, p, alpha, attrib={}, clockwise=False, **extra):
 
 class PathCreator:
 # TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
-# TODO: Zeichenfunktionen sollen den Pfad und nicht d zurück geben, um zu kontakatieren.
 
     def __init__(self, p, alpha = 0.0):
         self.x, self.y = p
@@ -122,26 +121,27 @@ class PathCreator:
         x0, y0 = self.intersection_point(x1, y1, angle)
         self.add(f'Q {fmt_f(x0)} {fmt_f(y0)} {fmt_f(x1)} {fmt_f(y1)}')
         self.x, self.y, self.alpha = x1, y1, angle
-        return self.path
+        return self
 
     def arc_to(self, p, r):
         self.x, self.y = p
         self.add(f' A {fmt_f(r)} {fmt_f(r)} 0 0 1 {fmt_f(self.x)} {fmt_f(self.y)}')
-        return self.path
+        return self
 
     def line_to(self, *points):
         for self.x, self.y in points:
             self.add(f' L {fmt_f(self.x)} {fmt_f(self.y)}')
-        return self.path
+        return self
 
     def move_to(self, p, angle=0.0):
         self.x, self.y = p
         self.alpha = angle
         self.add(f'M {fmt_f(self.x)} {fmt_f(self.y)}')
+        return self
 
     def close(self):
         self.add('C')
-        return self.path
+        return self
 
 thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
 medium_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }

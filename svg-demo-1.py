@@ -29,7 +29,7 @@ if __name__ == "__main__":
     svg.Line(img.content, M, P, stroke='red')
     svg.Dot(img.content, M)
     svg.LineLabel(img.content, M, P, 'r', pos=0.6, fill='red')
-    svg.Path(img.content, svg.PathCreator(T).line_to(Q, S, T), svg.thin_stroke, fill='none')
+    svg.Path(img.content, svg.PathCreator(T).line_to(Q, S, T).path, svg.thin_stroke, fill='none')
     svg.Arc(img.content, svg.pol2cart(1.5 * r, 0), 1.5 * P, 1.5 * r, svg.thin_stroke)
     svg.ArcLabel(img.content, M, 1.5 * r, 0.5 * alpha, u'\u03B1', offset=(0, 0.5))
     img.write('svg-demo-1.svg')

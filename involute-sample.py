@@ -23,7 +23,7 @@ if __name__ == "__main__":
     img.content = svg.Rotation(img.content, svg.radians(90))
 
     # involutes
-    svg.Path(img.content, svg.PathCreator(S).line_to(*involute.points(r, max_alpha, 0, n)), fill='none')
+    svg.Path(img.content, svg.PathCreator(S).line_to(*involute.points(r, max_alpha, 0, n)).path, fill='none')
 
     # base circle
     svg.Circle(img.content, M, r)

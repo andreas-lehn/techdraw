@@ -45,7 +45,7 @@ if __name__ == "__main__":
     img.content = svg.Rotation(img.content, math.pi/2)
     svg.Path(img.content, gear_wheel.svg_path(), stroke='lightgrey', fill='none')
     svg.Path(img.content, creator.path)
-    svg.Path(img.content, svg.PathCreator(P0).line_to(P7, M), stroke='none')
+    svg.Path(img.content, svg.PathCreator(P0).line_to(P7, M).path, stroke='none')
 
     # draw Teilkreis and Grundkreis
     r = gear_wheel.r_0()
