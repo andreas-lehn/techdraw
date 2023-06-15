@@ -103,14 +103,14 @@ if __name__ == "__main__":
     svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B3', offset=(-0.9, 0.5))
 
     # Mittelpunkt und Controllpunkte
-    svg.Point(img.content, M)
-    svg.Point(img.content, P0)
-    svg.Point(img.content, P1)
-    svg.Point(img.content, P2)
-    svg.Point(img.content, P3)
-    svg.Point(img.content, P4)
-    svg.Point(img.content, P5)
-    svg.Point(img.content, P6)
-    svg.Point(img.content, P7)
+    svg.Dot(img.content, M)
+    svg.Dot(img.content, P0)
+    svg.Dot(img.content, P1)
+    svg.Dot(img.content, P2)
+    svg.Dot(img.content, P3)
+    svg.Dot(img.content, P4)
+    svg.Dot(img.content, P5)
+    svg.Dot(img.content, P6)
+    svg.Dot(img.content, P7)
 
     img.write('gearwheel-construction.svg')

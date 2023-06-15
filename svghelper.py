@@ -53,7 +53,7 @@ def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
     return etree.SubElement(parent, 'circle', { 'cx': fmt(cx), 'cy': fmt(cy), 'r': fmt(radius), **thick_stroke, **attrib }, **extra)
 
-def Point(parent, pos, attrib={}, **extra):
+def Dot(parent, pos, attrib={}, **extra):
     cx, cy = pos
     return etree.SubElement(parent, 'circle', {'cx': fmt(cx), 'cy': fmt(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 

@@ -63,9 +63,9 @@ if __name__ == "__main__":
     svg.ArcLabel(img.content, M, d, 0.5 * gamma, u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
 
     # key points
-    svg.Point(img.content, M)
-    svg.Point(img.content, S)
-    svg.Point(img.content, P)
-    svg.Point(img.content, Q)
+    svg.Dot(img.content, M)
+    svg.Dot(img.content, S)
+    svg.Dot(img.content, P)
+    svg.Dot(img.content, Q)
 
     img.write('involute-sample.svg')
