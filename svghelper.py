@@ -69,24 +69,22 @@ def Rotation(parent, rotation, attrib={}, **extra):
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rad2grad(-rotation))})'})
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rad2grad(rotation))})'})
     t = etree.SubElement(g, 'text', {'transform': f'translate({fmt(offset[0])} {fmt(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
 
 def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra):
     p = p1 + (p2 - p1) * pos
-    alpha = angle(p2 - p1) - math.pi / 2
-    return Text(parent, p, text, **attrib, rotation=alpha, offset=(0, offset), **extra)
+    return Text(parent, p, text, **attrib, rotation=angle(p2 - p1), offset=(0, offset), **extra)
 
-def Arc(parent, p1, p2, r, attrib={}, clockwise = True, large = False, **extra):
+def Arc(parent, p1, p2, r, attrib={}, clockwise = False, large = False, **extra):
     return Path(parent, PathCreator(p1).arc_to(p2, r), { 'fill': 'none', **attrib }, **extra)
 
 def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset = (0, 0), **extra):
-    x, y = center
-    pos = (x + radius * math.sin(alpha), y + radius * math.cos(alpha))
-    return Text(parent, pos, text, **attrib, rotation=alpha, offset=offset, **extra)
-    
+    pos = np.array(center) + pol2cart(radius, alpha)
+    return Text(parent, pos, text, **attrib, rotation=alpha - math.pi/2, offset=offset, **extra)
+
 class PathCreator:
 
     def __init__(self, p, alpha = 0):
@@ -119,7 +117,7 @@ class PathCreator:
 
     def arc_to(self, p, r):
         self.x, self.y = p
-        self.d += f' A {r:.3f} {r:.3f} 0 0 0 {self.x:.3f} {self.y:.3f}'
+        self.d += f' A {r:.3f} {r:.3f} 0 0 1 {self.x:.3f} {self.y:.3f}'
         return self.d
 
     def line_to(self, *points):
