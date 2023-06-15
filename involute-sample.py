@@ -10,16 +10,17 @@ if __name__ == "__main__":
     M = np.array([0, 0]) # mid point of base circle
 
     n = 60 # number of line segements
-    max_alpha = math.pi # max alpha of involute
-    alpha = 60 * math.pi / 180 # angle on the base circle
+    max_alpha = svg.grad2rad(-180) # max alpha of involute
+    alpha = svg.grad2rad(-60) # angle on the base circle
     gamma = involute.gamma(alpha) # angle of the involute point
     P = svg.pol2cart(r, alpha) # example point on base circle
     Q = involute.point(r, alpha) # example point on involute
     d = involute.distance(r, alpha) # length of 
-    S = np.array([0, r]) # start point of involute
+    S = svg.pol2cart(r, 0) # start point of involute
     O = svg.orth(P) # orthognal vector of P
 
     img = svg.Image((150, 100), (50, 50))
+    img.content = svg.Rotation(img.content, svg.grad2rad(90))
 
     # involutes
     svg.Path(img.content, svg.PathCreator(S).line_to(*involute.points(r, max_alpha, 0, n)), fill='none')
@@ -52,14 +53,14 @@ if __name__ == "__main__":
     # alpha
     arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
     svg.Line(img.content, P, Q, arc_stroke)
-    svg.Arc(img.content, S, P, r, arc_stroke)
+    svg.Arc(img.content, P, S, r, arc_stroke)
     svg.ArcLabel(img.content, M, r, 0.4 * alpha, u'\u03B1', offset=(-0.5, 0.5), fill=arc_stroke['stroke'])
 
     # gamma
     gamma_color = 'blue'
     svg.Line(img.content, M, Q, stroke=gamma_color)
     svg.LineLabel(img.content, M, Q, 's', fill=gamma_color)
-    svg.Arc(img.content, (0, d), Q, d, svg.thin_stroke, stroke=gamma_color)
+    svg.Arc(img.content, Q, svg.pol2cart(d, 0), d, svg.thin_stroke, stroke=gamma_color)
     svg.ArcLabel(img.content, M, d, 0.5 * gamma, u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
 
     # key points

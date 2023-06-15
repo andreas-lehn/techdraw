@@ -1,34 +1,36 @@
 <svg width="150mm" height="100mm" viewBox="-50 -50 150 100" xmlns="http://www.w3.org/2000/svg" version="1.1">
     <style />
     <g transform="scale(1, -1)" fill="lightgrey">
-        <path d="M 0.000 20.000 L 0.001 20.027 L 0.008 20.109 L 0.026 20.245 L 0.061 20.434 L 0.119 20.674 L 0.205 20.963 L 0.324 21.299 L 0.481 21.678 L 0.682 22.099 L 0.931 22.556 L 1.232 23.047 L 1.589 23.567 L 2.007 24.110 L 2.488 24.673 L 3.035 25.249 L 3.652 25.834 L 4.340 26.421 L 5.101 27.005 L 5.937 27.580 L 6.849 28.138 L 7.836 28.674 L 8.900 29.181 L 10.040 29.653 L 11.255 30.083 L 12.543 30.464 L 13.902 30.790 L 15.331 31.055 L 16.826 31.251 L 18.383 31.374 L 20.000 31.416 L 21.672 31.372 L 23.393 31.236 L 25.160 31.003 L 26.966 30.668 L 28.805 30.227 L 30.671 29.674 L 32.557 29.005 L 34.456 28.218 L 36.361 27.310 L 38.264 26.276 L 40.158 25.116 L 42.032 23.827 L 43.881 22.408 L 45.694 20.859 L 47.464 19.179 L 49.181 17.370 L 50.836 15.431 L 52.421 13.365 L 53.927 11.173 L 55.345 8.859 L 56.666 6.426 L 57.881 3.878 L 58.982 1.218 L 59.961 -1.547 L 60.810 -4.412 L 61.520 -7.370 L 62.084 -10.416 L 62.495 -13.542 L 62.747 -16.739 L 62.832 -20.000" stroke="black" stroke-width="0.35" stroke-linecap="round" fill="none" />
-        <circle cx="0.000" cy="0.000" r="20.000" stroke="black" stroke-width="0.35" stroke-linecap="round" />
-        <line x1="-40.000" y1="0.000" x2="40.000" y2="0.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
-        <line x1="0.000" y1="-40.000" x2="0.000" y2="40.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
-        <line x1="0.000" y1="0.000" x2="34.641" y2="20.000" stroke="black" stroke-width="0.1" stroke-linecap="round" />
-        <line x1="0.000" y1="0.000" x2="9.459" y2="38.865" stroke="black" stroke-width="0.1" stroke-linecap="round" />
-        <line x1="-10.472" y1="18.138" x2="24.169" y2="38.138" stroke="black" stroke-width="0.1" stroke-linecap="round" />
-        <line x1="1.849" y1="36.798" x2="22.321" y2="1.340" stroke="black" stroke-width="0.1" stroke-linecap="round" />
-        <line x1="0.000" y1="0.000" x2="17.321" y2="10.000" stroke="black" stroke-width="0.2" stroke-linecap="round" />
-        <g transform="translate(8.660 5.000) rotate(30.000)">
-            <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="black" stroke="none">r</text>
+        <g transform="rotate(90.000)">
+            <path d="M 20.000 0.000 L 20.027 -0.001 L 20.109 -0.008 L 20.245 -0.026 L 20.434 -0.061 L 20.674 -0.119 L 20.963 -0.205 L 21.299 -0.324 L 21.678 -0.481 L 22.099 -0.682 L 22.556 -0.931 L 23.047 -1.232 L 23.567 -1.589 L 24.110 -2.007 L 24.673 -2.488 L 25.249 -3.035 L 25.834 -3.652 L 26.421 -4.340 L 27.005 -5.101 L 27.580 -5.937 L 28.138 -6.849 L 28.674 -7.836 L 29.181 -8.900 L 29.653 -10.040 L 30.083 -11.255 L 30.464 -12.543 L 30.790 -13.902 L 31.055 -15.331 L 31.251 -16.826 L 31.374 -18.383 L 31.416 -20.000 L 31.372 -21.672 L 31.236 -23.393 L 31.003 -25.160 L 30.668 -26.966 L 30.227 -28.805 L 29.674 -30.671 L 29.005 -32.557 L 28.218 -34.456 L 27.310 -36.361 L 26.276 -38.264 L 25.116 -40.158 L 23.827 -42.032 L 22.408 -43.881 L 20.859 -45.694 L 19.179 -47.464 L 17.370 -49.181 L 15.431 -50.836 L 13.365 -52.421 L 11.173 -53.927 L 8.859 -55.345 L 6.426 -56.666 L 3.878 -57.881 L 1.218 -58.982 L -1.547 -59.961 L -4.412 -60.810 L -7.370 -61.520 L -10.416 -62.084 L -13.542 -62.495 L -16.739 -62.747 L -20.000 -62.832" stroke="black" stroke-width="0.35" stroke-linecap="round" fill="none" />
+            <circle cx="0.000" cy="0.000" r="20.000" stroke="black" stroke-width="0.35" stroke-linecap="round" />
+            <line x1="-40.000" y1="0.000" x2="40.000" y2="0.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+            <line x1="0.000" y1="-40.000" x2="0.000" y2="40.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
+            <line x1="0.000" y1="0.000" x2="20.000" y2="-34.641" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+            <line x1="0.000" y1="0.000" x2="38.865" y2="-9.459" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+            <line x1="18.138" y1="10.472" x2="38.138" y2="-24.169" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+            <line x1="19.478" y1="-11.849" x2="18.660" y2="-12.321" stroke="black" stroke-width="0.1" stroke-linecap="round" />
+            <line x1="0.000" y1="0.000" x2="10.000" y2="-17.321" stroke="black" stroke-width="0.2" stroke-linecap="round" />
+            <g transform="translate(5.000 -8.660) rotate(-60.000)">
+                <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="black" stroke="none">r</text>
+            </g>
+            <line x1="10.000" y1="-17.321" x2="28.138" y2="-6.849" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
+            <path d="M 10.000 -17.321 A 20.000 20.000 0 0 1 20.000 0.000" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
+            <g transform="translate(18.271 -8.135) rotate(-114.000)">
+                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="red" stroke="none">&#945;</text>
+            </g>
+            <line x1="0.000" y1="0.000" x2="28.138" y2="-6.849" stroke="blue" stroke-width="0.2" stroke-linecap="round" />
+            <g transform="translate(14.069 -3.424) rotate(-13.679)">
+                <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">s</text>
+            </g>
+            <path d="M 28.138 -6.849 A 28.959 28.959 0 0 1 28.959 0.000" stroke="blue" stroke-width="0.1" stroke-linecap="round" fill="none" />
+            <g transform="translate(28.753 -3.449) rotate(-96.840)">
+                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">&#947;</text>
+            </g>
+            <circle cx="0.000" cy="0.000" r="0.5" fill="black" />
+            <circle cx="20.000" cy="0.000" r="0.5" fill="black" />
+            <circle cx="10.000" cy="-17.321" r="0.5" fill="black" />
+            <circle cx="28.138" cy="-6.849" r="0.5" fill="black" />
         </g>
-        <line x1="17.321" y1="10.000" x2="6.849" y2="28.138" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
-        <path d="M 0.000 20.000 A 20.000 20.000 0 0 0 17.321 10.000" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
-        <g transform="translate(8.135 18.271) rotate(-24.000)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="red" stroke="none">&#945;</text>
-        </g>
-        <line x1="0.000" y1="0.000" x2="6.849" y2="28.138" stroke="blue" stroke-width="0.2" stroke-linecap="round" />
-        <g transform="translate(3.424 14.069) rotate(76.321)">
-            <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">s</text>
-        </g>
-        <path d="M 0.000 28.959 A 28.959 28.959 0 0 0 6.849 28.138" stroke="blue" stroke-width="0.1" stroke-linecap="round" fill="none" />
-        <g transform="translate(3.449 28.753) rotate(-6.840)">
-            <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">&#947;</text>
-        </g>
-        <circle cx="0.000" cy="0.000" r="0.5" fill="black" />
-        <circle cx="0.000" cy="20.000" r="0.5" fill="black" />
-        <circle cx="17.321" cy="10.000" r="0.5" fill="black" />
-        <circle cx="6.849" cy="28.138" r="0.5" fill="black" />
     </g>
 </svg>

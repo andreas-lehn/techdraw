@@ -48,7 +48,7 @@ def inverse(r, s):
 
 def point(r, alpha, offset = 0):
     s, gamma = point_polar(r, alpha)
-    return s * np.array([math.sin(gamma + offset), math.cos(gamma + offset)])
+    return s * np.array([np.cos(gamma + offset), np.sin(gamma + offset)])
 
 def points(r, alpha, offset, n):
     alpha = alpha / n
