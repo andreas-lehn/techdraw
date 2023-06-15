@@ -65,7 +65,7 @@ def Translation(parent, origin, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(tx)} {fmt_f(ty)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
-    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(rad2grad(-rotation))})', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(rad2grad(rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
@@ -94,8 +94,8 @@ class PathCreator:
 
     def intersection_point(self, x1, y1, alpha1):
         '''returns the intersection point of two lines'''
-        dx0, dy0 = math.sin(self.alpha), math.cos(self.alpha)
-        dx1, dy1 = math.sin(alpha1), math.cos(alpha1)
+        dx0, dy0 = pol2cart(1, self.alpha)
+        dx1, dy1 = pol2cart(1, alpha1)
         '''
         x0 + r0 * dx0 = x1 + r1 * dx1
         y0 + r0 * dy0 = y1 + r1 * dy1

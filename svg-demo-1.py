@@ -7,7 +7,7 @@ import svghelper as svg
 if __name__ == "__main__":
     r = 20
     
-    alpha = math.pi / 6
+    alpha = math.pi / 4
     beta  = -math.pi / 6
     gamma = math.pi - math.pi / 6
     delta = math.pi / 2

@@ -10,14 +10,9 @@ if __name__ == "__main__":
     alpha = 20
 
     gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
+
+    # construct a single tooth
     p = gear_wheel.tooth_ctrl_points()
-
-    M = (0, 0)
-    width = int(gear_wheel.r_head() * 2) + 2
-    height = int(gear_wheel.r_head() * 1.75) + 2
-    img = svg.Image((width, height), (int(width / 2) - 1, height - 1))
-
-    # draw a single tooth
     r, phi, tan = p[3]
     P0 = svg.pol2cart(r, -phi)
     creator = svg.PathCreator(P0, -tan)
@@ -42,6 +37,12 @@ if __name__ == "__main__":
     r, phi, tan = p[3]
     P7 = svg.pol2cart(r, phi)
     creator.bezier_to(P7, tan)
+
+    M = (0, 0)
+    width = int(gear_wheel.r_head() * 2) + 2
+    height = int(gear_wheel.r_head() * 1.75) + 2    
+    img = svg.Image((width, height), (int(width / 2) - 1, height - 1))
+    img.content = svg.Rotation(img.content, math.pi/2)
     svg.Path(img.content, gear_wheel.svg_path(), stroke='lightgrey', fill='none')
     svg.Path(img.content, creator.d)
     svg.Path(img.content, svg.PathCreator(P0).line_to(P7, M), stroke='none')
