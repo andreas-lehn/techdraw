@@ -17,8 +17,8 @@
         <g transform="translate(8.485 8.485) rotate(45.000)">
             <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="red" stroke="none">r</text>
         </g>
-        <path d="M 0.000 20.000 L 17.321 -10.000 L -17.321 10.000 L 0.000 20.000" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
-        <path d="M 30.000 0.000 A 30.000 30.000 0 0 1 21.213 21.213" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <path d="M 0.000 20.000  L 17.321 -10.000  L -17.321 10.000  L 0.000 20.000" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+        <path d="M 30.000 0.000  A 30.000 30.000 0 0 1 21.213 21.213" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
         <g transform="translate(27.716 11.481) rotate(-67.500)">
             <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="black" stroke="none">&#945;</text>
         </g>

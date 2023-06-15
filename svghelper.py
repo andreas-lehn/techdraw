@@ -90,16 +90,17 @@ def RightAngle(parent, p, alpha, attrib={}, clockwise=False, **extra):
     return parent
 
 class PathCreator:
-# TODO: Formatierung der Fießkommazahlen mit fmt_f machen
 # TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
 # TODO: Zeichenfunktionen sollen den Pfad und nicht d zurück geben, um zu kontakatieren.
-# TODO: Move_to hinzufügen, um komplexere Pfade konstruieren zu können.
 
-    def __init__(self, p, alpha = 0):
+    def __init__(self, p, alpha = 0.0):
         self.x, self.y = p
         self.alpha = alpha
-        self.d = f'M {self.x:.3f} {self.y:.3f}'
+        self.path = f'M {fmt_f(self.x)} {fmt_f(self.y)}'
 
+    def add(self, path):
+        self.path += ' ' + path
+    
     def intersection_point(self, x1, y1, alpha1):
         '''returns the intersection point of two lines'''
         dx0, dy0 = pol2cart(1, self.alpha)
@@ -116,26 +117,31 @@ class PathCreator:
         r = np.linalg.solve(a, b)
         return self.x + dx0 * r[0], self.y + dy0 * r[0]
 
-    def bezier_to(self, p, alpha = 0):
+    def bezier_to(self, p, angle):
         x1, y1 = p
-        x0, y0 = self.intersection_point(x1, y1, alpha)
-        self.d += f' Q {x0:.3f} {y0:.3f} {x1:.3f} {y1:.3f}'
-        self.x, self.y, self.alpha = x1, y1, alpha
-        return self.d
+        x0, y0 = self.intersection_point(x1, y1, angle)
+        self.add(f'Q {fmt_f(x0)} {fmt_f(y0)} {fmt_f(x1)} {fmt_f(y1)}')
+        self.x, self.y, self.alpha = x1, y1, angle
+        return self.path
 
     def arc_to(self, p, r):
         self.x, self.y = p
-        self.d += f' A {r:.3f} {r:.3f} 0 0 1 {self.x:.3f} {self.y:.3f}'
-        return self.d
+        self.add(f' A {fmt_f(r)} {fmt_f(r)} 0 0 1 {fmt_f(self.x)} {fmt_f(self.y)}')
+        return self.path
 
     def line_to(self, *points):
         for self.x, self.y in points:
-            self.d += f' L {self.x:.3f} {self.y:.3f}'
-        return self.d
+            self.add(f' L {fmt_f(self.x)} {fmt_f(self.y)}')
+        return self.path
+
+    def move_to(self, p, angle=0.0):
+        self.x, self.y = p
+        self.alpha = angle
+        self.add(f'M {fmt_f(self.x)} {fmt_f(self.y)}')
 
     def close(self):
-        self.d += ' C'
-        return self.d
+        self.add('C')
+        return self.path
 
 thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
 medium_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }

@@ -76,4 +76,4 @@ class GearWheel:
             path.bezier_to(svg.pol2cart(r_b, offset + b_b), offset + b_b)
             path.bezier_to(svg.pol2cart(r_f, offset + b_f), offset + b_f + math.pi / 2)
         path.close()
-        return path.d
+        return path.path

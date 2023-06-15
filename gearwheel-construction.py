@@ -44,7 +44,7 @@ if __name__ == "__main__":
     img = svg.Image((width, height), (int(width / 2) - 1, height - 1))
     img.content = svg.Rotation(img.content, math.pi/2)
     svg.Path(img.content, gear_wheel.svg_path(), stroke='lightgrey', fill='none')
-    svg.Path(img.content, creator.d)
+    svg.Path(img.content, creator.path)
     svg.Path(img.content, svg.PathCreator(P0).line_to(P7, M), stroke='none')
 
     # draw Teilkreis and Grundkreis
