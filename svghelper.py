@@ -5,8 +5,8 @@ class Image(etree.Element):
 
     def __init__(self, size, center, attrib={}, **extra):
         img_attrib = {
-            'width': f'{size[0]}mm', 'height': f'{size[1]}mm',
-            'viewBox': f'{-center[0]} {-center[1]} {size[0]} {size[1]}',
+            'width': f'{fmt_f(size[0])}mm', 'height': f'{fmt_f(size[1])}mm',
+            'viewBox': f'{fmt_f(-center[0], -center[1], *size)}',
             'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1',
             **attrib }
         super().__init__('svg', img_attrib, **extra)
@@ -32,8 +32,11 @@ def orth(p):
     x, y = p
     return np.array([-y, x])
 
-def fmt_f(f):
-    return f'{f:.3f}'
+def fmt_f(f, *floats):
+    result = f'{f:.3f}'
+    for f in floats:
+        result += f' {f:.3f}'
+    return result
 
 def angle(p):
     return np.arctan2(p[1], p[0])
@@ -61,16 +64,14 @@ def Path(parent, d, attrib={}, **extra):
     return etree.SubElement(parent, 'path', {'d': d, **thick_stroke, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
-    tx, ty = origin
-    return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(tx)} {fmt_f(ty)}', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(*origin)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(degrees(rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
-    x, y = pos
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(x)} {fmt_f(y)}) rotate({fmt_f(degrees(rotation))})'})
-    t = etree.SubElement(g, 'text', {'transform': f'translate({fmt_f(offset[0])} {fmt_f(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(*pos)}) rotate({fmt_f(degrees(rotation))})'})
+    t = etree.SubElement(g, 'text', {'transform': f'translate({fmt_f(*offset)}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
 
@@ -78,10 +79,10 @@ def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra)
     p = p1 + (p2 - p1) * pos
     return Text(parent, p, text, **attrib, rotation=angle(p2 - p1), offset=(0, offset), **extra)
 
-def Arc(parent, p1, p2, r, attrib={}, clockwise = False, large = False, **extra):
+def Arc(parent, p1, p2, r, attrib={}, **extra):
     return Path(parent, PathCreator(p1).arc_to(p2, r).path, { 'fill': 'none', **attrib }, **extra)
 
-def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0, 0), **extra):
+def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0.0, 0.0), **extra):
     pos = np.array(center) + pol2cart(radius, alpha)
     return Text(parent, pos, text, **attrib, rotation = alpha - radians(90), offset=offset, **extra)
 
@@ -102,10 +103,13 @@ class PathCreator:
     def __init__(self, p, alpha = 0.0):
         self.x, self.y = p
         self.alpha = alpha
-        self.path = f'M {fmt_f(self.x)} {fmt_f(self.y)}'
+        self.path = f'M {fmt_f(self.x, self.y)}'
 
     def add(self, path):
         self.path += ' ' + path
+    
+    def pos(self):
+        return np.array([self.x, self.y])
     
     def intersection_point(self, x1, y1, alpha1):
         '''returns the intersection point of two lines'''
@@ -123,27 +127,31 @@ class PathCreator:
         r = np.linalg.solve(a, b)
         return self.x + dx0 * r[0], self.y + dy0 * r[0]
 
-    def bezier_to(self, p, angle):
+    def curve_to(self, p, angle):
         x1, y1 = p
         x0, y0 = self.intersection_point(x1, y1, angle)
-        self.add(f'Q {fmt_f(x0)} {fmt_f(y0)} {fmt_f(x1)} {fmt_f(y1)}')
+        self.add(f'Q {fmt_f(x0, y0, x1, y1)}')
         self.x, self.y, self.alpha = x1, y1, angle
         return self
 
     def arc_to(self, p, r):
         self.x, self.y = p
-        self.add(f' A {fmt_f(r)} {fmt_f(r)} 0 0 1 {fmt_f(self.x)} {fmt_f(self.y)}')
+        self.add(f'A {fmt_f(r, r)} 0 0 1 {fmt_f(self.x, self.y)}')
         return self
 
     def line_to(self, *points):
-        for self.x, self.y in points:
-            self.add(f' L {fmt_f(self.x)} {fmt_f(self.y)}')
+        for x, y in points:
+            self.add(f'L {fmt_f(x, y)}')
+            self.x, self.y, self.alpha = x, y, angle((x - self.x, y - self.y))
         return self
 
+    def line(self, distance):
+        return self.line_to(self.pos() + pol2cart(distance, self.alpha))
+    
     def move_to(self, p, angle=0.0):
         self.x, self.y = p
         self.alpha = angle
-        self.add(f'M {fmt_f(self.x)} {fmt_f(self.y)}')
+        self.add(f'M {fmt_f(self.x, self.y)}')
         return self
 
     def close(self):
