@@ -32,7 +32,7 @@ def orth(p):
     x, y = p
     return np.array([-y, x])
 
-def fmt(f):
+def fmt_f(f):
     return f'{f:.3f}'
 
 def angle(p):
@@ -47,30 +47,30 @@ def grad2rad(alpha):
 def Line(parent, p1, p2, attrib={}, **extra):
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', { 'x1': fmt(x1), 'y1': fmt(y1), 'x2': fmt(x2), 'y2': fmt(y2), **medium_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'line', { 'x1': fmt_f(x1), 'y1': fmt_f(y1), 'x2': fmt_f(x2), 'y2': fmt_f(y2), **medium_stroke, **attrib }, **extra)
 
 def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
-    return etree.SubElement(parent, 'circle', { 'cx': fmt(cx), 'cy': fmt(cy), 'r': fmt(radius), **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), **thick_stroke, **attrib }, **extra)
 
 def Dot(parent, pos, attrib={}, **extra):
     cx, cy = pos
-    return etree.SubElement(parent, 'circle', {'cx': fmt(cx), 'cy': fmt(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
+    return etree.SubElement(parent, 'circle', {'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 
 def Path(parent, d, attrib={}, **extra):
     return etree.SubElement(parent, 'path', {'d': d, **thick_stroke, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
     tx, ty = origin
-    return etree.SubElement(parent, 'g', {'transform': f'translate({fmt(tx)} {fmt(ty)}', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(tx)} {fmt_f(ty)}', **attrib }, **extra)
 
 def Rotation(parent, rotation, attrib={}, **extra):
-    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt(rad2grad(-rotation))})', **attrib }, **extra)
+    return etree.SubElement(parent, 'g', {'transform': f'rotate({fmt_f(rad2grad(-rotation))})', **attrib }, **extra)
 
 def Text(parent, pos, text, attrib={}, rotation = 0, offset = (0, 0), **extra):
     x, y = pos
-    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt(x)} {fmt(y)}) rotate({fmt(rad2grad(rotation))})'})
-    t = etree.SubElement(g, 'text', {'transform': f'translate({fmt(offset[0])} {fmt(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
+    g = etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(x)} {fmt_f(y)}) rotate({fmt_f(rad2grad(rotation))})'})
+    t = etree.SubElement(g, 'text', {'transform': f'translate({fmt_f(offset[0])} {fmt_f(offset[1])}) scale(0.25, -0.25)', 'fill': 'black', 'stroke': 'none', **attrib }, **extra)
     t.text = text
     return g
 
