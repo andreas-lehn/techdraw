@@ -22,6 +22,9 @@ class Image(etree.Element):
 def length(p):
     return np.sqrt(p[0]**2 + p[1]**2)
 
+def distance(p, q):
+    return length(p - q)
+
 def cart2pol(p):
     return np.array([length(p), angle(p)])
 
@@ -31,6 +34,12 @@ def pol2cart(r, phi):
 def orth(p):
     x, y = p
     return np.array([-y, x])
+
+def norm_angle(alpha):
+    '''Returns an angle equivalent to alpha in the interval [0, 2 * PI)'''
+    U = 2 * np.pi
+    n = np.floor(alpha / U)
+    return alpha - n * U
 
 def fmt_f(f, *floats):
     result = f'{f:.3f}'
@@ -97,6 +106,25 @@ def RightAngleSymbol(parent, pos, rotation, attrib={}, clockwise=False, **extra)
     Dot(g, pos + (v1 + v2) / 2 / np.sqrt(2))
     return result
 
+def intersection_r(x0, y0, alpha0, x1, y1, alpha1):
+    '''returns the intersection point of two lines'''
+    dx0, dy0 = pol2cart(1, alpha0)
+    dx1, dy1 = pol2cart(1, alpha1)
+    '''
+    x0 + r0 * dx0 = x1 + r1 * dx1
+    y0 + r0 * dy0 = y1 + r1 * dy1
+    -----------------------------
+    r0 * dx0 - r1 * dx1 = x1 - x0
+    r0 * dy0 - r1 * dy1 = y1 - y0
+    '''
+    a = np.array([[dx0, -dx1], [dy0, -dy1]])
+    b = np.array([x1 - x0, y1 - y0])
+    return np.linalg.solve(a, b)
+
+def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
+    r0, r1 = intersection_r(x0, y0, alpha0, x1, y1, alpha1)
+    return np.array([x0, y0]) + pol2cart(r0, alpha0)
+
 class PathCreator:
     #TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
 
@@ -112,26 +140,13 @@ class PathCreator:
         return np.array([self.x, self.y])
     
     def intersection_point(self, x1, y1, alpha1):
-        '''returns the intersection point of two lines'''
-        dx0, dy0 = pol2cart(1, self.alpha)
-        dx1, dy1 = pol2cart(1, alpha1)
-        '''
-        x0 + r0 * dx0 = x1 + r1 * dx1
-        y0 + r0 * dy0 = y1 + r1 * dy1
-        -----------------------------
-        r0 * dx0 - r1 * dx1 = x1 - x0
-        r0 * dy0 - r1 * dy1 = y1 - y0
-        '''
-        a = np.array([[dx0, -dx1], [dy0, -dy1]])
-        b = np.array([x1 - self.x, y1 - self.y])
-        r = np.linalg.solve(a, b)
-        return self.x + dx0 * r[0], self.y + dy0 * r[0]
+        return intersection_point(self.x, self.y, self.alpha, x1, y1, alpha1)
 
-    def curve_to(self, p, angle):
+    def curve_to(self, p, alpha):
         x1, y1 = p
-        x0, y0 = self.intersection_point(x1, y1, angle)
+        x0, y0 = self.intersection_point(x1, y1, alpha)
         self.add(f'Q {fmt_f(x0, y0, x1, y1)}')
-        self.x, self.y, self.alpha = x1, y1, angle
+        self.x, self.y, self.alpha = x1, y1, alpha
         return self
 
     def arc_to(self, p, r):
@@ -139,11 +154,23 @@ class PathCreator:
         self.add(f'A {fmt_f(r, r)} 0 0 1 {fmt_f(self.x, self.y)}')
         return self
     
-    def arc_to_line(self, p, angle):
-        q = self.intersection_point(*p, angle)
-        r = q + pol2cart(length(q - self.pos()), angle)
-        self.add(f'Q {fmt_f(*q, *r)}') #TODO: Replace this by an arc
-        self.x, self.y, self.alpha = *r, angle
+    def arc_to_line(self, p, alpha):
+        large_arg, clockwise = '0', '0'
+        r0, r1 = intersection_r(self.x, self.y, self.alpha, *p, alpha)
+        s = self.pos() + pol2cart(r0, self.alpha)
+        q = pol2cart(length(s - self.pos()), alpha)
+        if (r0 >= 0):
+            q = s + q
+            if norm_angle(norm_angle(alpha) - norm_angle(self.alpha)) < radians(180): clockwise = '1'
+        else:
+            q = s - q
+            large_arg = '1'
+            if norm_angle(norm_angle(alpha) - norm_angle(self.alpha)) > radians(180): clockwise = '1'
+        m = (self.pos() + q) / 2
+        m = intersection_point(*s, angle(m - s), *q, alpha + radians(90))
+        r = distance(m, self.pos())
+        self.add(f'A {fmt_f(r, r)} 0 {large_arg} {clockwise} {fmt_f(*q)}')
+        self.x, self.y, self.alpha = *q, alpha
         return self
 
     def line_to(self, *points):
