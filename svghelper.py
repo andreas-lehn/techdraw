@@ -126,7 +126,6 @@ def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
     return np.array([x0, y0]) + pol2cart(r0, alpha0)
 
 class PathCreator:
-    #TODO: Arc verändern, dass es mit Punkt und Richtung funktioniert
 
     def __init__(self, p, alpha = 0.0):
         self.x, self.y = p
@@ -161,26 +160,30 @@ class PathCreator:
         m = q + orth(pol2cart(r, angle(p - o))) * c/np.abs(r) # Mittelpunkt des Kreises
         self.x, self.y, self.alpha = *p, angle(p - m) + np.pi/2
         clockwise = '1'
-        if r < 0: r, clockwise = -r, '0'
+        if r < 0: r, clockwise, self.alpha = -r, '0', self.alpha + np.pi
         self.add(f'A {fmt_f(r, r)} 0 0 {clockwise} {fmt_f(self.x, self.y)}')
         return self
     
     def arc_to_line(self, p, alpha):
-        #TODO: 180° Bögen gehen noch nicht.
         large, clockwise = '0', '0'
-        r0, r1 = intersection_r(self.x, self.y, self.alpha, *p, alpha)
-        s = self.pos() + pol2cart(r0, self.alpha)
-        q = pol2cart(length(s - self.pos()), alpha)
         delta = norm_angle(norm_angle(alpha) - norm_angle(self.alpha))
-        if (r0 >= 0):
-            q = s + q
-            if delta < radians(180): clockwise = '1'
+        if delta == 0 or delta == np.pi:
+            #TODO: Clockwise stimmt noch nicht.
+            q = intersection_point(self.x, self.y, self.alpha + np.pi/2, *p, alpha)
+            m = (q + self.pos()) / 2
         else:
-            q = s - q
-            large = '1'
-            if delta > radians(180): clockwise = '1'
-        m = (self.pos() + q) / 2
-        m = intersection_point(*s, angle(m - s), *q, alpha + radians(90))
+            r0, r1 = intersection_r(self.x, self.y, self.alpha, *p, alpha)
+            s = self.pos() + pol2cart(r0, self.alpha)
+            q = pol2cart(length(s - self.pos()), alpha)
+            if (r0 >= 0):
+                q = s + q
+                if delta < radians(180): clockwise = '1'
+            else:
+                q = s - q
+                large = '1'
+                if delta > radians(180): clockwise = '1'
+            m = (self.pos() + q) / 2
+            m = intersection_point(*s, angle(m - s), *q, alpha + radians(90))
         r = distance(m, self.pos())
         self.add(f'A {fmt_f(r, r)} 0 {large} {clockwise} {fmt_f(*q)}')
         self.x, self.y, self.alpha = *q, alpha
