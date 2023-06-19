@@ -89,7 +89,7 @@ def LineLabel(parent, p1, p2, text, attrib={}, pos = 0.5, offset = 0.5, **extra)
     return Text(parent, p, text, **attrib, rotation=angle(p2 - p1), offset=(0, offset), **extra)
 
 def Arc(parent, p1, p2, r, attrib={}, **extra):
-    return Path(parent, PathCreator(p1).arc_to(p2, r).path, { 'fill': 'none', **attrib }, **extra)
+    return Path(parent, PathCreator(p1).arc_to_point(p2, r).path, { 'fill': 'none', **attrib }, **extra)
 
 def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0.0, 0.0), **extra):
     pos = np.array(center) + pol2cart(radius, alpha)
@@ -102,7 +102,7 @@ def RightAngleSymbol(parent, pos, rotation, attrib={}, clockwise=False, **extra)
     if clockwise:
         v1, v2 = -v2, v1
     g = etree.SubElement(parent, 'g')
-    result = Path(g, PathCreator(pos + v1).arc_to(pos + v2, length(v2)).path, { **thin_stroke, 'fill': 'none', **attrib}, **extra)
+    result = Path(g, PathCreator(pos + v1).arc_to_point(pos + v2, length(v2)).path, { **thin_stroke, 'fill': 'none', **attrib}, **extra)
     Dot(g, pos + (v1 + v2) / 2 / np.sqrt(2))
     return result
 
@@ -149,27 +149,36 @@ class PathCreator:
         self.x, self.y, self.alpha = x1, y1, alpha
         return self
 
-    def arc_to(self, p, r):
+    def arc(self, length, r):
+        #TODO: Bogen mit einer Länge und einem Radius zeichnen
+        return self
+     
+    def arc_to_point(self, p, r):
+        #TODO: alpha richtig berechnen
         self.x, self.y = p
-        self.add(f'A {fmt_f(r, r)} 0 0 1 {fmt_f(self.x, self.y)}')
+        clockwise = '1'
+        if r < 0: r, clockwise = -r, '0'
+        self.add(f'A {fmt_f(r, r)} 0 0 {clockwise} {fmt_f(self.x, self.y)}')
         return self
     
     def arc_to_line(self, p, alpha):
-        large_arg, clockwise = '0', '0'
+        #TODO: 180° Bögen gehen noch nicht.
+        large, clockwise = '0', '0'
         r0, r1 = intersection_r(self.x, self.y, self.alpha, *p, alpha)
         s = self.pos() + pol2cart(r0, self.alpha)
         q = pol2cart(length(s - self.pos()), alpha)
+        delta = norm_angle(norm_angle(alpha) - norm_angle(self.alpha))
         if (r0 >= 0):
             q = s + q
-            if norm_angle(norm_angle(alpha) - norm_angle(self.alpha)) < radians(180): clockwise = '1'
+            if delta < radians(180): clockwise = '1'
         else:
             q = s - q
-            large_arg = '1'
-            if norm_angle(norm_angle(alpha) - norm_angle(self.alpha)) > radians(180): clockwise = '1'
+            large = '1'
+            if delta > radians(180): clockwise = '1'
         m = (self.pos() + q) / 2
         m = intersection_point(*s, angle(m - s), *q, alpha + radians(90))
         r = distance(m, self.pos())
-        self.add(f'A {fmt_f(r, r)} 0 {large_arg} {clockwise} {fmt_f(*q)}')
+        self.add(f'A {fmt_f(r, r)} 0 {large} {clockwise} {fmt_f(*q)}')
         self.x, self.y, self.alpha = *q, alpha
         return self
 

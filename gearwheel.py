@@ -64,16 +64,17 @@ class GearWheel:
         r_0, r_h, r_b, r_f = self.r_0(), self.r_head(), self.r_base(), self.r_foot()
         b_0, b_h, b_b, b_f = self.beta_0(), self.gamma(), self.beta(), self.tau() / 2
 
-        path = svg.PathCreator(svg.pol2cart(r_f, -b_f), -b_f / 2 + math.pi / 2)
+        path = svg.PathCreator(svg.pol2cart(r_f, -b_f), -b_f / 2 + math.pi/2)
         for i in range(self.n_teeth):
             offset = i * self.tau()
-            path.bezier_to(svg.pol2cart(r_b, offset - b_b), offset - b_b)
-            path.bezier_to(svg.pol2cart(r_0, offset - b_0), offset - b_0 + self.alpha)
-            path.bezier_to(svg.pol2cart(r_h, offset - b_h), offset - b_h + involute.inverse(r_b, r_h))
-            path.arc_to(svg.pol2cart(r_h, offset + b_h), r_h)
+            path.curve_to(svg.pol2cart(r_b, offset - b_b), offset - b_b)
+            path.curve_to(svg.pol2cart(r_0, offset - b_0), offset - b_0 + self.alpha)
+            path.curve_to(svg.pol2cart(r_h, offset - b_h), offset - b_h + involute.inverse(r_b, r_h))
+            path.alpha = offset - b_h + math.pi/2
+            path.arc_to_line(svg.pol2cart(r_h, offset + b_h), offset + b_h + math.pi/2)
             path.alpha = offset + b_h - involute.inverse(r_b, r_h)
-            path.bezier_to(svg.pol2cart(r_0, offset + b_0), offset + b_0 - self.alpha)
-            path.bezier_to(svg.pol2cart(r_b, offset + b_b), offset + b_b)
-            path.bezier_to(svg.pol2cart(r_f, offset + b_f), offset + b_f + math.pi / 2)
+            path.curve_to(svg.pol2cart(r_0, offset + b_0), offset + b_0 - self.alpha)
+            path.curve_to(svg.pol2cart(r_b, offset + b_b), offset + b_b)
+            path.curve_to(svg.pol2cart(r_f, offset + b_f), offset + b_f + math.pi/2)
         path.close()
         return path.path

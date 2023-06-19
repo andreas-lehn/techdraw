@@ -18,25 +18,26 @@ if __name__ == "__main__":
     creator = svg.PathCreator(P0, -tan)
     r, phi, tan = p[2]
     P1 = svg.pol2cart(r, -phi)
-    creator.bezier_to(P1, -tan)
+    creator.curve_to(P1, -tan)
     r, phi, tan = p[1]
     P2 = svg.pol2cart(r, -phi)
-    creator.bezier_to(P2, -tan)
+    creator.curve_to(P2, -tan)
     r, phi, tan = p[0]
     P3 = svg.pol2cart(r, -phi)
-    creator.bezier_to(P3, -tan)
+    creator.curve_to(P3, -tan)
     P4 = svg.pol2cart(r, phi)
-    creator.arc_to(P4, gear_wheel.r_head())
+    creator.alpha = -phi + math.pi/2
+    creator.arc_to_line(P4, phi + math.pi/2)
     creator.alpha = tan
     r, phi, tan = p[1]
     P5 = svg.pol2cart(r, phi)
-    creator.bezier_to(P5, tan)
+    creator.curve_to(P5, tan)
     r, phi, tan = p[2]
     P6 = svg.pol2cart(r, phi)
-    creator.bezier_to(P6, tan)
+    creator.curve_to(P6, tan)
     r, phi, tan = p[3]
     P7 = svg.pol2cart(r, phi)
-    creator.bezier_to(P7, tan)
+    creator.curve_to(P7, tan)
 
     M = (0, 0)
     width = int(gear_wheel.r_head() * 2) + 2
