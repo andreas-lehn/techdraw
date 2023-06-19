@@ -154,8 +154,12 @@ class PathCreator:
         return self
      
     def arc_to_point(self, p, r):
-        #TODO: alpha richtig berechnen
-        self.x, self.y = p
+        o = self.pos() # Ausgangspunkt
+        q = (o + np.array(p)) / 2 # Mittelpunkt zwischen Anfangs- und Endpunkt
+        d = distance(q, p)
+        c = np.sqrt(r**2 - d**2)
+        m = q + orth(pol2cart(r, angle(p - o))) * c/np.abs(r) # Mittelpunkt des Kreises
+        self.x, self.y, self.alpha = *p, angle(p - m) + np.pi/2
         clockwise = '1'
         if r < 0: r, clockwise = -r, '0'
         self.add(f'A {fmt_f(r, r)} 0 0 {clockwise} {fmt_f(self.x, self.y)}')
@@ -188,8 +192,8 @@ class PathCreator:
             self.x, self.y, self.alpha = x, y, angle((x - self.x, y - self.y))
         return self
 
-    def line(self, distance):
-        return self.line_to(self.pos() + pol2cart(distance, self.alpha))
+    def line(self, length):
+        return self.line_to(self.pos() + pol2cart(length, self.alpha))
     
     def move_to(self, p, angle=0.0):
         self.x, self.y = p
