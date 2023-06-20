@@ -19,6 +19,7 @@ if __name__ == "__main__":
     c = int(gear_wheel.r_head() + 1)
     w = c * 2
     img = svg.Image((w, w), (c, c))
+    img.desc.text = f'Gear wheel: modul = {gear_wheel.modul}, teeth = {gear_wheel.n_teeth}, alpha = {svg.degrees(gear_wheel.alpha)}, d = {svg.fmt_f(2 * gear_wheel.r_0())}'
     svg.Path(img.content, gear_wheel.svg_path())
     svg.Circle(img.content, M, gear_wheel.r_head(), svg.dash_stroke, fill='none')
     svg.Circle(img.content, M, gear_wheel.r_0(), svg.sym_stroke, fill='none')

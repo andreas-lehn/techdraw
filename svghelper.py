@@ -10,8 +10,8 @@ class Image(etree.Element):
             'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1',
             **attrib }
         super().__init__('svg', img_attrib, **extra)
-        #TODO: Description hinzufügen
         self.style = etree.SubElement(self, 'style')
+        self.desc = etree.SubElement(self, 'desc')
         self.content = etree.SubElement(self, 'g', { 'transform': 'scale(1, -1)', 'fill': 'lightgrey'})
 
     def write(self, file):
