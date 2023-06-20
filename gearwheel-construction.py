@@ -5,9 +5,9 @@ from gearwheel import GearWheel
 import svghelper as svg
 
 if __name__ == "__main__":
-    modul = 10
-    teeth = 12
-    alpha = 20
+    modul = 15
+    teeth = 8
+    alpha = 22.5
 
     gear_wheel = GearWheel(modul, teeth, alpha * math.pi / 180)
 
