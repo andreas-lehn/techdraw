@@ -10,10 +10,10 @@ if __name__ == "__main__":
     parser.add_argument('filename', type=str, help='file name')
     parser.add_argument('-m', '--modul', type=float, help='modul in mm', default=2.0)
     parser.add_argument('-t', '--teeth', type=int, help='number of teeth', default=30)
-    parser.add_argument('-a', '--alpha', type=float, help='Eingriffswinkel', default=20.0)
+    parser.add_argument('-p', '--pitch', type=float, help='pitch angle', default=20.0)
     args = parser.parse_args()
 
-    gear_wheel = GearWheel(args.modul, args.teeth, args.alpha * math.pi / 180)
+    gear_wheel = GearWheel(args.modul, args.teeth, svg.radians(args.pitch))
 
     M = (0, 0)
     c = int(gear_wheel.r_head() + 1)
