@@ -95,6 +95,14 @@ def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0.0, 0.0), 
     pos = np.array(center) + pol2cart(radius, alpha)
     return Text(parent, pos, text, **attrib, rotation = alpha - radians(90), offset=offset, **extra)
 
+def ArcMeasurement(parent, center, distance, start, end, attrib={}, label=None, **extra):
+    center = np.array(center)
+    Line(parent, center, center + pol2cart(distance + 5, start), thin_stroke)
+    Line(parent, center, center + pol2cart(distance + 5, end), thin_stroke)
+    Arc(parent, center + pol2cart(distance, start), center + pol2cart(distance, end), distance, thin_stroke)
+    if label == None: label = fmt_f(end - start)
+    ArcLabel(parent, center, distance, (start + end)/2, label, offset=(-1.0, 0.5))
+
 def RightAngleSymbol(parent, pos, rotation, attrib={}, clockwise=False, **extra):
     pos = np.array(pos)
     v1 = pol2cart(5, rotation)

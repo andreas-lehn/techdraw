@@ -104,7 +104,11 @@ if __name__ == "__main__":
     svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B3', offset=(-0.9, 0.5))
     svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B3', offset=(-0.9, 0.5))
 
-    # Mittelpunkt und Controllpunkte
+    # draw pitch angle
+    svg.ArcMeasurement(img.content, P2, 10, -gear_wheel.beta_0(), -gear_wheel.beta_0() + gear_wheel.alpha, label=u'\u03B1')
+    svg.ArcMeasurement(img.content, P5, 10, gear_wheel.beta_0() - gear_wheel.alpha, gear_wheel.beta_0(), label=u'\u03B1')
+
+    # Center point and control points
     svg.Dot(img.content, M)
     svg.Dot(img.content, P0)
     svg.Dot(img.content, P1)
