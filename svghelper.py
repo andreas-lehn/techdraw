@@ -149,7 +149,10 @@ class PathCreator:
         return self
 
     def arc(self, length, r):
-        #TODO: Bogen mit einer Länge und einem Radius zeichnen
+        m = self.pos() + pol2cart(r, self.alpha + np.pi/2)
+        beta = self.alpha + np.pi/2 + length/r
+        p = m - pol2cart(r, beta)
+        self.arc_to_line(p, beta - np.pi/2)
         return self
      
     def arc_to_point(self, p, r):
@@ -168,7 +171,7 @@ class PathCreator:
         large, clockwise = '0', '0'
         delta = norm_angle(norm_angle(alpha) - norm_angle(self.alpha))
         if delta == 0 or delta == np.pi:
-            #TODO: Clockwise stimmt noch nicht.
+            #TODO: Clockwise stimmt noch nicht bei 180°
             q = intersection_point(self.x, self.y, self.alpha + np.pi/2, *p, alpha)
             m = (q + self.pos()) / 2
         else:

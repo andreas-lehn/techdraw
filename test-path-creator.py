@@ -121,8 +121,43 @@ def test_path_creator_arc_to_point():
     svg.Path(img.content, p.path, fill='none')
     img.write('test-path-creator-arc-to-point-2.svg')
 
+def test_path_creator_arc():
+    img = svg.Image(size=(100, 100), center=(50, 50))
+    p = svg.PathCreator((0, 0), 0)
+    draw_state(img.content, p.pos(), p.alpha)
+    p.arc(10, 20)
+    draw_state(img.content, p.pos(), p.alpha)
+    svg.Path(img.content, p.path, fill='none')
+    img.write('test-path-creator-arc-1.svg')
+    
+    img = svg.Image(size=(100, 100), center=(50, 50))
+    p = svg.PathCreator((0, 0), 0)
+    draw_state(img.content, p.pos(), p.alpha)
+    p.arc(10, -20)
+    draw_state(img.content, p.pos(), p.alpha)
+    svg.Path(img.content, p.path, fill='none')
+    img.write('test-path-creator-arc-2.svg')
+    
+    img = svg.Image(size=(100, 100), center=(50, 50))
+    p = svg.PathCreator((0, 0), 0)
+    draw_state(img.content, p.pos(), p.alpha)
+    p.arc(30, 10)
+    draw_state(img.content, p.pos(), p.alpha)
+    svg.Path(img.content, p.path, fill='none')
+    img.write('test-path-creator-arc-3.svg')
+    
+    img = svg.Image(size=(100, 100), center=(50, 50))
+    p = svg.PathCreator((0, 0), 0)
+    draw_state(img.content, p.pos(), p.alpha)
+    p.arc(40, 10)
+    draw_state(img.content, p.pos(), p.alpha)
+    svg.Path(img.content, p.path, fill='none')
+    img.write('test-path-creator-arc-4.svg')
+    
+
 if __name__ == "__main__":
     test_path_creator_arc_to_line()
     test_path_creator_arc_to_point()
+    test_path_creator_arc()
     test_path_creator_curve()
     test_path_creator_line()
