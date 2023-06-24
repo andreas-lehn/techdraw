@@ -32,9 +32,6 @@ class Spirograph:
     def r_excenter(self):
         return self.excenter * self.r_wheel()
 
-    def r_max(self):
-        return self.r_ring() + 2 * self.r_wheel()
-
     def step_count(self):
         if self.wheeel == 0: return self.ring
         return kgv(abs(self.wheeel), abs(self.ring))
@@ -52,12 +49,12 @@ class Spirograph:
         '''returns the position of the wheels center'''
         x, y, alpha = self.tooth_pose(n)
         r = self.r_wheel()
-        return x + r * math.sin(alpha), y + r * math.cos(alpha), alpha
+        return x - r * math.sin(alpha), y - r * math.cos(alpha), alpha
 
     def excenter_pos(self, n, m):
         cx, cy, alpha = self.center_pose(n)
         r = self.r_excenter()
-        beta = alpha + m / self.wheeel * 2 * math.pi
+        beta = alpha - m / self.wheeel * 2 * math.pi
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
     def pen_pos(self, step: int):
@@ -85,10 +82,11 @@ if __name__ == "__main__":
     spirograph = Spirograph(args.ring, args.wheel, args.excenter, args.offset)
 
     M = (0, 0)
-    c = int(spirograph.r_max() + 2)
+    c = int(spirograph.r_ring() + 2)
     w = c * 2
     img = svg.Image((w, w), (c, c))
     img.desc.text = f'Spirograph: ring = {spirograph.ring}, wheel = {spirograph.wheeel}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
     svg.Path(img.content, spirograph.svg_path(), { 'stroke-width': '0.5', 'stroke': 'black', 'fill': 'none'})
-    svg.Circle(img.content, M, spirograph.r_ring(), svg.sym_stroke, fill='none')
+    svg.Circle(img.content, M, spirograph.r_ring(), svg.dot_stroke, fill='none')
+    svg.Circle(img.content, M, spirograph.r_ring() - spirograph.r_wheel(), svg.sym_stroke, fill='none')
     img.write(args.filename)
