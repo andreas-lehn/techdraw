@@ -3,6 +3,7 @@
 import math
 import argparse
 import svghelper as svg
+import sys
 
 def ggt(a: int, b: int) -> int:
     if b == 0: return 1
@@ -18,7 +19,7 @@ class Spirograph:
 
     def __init__(self, ring: int, wheel: int, excenter=0.8, offset=0):
         self.ring = ring
-        self.wheeel = wheel
+        self.wheel = wheel
         self.excenter = excenter
         self.offset = offset
         self.modul = 1
@@ -27,14 +28,20 @@ class Spirograph:
         return self.modul * self.ring / 2
 
     def r_wheel(self):
-        return self.modul * self.wheeel / 2
+        return self.modul * self.wheel / 2
 
     def r_excenter(self):
         return self.excenter * self.r_wheel()
 
+    def r_max(self):
+        result = self.r_ring()
+        if self.wheel < 0:
+            result -= 2 * self.r_wheel()
+        return result
+    
     def step_count(self):
-        if self.wheeel == 0: return self.ring
-        return kgv(abs(self.wheeel), abs(self.ring))
+        if self.wheel == 0: return self.ring
+        return kgv(abs(self.wheel), abs(self.ring))
 
     def tooth_angle(self, n):
         if self.ring == 0: return 0
@@ -54,7 +61,7 @@ class Spirograph:
     def excenter_pos(self, n, m):
         cx, cy, alpha = self.center_pose(n)
         r = self.r_excenter()
-        beta = alpha - m / self.wheeel * 2 * math.pi
+        beta = alpha - m / self.wheel * 2 * math.pi
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
     def pen_pos(self, step: int):
@@ -79,13 +86,24 @@ if __name__ == "__main__":
     parser.add_argument('-o', '--offset', type=int, help='offset of rotator', default=0)
     args = parser.parse_args()
 
+    args.ring = abs(args.ring)
+    args.excenter = abs(args.excenter)
+
+    if args.ring <= args.wheel:
+        print(f'{sys.argv[0]}: Wheel must be smaller than ring! No spriograph generated.', file=sys.stderr)
+        sys.exit(-1)
+
+    if args.excenter > 0.9:
+        args.excenter = 0.9
+        print(f'{sys.argv[0]}: Excenter limited to {args.excenter}', file=sys.stderr)
+    
     spirograph = Spirograph(args.ring, args.wheel, args.excenter, args.offset)
 
     M = (0, 0)
-    c = int(spirograph.r_ring() + 2)
+    c = int(spirograph.r_max() + 2)
     w = c * 2
     img = svg.Image((w, w), (c, c))
-    img.desc.text = f'Spirograph: ring = {spirograph.ring}, wheel = {spirograph.wheeel}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
+    img.desc.text = f'Spirograph: ring = {spirograph.ring}, wheel = {spirograph.wheel}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
     svg.Path(img.content, spirograph.svg_path(), { 'stroke-width': '0.5', 'stroke': 'black', 'fill': 'none'})
     svg.Circle(img.content, M, spirograph.r_ring(), svg.dot_stroke, fill='none')
     svg.Circle(img.content, M, spirograph.r_ring() - spirograph.r_wheel(), svg.sym_stroke, fill='none')
