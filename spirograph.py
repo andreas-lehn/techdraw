@@ -117,7 +117,7 @@ if __name__ == "__main__":
     c = int(spirograph.r_max() + 2)
     w = c * 2
     img = svg.Image((w, w), (c, c))
-    img.desc.text = f'Spirograph: ring = {spirograph.ring}, wheel = {spirograph.wheel}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
+    img.desc.text = f'Spirograph: ring = {args.ring}, wheel = {args.wheel}, excenter = {args.excenter}, offset = {args.offset}, samples = {args.samples}'
     svg.Path(img.content, spirograph.svg_path(), { 'stroke-width': '0.5', 'stroke': 'black', 'fill': 'none'})
     svg.Circle(img.content, M, spirograph.r_ring(), svg.dot_stroke, fill='none')
     svg.Circle(img.content, M, spirograph.r_ring() - spirograph.r_wheel(), svg.sym_stroke, fill='none')
