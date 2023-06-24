@@ -1,6 +1,6 @@
 [
     { "ring": 105, "wheel": 84, "stroke": "blue"},
-    { "ring": 105, "wheel": 84, "offset": 3, "excenter": 0.6, "stroke": "green", "stroke-width": "1" },
-    { "ring": 105, "wheel": 84, "offset": 6, "samples": 2, "stroke": "red"},
-    { "ring": 40,  "wheel": -12, "samples": 4 }
+    { "ring": 105, "wheel": 84, "offset": 14, "excenter": 0.6, "stroke": "green", "stroke-width": "1" },
+    { "ring": 105, "wheel": 84, "offset": 7, "samples": 2, "stroke": "red"},
+    { "ring": 90,  "wheel": -12, "samples": 4 }
 ]

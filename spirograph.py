@@ -35,9 +35,9 @@ class Spirograph:
         return self.excenter * self.r_wheel()
 
     def r_max(self):
-        result = self.r_ring()
+        result = self.r_ring() - (1.0 - self.excenter) * self.r_wheel()
         if self.wheel < 0:
-            result -= 2 * self.r_wheel()
+            result -= (1.0 + self.excenter) * self.r_wheel()
         return result
     
     def revolutions(self):

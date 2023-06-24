@@ -40,6 +40,7 @@ if __name__ == "__main__":
         if spirograph.r_max() > r_max:
             r_max = spirograph.r_max()
 
+    r_max = int(r_max + 2)
     width = 2 * r_max
     img = svg.Image((width, width), (r_max, r_max))
     img.desc.text = f'Spirograph from file: {args.filename}'
