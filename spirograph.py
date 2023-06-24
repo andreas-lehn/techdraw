@@ -17,12 +17,13 @@ def kgv(a: int, b: int) -> int:
 class Spirograph:
     '''draws spirographs'''
 
-    def __init__(self, ring: int, wheel: int, excenter=0.8, offset=0):
+    def __init__(self, ring: int, wheel: int, excenter=0.8, offset=0, samples=1):
         self.ring = ring
         self.wheel = wheel
         self.excenter = excenter
-        self.offset = offset
+        self.offset = offset * 2 * math.pi / self.wheel
         self.modul = 1
+        self.samples = samples
 
     def r_ring(self):
         return self.modul * self.ring / 2
@@ -39,38 +40,42 @@ class Spirograph:
             result -= 2 * self.r_wheel()
         return result
     
+    def revolutions(self):
+        return int(self.step_count() / self.ring)
+    
+    def step_size(self):
+        return 2 * math.pi / self.ring / self.samples
+    
     def step_count(self):
         if self.wheel == 0: return self.ring
         return kgv(abs(self.wheel), abs(self.ring))
 
-    def tooth_angle(self, n):
-        if self.ring == 0: return 0
-        return n / self.ring * 2 * math.pi
+    def tooth_pos(self, alpha):
+        '''return x, y of a tooth'''
+        r = self.r_ring()
+        return r * math.sin(alpha), r * math.cos(alpha)
 
-    def tooth_pose(self, n):
-        '''return x, y, alpha of a tooth'''
-        r, alpha = self.r_ring(), self.tooth_angle(n)
-        return r * math.sin(alpha), r * math.cos(alpha), alpha
-
-    def center_pose(self, n):
+    def center_pos(self, alpha):
         '''returns the position of the wheels center'''
-        x, y, alpha = self.tooth_pose(n)
+        x, y = self.tooth_pos(alpha)
         r = self.r_wheel()
-        return x - r * math.sin(alpha), y - r * math.cos(alpha), alpha
+        return x - r * math.sin(alpha), y - r * math.cos(alpha)
 
-    def excenter_pos(self, n, m):
-        cx, cy, alpha = self.center_pose(n)
+    def excenter_pos(self, alpha):
+        cx, cy = self.center_pos(alpha)
         r = self.r_excenter()
-        beta = alpha - m / self.wheel * 2 * math.pi
+        beta = alpha - alpha / self.wheel * self.ring + self.offset
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
-    def pen_pos(self, step: int):
-        return self.excenter_pos(step, step + self.offset)
+    def pen_pos(self, alpha):
+        return self.excenter_pos(alpha)
 
     def points(self):
         result = []
-        for i in range(self.step_count()):
-            result.append(self.pen_pos(i))
+        alpha, beta, delta = 0, self.revolutions() * 2 * math.pi, self.step_size()
+        while alpha < beta:
+            result.append(self.pen_pos(alpha))
+            alpha += delta
         return result
 
     def svg_path(self):
@@ -84,6 +89,7 @@ if __name__ == "__main__":
     parser.add_argument('-w', '--wheel', type=int, help='number of teeth of the wheel', default=52)
     parser.add_argument('-e', '--excenter', type=float, help='excenter', default=0.8)
     parser.add_argument('-o', '--offset', type=int, help='offset of rotator', default=0)
+    parser.add_argument('-s', '--samples', type=int, help='samples per teeth step.', default=1)
     args = parser.parse_args()
 
     args.ring = abs(args.ring)
@@ -93,11 +99,19 @@ if __name__ == "__main__":
         print(f'{sys.argv[0]}: Wheel must be smaller than ring! No spriograph generated.', file=sys.stderr)
         sys.exit(-1)
 
+    if args.wheel == 0:
+        print(f'{sys.argv[0]}: Wheel must not be zero! No spriograph generated.', file=sys.stderr)
+        sys.exit(-1)
+
     if args.excenter > 0.9:
         args.excenter = 0.9
         print(f'{sys.argv[0]}: Excenter limited to {args.excenter}', file=sys.stderr)
     
-    spirograph = Spirograph(args.ring, args.wheel, args.excenter, args.offset)
+    if args.samples < 1:
+        print(f'{sys.argv[0]}: Number of samples must be > 0 but is {args.samples}. Value set to 1.', file=sys.stderr)
+        args.samples = 1
+
+    spirograph = Spirograph(args.ring, args.wheel, args.excenter, args.offset, args.samples)
 
     M = (0, 0)
     c = int(spirograph.r_max() + 2)
