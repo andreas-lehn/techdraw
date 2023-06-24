@@ -16,48 +16,48 @@ def kgv(a: int, b: int) -> int:
 class Spirograph:
     '''draws spirographs'''
 
-    def __init__(self, n_stator: int, n_rotator: int, excenter=0.8, offset=0):
-        self.n_stator = n_stator
-        self.n_rotator = n_rotator
+    def __init__(self, ring: int, wheel: int, excenter=0.8, offset=0):
+        self.ring = ring
+        self.wheeel = wheel
         self.excenter = excenter
         self.offset = offset
         self.modul = 1
 
-    def r_stator(self):
-        return self.modul * self.n_stator / 2
+    def r_ring(self):
+        return self.modul * self.ring / 2
 
-    def r_rotator(self):
-        return self.modul * self.n_rotator / 2
+    def r_wheel(self):
+        return self.modul * self.wheeel / 2
 
     def r_excenter(self):
-        return self.excenter * self.r_rotator()
+        return self.excenter * self.r_wheel()
 
     def r_max(self):
-        return self.r_stator() + 2 * self.r_rotator()
+        return self.r_ring() + 2 * self.r_wheel()
 
     def step_count(self):
-        if self.n_rotator == 0: return self.n_stator
-        return kgv(abs(self.n_rotator), abs(self.n_stator))
+        if self.wheeel == 0: return self.ring
+        return kgv(abs(self.wheeel), abs(self.ring))
 
     def tooth_angle(self, n):
-        if self.n_stator == 0: return 0
-        return n / self.n_stator * 2 * math.pi
+        if self.ring == 0: return 0
+        return n / self.ring * 2 * math.pi
 
     def tooth_pose(self, n):
         '''return x, y, alpha of a tooth'''
-        r, alpha = self.r_stator(), self.tooth_angle(n)
+        r, alpha = self.r_ring(), self.tooth_angle(n)
         return r * math.sin(alpha), r * math.cos(alpha), alpha
 
     def center_pose(self, n):
-        '''returns the position of rotators center'''
+        '''returns the position of the wheels center'''
         x, y, alpha = self.tooth_pose(n)
-        r = self.r_rotator()
+        r = self.r_wheel()
         return x + r * math.sin(alpha), y + r * math.cos(alpha), alpha
 
     def excenter_pos(self, n, m):
         cx, cy, alpha = self.center_pose(n)
         r = self.r_excenter()
-        beta = alpha + m / self.n_rotator * 2 * math.pi
+        beta = alpha + m / self.wheeel * 2 * math.pi
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
     def pen_pos(self, step: int):
@@ -74,21 +74,21 @@ class Spirograph:
         return svg.PathCreator(points[0]).line_to(*points[1:]).close().path
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generates an SVG image with a gear wheel.')
+    parser = argparse.ArgumentParser(description='Generates an SVG image with a spirograph.')
     parser.add_argument('filename', type=str, help='file name')
-    parser.add_argument('-s', '--stator', type=int, help='number of teeth of the stator', default=20)
-    parser.add_argument('-r', '--rotator', type=int, help='number of teeth of the rotator', default=12)
+    parser.add_argument('-r', '--ring', type=int, help='number of teeth of the ring', default=150)
+    parser.add_argument('-w', '--wheel', type=int, help='number of teeth of the wheel', default=52)
     parser.add_argument('-e', '--excenter', type=float, help='excenter', default=0.8)
     parser.add_argument('-o', '--offset', type=int, help='offset of rotator', default=0)
     args = parser.parse_args()
 
-    spirograph = Spirograph(args.stator, args.rotator, args.excenter, args.offset)
+    spirograph = Spirograph(args.ring, args.wheel, args.excenter, args.offset)
 
     M = (0, 0)
     c = int(spirograph.r_max() + 2)
     w = c * 2
     img = svg.Image((w, w), (c, c))
-    img.desc.text = f'Spirograph: stator teeth = {spirograph.n_stator}, rotator teeth = {spirograph.n_rotator}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
+    img.desc.text = f'Spirograph: ring = {spirograph.ring}, wheel = {spirograph.wheeel}, excenter = {spirograph.excenter}, offset = {spirograph.offset}'
     svg.Path(img.content, spirograph.svg_path(), { 'stroke-width': '0.5', 'stroke': 'black', 'fill': 'none'})
-    svg.Circle(img.content, M, spirograph.r_stator(), svg.sym_stroke, fill='none')
+    svg.Circle(img.content, M, spirograph.r_ring(), svg.sym_stroke, fill='none')
     img.write(args.filename)
