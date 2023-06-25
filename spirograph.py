@@ -67,6 +67,15 @@ class Spirograph:
         beta = alpha - alpha / self.wheel * self.ring + self.offset
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
+    def __getitem__(self, index: int):
+        if index < len(self):
+            return self.excenter_pos(index * self.step_size())
+        else:
+            raise IndexError("Spirograph index out of range")
+    
+    def __len__(self):
+        return self.step_count()
+    
     def pen_pos(self, alpha):
         return self.excenter_pos(alpha)
 
@@ -82,6 +91,19 @@ class Spirograph:
         points = self.points()
         return svg.PathCreator(points[0]).line_to(*points[1:]).close().path
 
+    class Iterator:
+        def __init__(self):
+            self.index = 0
+    
+        def __next__(self):
+            if self.index > self.step_count():
+                raise StopIteration()
+            yield self.excenter_pos(self.index * self.step_size())
+            self.index += 1
+
+    def __iter__(self):
+        return self.Iterator()
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generates an SVG image with a spirograph.')
     parser.add_argument('filename', type=str, help='file name')
