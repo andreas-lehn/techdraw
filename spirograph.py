@@ -61,35 +61,33 @@ class Spirograph:
         r = self.r_wheel()
         return x - r * math.sin(alpha), y - r * math.cos(alpha)
 
-    def excenter_pos(self, alpha):
+    def pen_pos(self, alpha):
         cx, cy = self.center_pos(alpha)
         r = self.r_excenter()
         beta = alpha - alpha / self.wheel * self.ring + self.offset
         return cx + r * math.sin(beta), cy + r * math.cos(beta)
 
-    def __getitem__(self, index: int):
-        if index < len(self):
-            return self.excenter_pos(index * self.step_size())
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            return [self[i] for i in range(*key.indices(len(self)))]
+        elif isinstance(key, int):
+            if key < 0: # Handle negative indices
+                key += len(self)
+            if key < 0 or key >= len(self):
+                raise IndexError(f'Spirograph index {key} is out of range.')
+            return self.pen_pos(key * self.step_size())
         else:
-            raise IndexError("Spirograph index out of range")
+            raise TypeError(f'Spirograph indices must be integers or slices, not {type(key)}')
     
     def __len__(self):
-        return self.step_count()
+        return self.step_count() * self.samples
     
-    def pen_pos(self, alpha):
-        return self.excenter_pos(alpha)
-
     def points(self):
-        result = []
-        alpha, beta, delta = 0, self.revolutions() * 2 * math.pi, self.step_size()
-        while alpha < beta:
-            result.append(self.pen_pos(alpha))
-            alpha += delta
-        return result
+        return self[:]
 
     def svg_path(self):
-        points = self.points()
-        return svg.PathCreator(points[0]).line_to(*points[1:]).close().path
+        print(self.step_count(), len(self), len(self[1:]))
+        return svg.PathCreator(self[0]).line_to(*self[1:]).close().path
 
     class Iterator:
         def __init__(self):
@@ -103,7 +101,7 @@ class Spirograph:
 
     def __iter__(self):
         return self.Iterator()
-    
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generates an SVG image with a spirograph.')
     parser.add_argument('filename', type=str, help='file name')
