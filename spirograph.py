@@ -90,17 +90,18 @@ class Spirograph:
         return svg.PathCreator(self[0]).line_to(*self[1:]).close().path
 
     class Iterator:
-        def __init__(self):
-            self.index = 0
+        def __init__(self, spiro):
+            self.index = -1
+            self.spiro = spiro
     
         def __next__(self):
-            if self.index > self.step_count():
-                raise StopIteration()
-            yield self.excenter_pos(self.index * self.step_size())
             self.index += 1
+            if self.index == len(self.spiro):
+                raise StopIteration()
+            return self.spiro[self.index]
 
     def __iter__(self):
-        return self.Iterator()
+        return self.Iterator(self)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Generates an SVG image with a spirograph.')
