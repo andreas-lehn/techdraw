@@ -41,14 +41,13 @@ class Spirograph:
         return result
     
     def revolutions(self):
-        return int(self.step_count() / self.ring)
+        return int(self.step_count() / self.ring / self.samples)
     
     def step_size(self):
         return 2 * math.pi / self.ring / self.samples
     
     def step_count(self):
-        if self.wheel == 0: return self.ring
-        return kgv(abs(self.wheel), abs(self.ring))
+        return kgv(abs(self.wheel), abs(self.ring)) * self.samples
 
     def tooth_pos(self, alpha):
         '''return x, y of a tooth'''
@@ -80,7 +79,7 @@ class Spirograph:
             raise TypeError(f'Spirograph indices must be integers or slices, not {type(key)}')
     
     def __len__(self):
-        return self.step_count() * self.samples
+        return self.step_count()
     
     def points(self):
         return self[:]
