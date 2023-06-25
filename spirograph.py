@@ -86,7 +86,6 @@ class Spirograph:
         return self[:]
 
     def svg_path(self):
-        print(self.step_count(), len(self), len(self[1:]))
         return svg.PathCreator(self[0]).line_to(*self[1:]).close().path
 
     class Iterator:
