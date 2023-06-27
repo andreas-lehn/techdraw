@@ -3,7 +3,7 @@ import xml.etree.ElementTree as etree
 
 class Image(etree.Element):
 
-    def __init__(self, size, center, attrib={}, **extra):
+    def __init__(self, size=(160,160), center=(0,0), attrib={}, **extra):
         img_attrib = {
             'width': f'{fmt_f(size[0])}mm', 'height': f'{fmt_f(size[1])}mm',
             'viewBox': f'{fmt_f(-center[0], -center[1], *size)}',
@@ -12,12 +12,12 @@ class Image(etree.Element):
         super().__init__('svg', img_attrib, **extra)
         self.style = etree.SubElement(self, 'style')
         self.desc = etree.SubElement(self, 'desc')
-        self.content = etree.SubElement(self, 'g', { 'transform': 'scale(1, -1)', 'fill': 'lightgrey'})
+        self.content = etree.SubElement(self, 'g', {'transform': 'scale(1, -1)'})
 
     def write(self, file):
         tree = etree.ElementTree(self)
         etree.indent(tree, '    ')
-        tree.write(file)
+        tree.write(file, encoding='unicode')
 
 def length(p):
     return np.sqrt(p[0]**2 + p[1]**2)
@@ -63,14 +63,14 @@ def Line(parent, p1, p2, attrib={}, **extra):
 
 def Circle(parent, center, radius, attrib={}, **extra):
     cx, cy = center
-    return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
 
 def Dot(parent, pos, attrib={}, **extra):
     cx, cy = pos
     return etree.SubElement(parent, 'circle', {'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 
 def Path(parent, d, attrib={}, **extra):
-    return etree.SubElement(parent, 'path', {'d': d, **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'path', {'d': d, 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(*origin)}', **attrib }, **extra)
