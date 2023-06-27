@@ -1,7 +1,5 @@
-#!/usr/env python3
 
 import math
-import numpy as np
 import svghelper as svg
 
 if __name__ == "__main__":
