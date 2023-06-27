@@ -1,4 +1,3 @@
-#!/usr/env python3
 
 import numpy as np
 import svghelper as svg
@@ -60,4 +59,4 @@ if __name__ == "__main__":
     svg.Dot(img.content, P)
     svg.Dot(img.content, Q)
 
-    img.write('involute-sample.svg')
+    img.write('involute-demo.svg')
