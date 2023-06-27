@@ -5,7 +5,7 @@ from gearwheel import GearWheel
 import svghelper as svg
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generates an SVG image with a gear wheel.')
+    parser = argparse.ArgumentParser(prog='gearwheel.svg', description='Generates an SVG image with a gear wheel.')
     parser.add_argument('filename', type=str, help='file name')
     parser.add_argument('-m', '--modul', type=float, help='modul in mm', default=2.0)
     parser.add_argument('-t', '--teeth', type=int, help='number of teeth', default=30)
