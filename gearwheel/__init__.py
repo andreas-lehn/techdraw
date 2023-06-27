@@ -1,4 +1,3 @@
-#!/usr/env python3
 
 import math
 import involute

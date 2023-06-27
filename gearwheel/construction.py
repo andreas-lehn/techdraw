@@ -1,4 +1,3 @@
-#!/usr/env python3
 
 import math
 from gearwheel import GearWheel
@@ -119,4 +118,4 @@ if __name__ == "__main__":
     svg.Dot(img.content, P6)
     svg.Dot(img.content, P7)
 
-    img.write('gearwheel-construction.svg')
+    img.write('construction.svg')
