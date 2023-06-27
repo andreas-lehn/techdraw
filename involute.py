@@ -52,7 +52,4 @@ def point(r, alpha, offset = 0):
 
 def points(r, alpha, offset, n):
     alpha = alpha / n
-    result = []
-    for i in range(n):
-        result.append(point(r, (i + 1) * alpha, offset))
-    return result
+    return [point(r, (i + 1) * alpha, offset) for i in range(n)]
