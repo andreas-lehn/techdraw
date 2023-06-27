@@ -1,4 +1,3 @@
-#!/usr/env python3
 
 import argparse
 import svghelper as svg
@@ -26,8 +25,8 @@ def parse_hook(data: dict):
     return Spirograph(ring, wheel, excenter, offset, samples), data
 
 if __name__ == "__main__":
-    prog = 'spirograph.tool'
-    description = 'A simple command line tool to generate spirograph SVG files form .spiro files.'
+    prog = 'spirograph.compile'
+    description = 'Command line tool to generate SVG files form spirograph files.'
     parser = argparse.ArgumentParser(prog=prog, description=description)
     parser.add_argument('filename', type=str, help='file name')
     args = parser.parse_args()
