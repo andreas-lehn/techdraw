@@ -13,13 +13,13 @@ def get_value(data: dict, key: str, default=None):
         del data[key]
     else:
         if default == None:
-            raise f'Mandatory value {key} not found.'
+            raise KeyError(f'Missing key: {key}')
         result = default
     return result
 
 def parse_hook(data: dict):
-    ring = int(get_value(data, 'ring'))
-    wheel = int(get_value(data, 'wheel'))
+    ring = get_value(data, 'ring')
+    wheel = get_value(data, 'wheel')
     excenter = get_value(data, 'excenter', 0.8)
     offset = get_value(data, 'offset', 0)
     samples = get_value(data, 'samples', 1)
@@ -32,9 +32,13 @@ if __name__ == "__main__":
     base, ext = os.path.splitext(args.filename)
     outfile = base + '.svg' if ext == '.spiro' else args.filename + '.svg'
 
-    with open(args.filename) as f:
-        data = json.load(f, object_hook=parse_hook)
-
+    try:
+        with open(args.filename) as f:
+            data = json.load(f, object_hook=parse_hook)
+    except Exception as error:
+        print(sys.argv[0] + ':', error, file=sys.stderr)
+        sys.exit(-1)
+    
     r_max = 0
     for spirograph, _ in data:
         if spirograph.r_max() > r_max:

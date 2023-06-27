@@ -18,12 +18,25 @@ class Spirograph:
     '''draws spirographs'''
 
     def __init__(self, ring: int, wheel: int, excenter=0.8, offset=0, samples=1):
-        self.ring = ring
-        self.wheel = wheel
+        self.ring = int(ring)
+        if self.ring < 1:
+            raise ValueError('ring must be > 0')
+
+        self.wheel = int(wheel)
+        if self.wheel == 0:
+            raise ValueError('wheel must not be zero')
+
         self.excenter = excenter
-        self.offset = offset * 2 * math.pi / self.wheel
+        if self.excenter < 0.0 or excenter > 1.0:
+            raise ValueError('excenter value out of range (0.0 .. 1.0)')
+
+        self.offset = int(offset) * 2 * math.pi / self.wheel
+
+        self.samples = int(samples)
+        if samples < 1:
+            raise ValueError('samples must be > 0')
+
         self.modul = 1
-        self.samples = samples
 
     def r_ring(self):
         return self.modul * self.ring / 2
