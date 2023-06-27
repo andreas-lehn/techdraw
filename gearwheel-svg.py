@@ -1,7 +1,6 @@
 #!/usr/env python3
 
 import argparse
-import math
 from gearwheel import GearWheel
 import svghelper as svg
 
