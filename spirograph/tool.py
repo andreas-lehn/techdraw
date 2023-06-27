@@ -26,7 +26,9 @@ def parse_hook(data: dict):
     return Spirograph(ring, wheel, excenter, offset, samples), data
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Generates an SVG image with a spirograph.')
+    prog = 'spirograph.tool'
+    description = 'A simple command line tool to generate spirograph SVG files form .spiro files.'
+    parser = argparse.ArgumentParser(prog=prog, description=description)
     parser.add_argument('filename', type=str, help='file name')
     args = parser.parse_args()
     base, ext = os.path.splitext(args.filename)
@@ -36,7 +38,7 @@ if __name__ == "__main__":
         with open(args.filename) as f:
             data = json.load(f, object_hook=parse_hook)
     except Exception as error:
-        print(sys.argv[0] + ':', error, file=sys.stderr)
+        print(prog + ':', error, file=sys.stderr)
         sys.exit(-1)
     
     r_max = 0
