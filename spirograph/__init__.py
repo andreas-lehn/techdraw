@@ -86,7 +86,7 @@ class Spirograph:
                 raise IndexError(f'Spirograph index {key} is out of range.')
             return self.pen_pos(key * self.step_size())
         else:
-            raise TypeError(f'Spirograph indices must be integers or slices, not {type(key)}')
+            raise TypeError(f'Spirograph indices must be integers or slices, not {key.__class__.__name__}')
     
     def __len__(self):
         return self.step_count()
