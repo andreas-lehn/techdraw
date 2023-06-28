@@ -1,5 +1,15 @@
+'''
+SVG helper module
+
+This module contains helpful classes and function for creating SVG files.
+'''
+
+__version__ = '0.1'
+__author__ = 'Andreas Lehn <andreas.lehn@icloud.com'
+
 import numpy as np
 import xml.etree.ElementTree as etree
+
 
 class Image(etree.Element):
 
