@@ -1,5 +1,4 @@
-'''
-SVG helper module
+'''SVG helper module
 
 This module contains helpful classes and function for creating SVG files.
 '''
@@ -10,40 +9,60 @@ __author__ = 'Andreas Lehn <andreas.lehn@icloud.com'
 import numpy as np
 import xml.etree.ElementTree as etree
 
+IMAGE_SIZE_DEFAULT = 150
 
 class Image(etree.Element):
 
-    def __init__(self, size=(160,160), center=(0,0), attrib={}, **extra):
-        img_attrib = {
-            'width': f'{fmt_f(size[0])}mm', 'height': f'{fmt_f(size[1])}mm',
-            'viewBox': f'{fmt_f(-center[0], -center[1], *size)}',
-            'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1',
-            **attrib }
-        super().__init__('svg', img_attrib, **extra)
+    def __init__(self, size=(IMAGE_SIZE_DEFAULT, IMAGE_SIZE_DEFAULT), center=None, attrib={}, **extra):
+        super().__init__('svg', {'xmlns': 'http://www.w3.org/2000/svg', 'version': '1.1', **attrib}, **extra)
+        if center is None:
+            center = (0, size[1])
+        self.resize(size, center)
         self.style = etree.SubElement(self, 'style')
         self.desc = etree.SubElement(self, 'desc')
         self.content = etree.SubElement(self, 'g', {'transform': 'scale(1, -1)'})
+
+    def resize(self, size, center=None):
+        self._width, self._height = size
+        if center == None:
+            center = (self._cx, self._cy)
+        self.set('width', f'{fmt_f(self._width)}mm')
+        self.set('height', f'{fmt_f(self._height)}mm')
+        self.recenter(center)
+
+    def recenter(self, center):
+        self._cx, self._cy = center
+        self.set('viewBox', f'{fmt_f(-self._cx, -self._cy, self._width, self._height)}')
 
     def write(self, file):
         tree = etree.ElementTree(self)
         etree.indent(tree, '    ')
         tree.write(file, encoding='unicode')
 
+def Point(x, y):
+    '''Create a Point object'''
+    return np.array([x, y])
+
 def length(p):
+    '''Calculate the length of a Point'''
     return np.sqrt(p[0]**2 + p[1]**2)
 
 def distance(p, q):
+    '''Calculate the distance between to points'''
     return length(p - q)
 
 def cart2pol(p):
-    return np.array([length(p), angle(p)])
+    '''Convert a point from cartesian coordinate system to polar coordinate system'''
+    return Point(length(p), angle(p))
 
 def pol2cart(r, phi):
-    return np.array([r * np.cos(phi), r * np.sin(phi)])
+    '''Convert a point from polar coordinate system to cartesian coordinate system'''
+    return Point(r * np.cos(phi), r * np.sin(phi))
 
 def orth(p):
+    '''Calculate the orthogonal vector'''
     x, y = p
-    return np.array([-y, x])
+    return Point(-y, x)
 
 def norm_angle(alpha):
     '''Returns an angle equivalent to alpha in the interval [0, 2 * PI)'''
@@ -52,34 +71,42 @@ def norm_angle(alpha):
     return alpha - n * U
 
 def fmt_f(f, *floats):
+    '''Format floats for output in SVG file'''
     result = f'{f:.3f}'
     for f in floats:
         result += f' {f:.3f}'
     return result
 
 def angle(p):
+    '''Calculate the angle of a vector'''
     return np.arctan2(p[1], p[0])
 
 def degrees(alpha):
+    '''Convert an angle from radians to degrees'''
     return np.degrees(alpha)
 
 def radians(alpha):
+    '''Convert an angle from degrees to radians'''
     return np.radians(alpha)
 
 def Line(parent, p1, p2, attrib={}, **extra):
+    '''Create a SVG line elemente'''
     x1, y1 = p1
     x2, y2 = p2
     return etree.SubElement(parent, 'line', { 'x1': fmt_f(x1), 'y1': fmt_f(y1), 'x2': fmt_f(x2), 'y2': fmt_f(y2), **medium_stroke, **attrib }, **extra)
 
 def Circle(parent, center, radius, attrib={}, **extra):
+    '''Create an SVG circle element'''
     cx, cy = center
     return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
 
 def Dot(parent, pos, attrib={}, **extra):
+    '''Create a dot in the SVG image'''
     cx, cy = pos
     return etree.SubElement(parent, 'circle', {'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': '0.5', 'fill': 'black', **attrib}, **extra)
 
 def Path(parent, d, attrib={}, **extra):
+    '''Create a SVG path element'''
     return etree.SubElement(parent, 'path', {'d': d, 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
