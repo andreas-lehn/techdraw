@@ -4,7 +4,7 @@ This module contains helpful classes and function for creating SVG files.
 '''
 
 __version__ = '0.1'
-__author__ = 'Andreas Lehn <andreas.lehn@icloud.com'
+__author__ = 'Andreas Lehn <andreas.lehn@icloud.com>'
 
 import numpy as np
 import xml.etree.ElementTree as etree
@@ -24,10 +24,10 @@ class Image(etree.Element):
 
     def resize(self, size, center=None):
         self._width, self._height = size
-        if center == None:
-            center = (self._cx, self._cy)
         self.set('width', f'{fmt_f(self._width)}mm')
         self.set('height', f'{fmt_f(self._height)}mm')
+        if center == None:
+            center = (self._cx, self._cy)
         self.recenter(center)
 
     def recenter(self, center):
@@ -93,12 +93,12 @@ def Line(parent, p1, p2, attrib={}, **extra):
     '''Create a SVG line elemente'''
     x1, y1 = p1
     x2, y2 = p2
-    return etree.SubElement(parent, 'line', { 'x1': fmt_f(x1), 'y1': fmt_f(y1), 'x2': fmt_f(x2), 'y2': fmt_f(y2), **medium_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'line', { 'x1': fmt_f(x1), 'y1': fmt_f(y1), 'x2': fmt_f(x2), 'y2': fmt_f(y2), **MEDIUM_STROKE, **attrib }, **extra)
 
 def Circle(parent, center, radius, attrib={}, **extra):
     '''Create an SVG circle element'''
     cx, cy = center
-    return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'circle', { 'cx': fmt_f(cx), 'cy': fmt_f(cy), 'r': fmt_f(radius), 'fill': 'lightgrey', **THICK_STROKE, **attrib }, **extra)
 
 def Dot(parent, pos, attrib={}, **extra):
     '''Create a dot in the SVG image'''
@@ -107,7 +107,7 @@ def Dot(parent, pos, attrib={}, **extra):
 
 def Path(parent, d, attrib={}, **extra):
     '''Create a SVG path element'''
-    return etree.SubElement(parent, 'path', {'d': d, 'fill': 'lightgrey', **thick_stroke, **attrib }, **extra)
+    return etree.SubElement(parent, 'path', {'d': d, 'fill': 'lightgrey', **THICK_STROKE, **attrib }, **extra)
 
 def Translation(parent, origin, attrib={}, **extra):
     return etree.SubElement(parent, 'g', {'transform': f'translate({fmt_f(*origin)}', **attrib }, **extra)
@@ -134,9 +134,9 @@ def ArcLabel(parent, center, radius, alpha, text, attrib={}, offset=(0.0, 0.0), 
 
 def ArcMeasurement(parent, center, distance, start, end, attrib={}, label=None, **extra):
     center = np.array(center)
-    Line(parent, center, center + pol2cart(distance + 5, start), thin_stroke)
-    Line(parent, center, center + pol2cart(distance + 5, end), thin_stroke)
-    Arc(parent, center + pol2cart(distance, start), center + pol2cart(distance, end), distance, thin_stroke)
+    Line(parent, center, center + pol2cart(distance + 5, start), THIN_STROKE)
+    Line(parent, center, center + pol2cart(distance + 5, end), THIN_STROKE)
+    Arc(parent, center + pol2cart(distance, start), center + pol2cart(distance, end), distance, THIN_STROKE)
     if label == None: label = fmt_f(end - start)
     ArcLabel(parent, center, distance, (start + end)/2, label, offset=(-1.0, 0.5))
 
@@ -147,7 +147,7 @@ def RightAngleSymbol(parent, pos, rotation, attrib={}, clockwise=False, **extra)
     if clockwise:
         v1, v2 = -v2, v1
     g = etree.SubElement(parent, 'g')
-    result = Path(g, PathCreator(pos + v1).arc_to_point(pos + v2, length(v2)).path, { **thin_stroke, 'fill': 'none', **attrib}, **extra)
+    result = Path(g, PathCreator(pos + v1).arc_to_point(pos + v2, length(v2)).path, { **THIN_STROKE, 'fill': 'none', **attrib}, **extra)
     Dot(g, pos + (v1 + v2) / 2 / np.sqrt(2))
     return result
 
@@ -256,9 +256,9 @@ class PathCreator:
         self.add('Z')
         return self
 
-thick_stroke = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
-medium_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
-thin_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-linecap': 'round'}
-sym_stroke = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 1.0 0.0 1.0', 'stroke-dashoffset': '1.0', 'stroke-linecap': 'round' }
-dash_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-dasharray': '1.0 1.0', 'stroke-dashoffset': '0.5', 'stroke-linecap': 'round' }
-dot_stroke = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-dasharray': '0.0 0.2', 'stroke-linecap': 'round' }
+THICK_STROKE = { 'stroke': 'black', 'stroke-width': '0.35', 'stroke-linecap': 'round' }
+MEDIUM_STROKE = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-linecap': 'round' }
+THIN_STROKE = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-linecap': 'round'}
+SYM_STROKE = { 'stroke': 'black', 'stroke-width': '0.2', 'stroke-dasharray': '2.0 1.0 0.0 1.0', 'stroke-dashoffset': '1.0', 'stroke-linecap': 'round' }
+DASH_STROKE = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-dasharray': '1.0 1.0', 'stroke-dashoffset': '0.5', 'stroke-linecap': 'round' }
+DOT_STROKE = { 'stroke': 'black', 'stroke-width': '0.1', 'stroke-dasharray': '0.0 0.2', 'stroke-linecap': 'round' }

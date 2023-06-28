@@ -25,14 +25,14 @@ if __name__ == "__main__":
 
     # base circle
     svg.Circle(img.content, M, r)
-    svg.Line(img.content, (-2 * r, 0), (2 * r, 0), svg.sym_stroke)
-    svg.Line(img.content, (0, -2 * r), (0, 2 * r), svg.sym_stroke)
+    svg.Line(img.content, (-2 * r, 0), (2 * r, 0), svg.SYM_STROKE)
+    svg.Line(img.content, (0, -2 * r), (0, 2 * r), svg.SYM_STROKE)
 
     # construction lines
-    svg.Line(img.content, M, svg.pol2cart(2 * r, alpha), svg.thin_stroke)
-    svg.Line(img.content, M, svg.pol2cart(2 * r, gamma), svg.thin_stroke)
-    svg.Line(img.content, Q - P, Q + P, svg.thin_stroke)
-    svg.Line(img.content, Q - O / 2, P + O / 2, svg.thin_stroke)
+    svg.Line(img.content, M, svg.pol2cart(2 * r, alpha), svg.THIN_STROKE)
+    svg.Line(img.content, M, svg.pol2cart(2 * r, gamma), svg.THIN_STROKE)
+    svg.Line(img.content, Q - P, Q + P, svg.THIN_STROKE)
+    svg.Line(img.content, Q - O / 2, P + O / 2, svg.THIN_STROKE)
     svg.RightAngleSymbol(img.content, P, alpha)
     svg.RightAngleSymbol(img.content, Q, alpha, clockwise=True)
 
@@ -41,7 +41,7 @@ if __name__ == "__main__":
     svg.LineLabel(img.content, M, P, 'r')
 
     # alpha
-    arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.thick_stroke['stroke-width']}
+    arc_stroke = { 'fill': 'none', 'stroke': 'red', 'stroke-width': svg.THICK_STROKE['stroke-width']}
     svg.Line(img.content, P, Q, arc_stroke)
     svg.Arc(img.content, P, S, r, arc_stroke)
     svg.ArcLabel(img.content, M, r, 0.4 * alpha, u'\u03B1', offset=(-0.5, 0.5), fill=arc_stroke['stroke'])
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     gamma_color = 'blue'
     svg.Line(img.content, M, Q, stroke=gamma_color)
     svg.LineLabel(img.content, M, Q, 's', fill=gamma_color)
-    svg.Arc(img.content, Q, svg.pol2cart(d, 0), d, svg.thin_stroke, stroke=gamma_color)
+    svg.Arc(img.content, Q, svg.pol2cart(d, 0), d, svg.THIN_STROKE, stroke=gamma_color)
     svg.ArcLabel(img.content, M, d, 0.5 * gamma, u'\u03B3', offset=(-0.5, 0.5), fill=gamma_color)
 
     # key points

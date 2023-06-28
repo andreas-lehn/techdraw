@@ -5,7 +5,7 @@ import svghelper as svg
 
 def draw_state(parent, pos, angle):
     svg.Dot(parent, pos)
-    svg.Line(parent, pos, pos + svg.pol2cart(10, angle), svg.thin_stroke)
+    svg.Line(parent, pos, pos + svg.pol2cart(10, angle), svg.THIN_STROKE)
 
 def test_path_creator_line():
     img = svg.Image(size=(100, 100), center=(50, 50))
