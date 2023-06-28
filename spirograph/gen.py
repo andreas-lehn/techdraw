@@ -8,7 +8,7 @@ if __name__ == "__main__":
     prog = 'spirograph.gen'
     description = 'Command line tool to generate spirographs as SVG files'
     parser = argparse.ArgumentParser(prog=prog, description=description)
-    parser.add_argument('filename', type=str, help='name of output SVG file')
+    parser.add_argument('filename', type=str, help='name of output SVG file', nargs='?', default=sys.stdout)
     parser.add_argument('-r', '--ring', type=int, help='number of teeth of the ring', default=105)
     parser.add_argument('-w', '--wheel', type=int, help='number of teeth of the wheel', default=50)
     parser.add_argument('-e', '--excenter', type=float, help='excenter', default=0.8)
