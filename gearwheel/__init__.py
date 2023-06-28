@@ -21,8 +21,8 @@ class GearWheel:
 
     def r_foot(self):
         '''returns the radius of the tooth foot (Fußkreisradius)'''
-        c = 0.167 # Magische Konstante, siehe: https://www.tec-science.com/de/getriebe-technik/evolventenverzahnung/evolventen-zahnrad-geometrie/
-        return min(self.r_0() - self.modul, self.r_base()) - c * self.modul
+        C = 0.167 # Magische Konstante, siehe: https://www.tec-science.com/de/getriebe-technik/evolventenverzahnung/evolventen-zahnrad-geometrie/
+        return min(self.r_0() - self.modul, self.r_base()) - C * self.modul
 
     def r_base(self):
         '''returns the radius of the base circle'''
@@ -35,7 +35,7 @@ class GearWheel:
     def beta_0(self):
         '''returns the angle offsets of the intesection of the tooth with the Teilkreis'''
         return self.tau() / 4
-    
+
     def beta(self):
         '''returns the angle offsets of the tooth base point'''
         return self.beta_0() + involute.gamma(self.alpha)
@@ -43,9 +43,12 @@ class GearWheel:
     def gamma(self):
         '''returns the angle offsets of the tooths head point'''
         return self.beta() - involute.gamma(involute.inverse(self.r_base(), self.r_head()))
-    
+
     def tooth_ctrl_points(self):
-        '''returns the controls point of a tooth as an array of tupels (r, phi, tangent) starting with the head point down to the foot point
+        '''returns the controls points of a tooth
+         
+        The control points are returned as an array of tupels (r, phi, tangent),
+        starting from the head point to the foot point.
         
         r, phi:  polar coordinates of the control point
         tangent: tangent of the tooth in that control point

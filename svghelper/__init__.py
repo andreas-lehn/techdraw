@@ -167,7 +167,7 @@ def intersection_r(x0, y0, alpha0, x1, y1, alpha1):
     return np.linalg.solve(a, b)
 
 def intersection_point(x0, y0, alpha0, x1, y1, alpha1):
-    r0, r1 = intersection_r(x0, y0, alpha0, x1, y1, alpha1)
+    r0, _ = intersection_r(x0, y0, alpha0, x1, y1, alpha1)
     return np.array([x0, y0]) + pol2cart(r0, alpha0)
 
 class PathCreator:
