@@ -79,14 +79,13 @@ class Spirograph:
     def __getitem__(self, key):
         if isinstance(key, slice):
             return [self[i] for i in range(*key.indices(len(self)))]
-        elif isinstance(key, int):
+        if isinstance(key, int):
             if key < 0: # Handle negative indices
                 key += len(self)
             if key < 0 or key >= len(self):
                 raise IndexError(f'Spirograph index {key} is out of range.')
             return self.pen_pos(key * self.step_size())
-        else:
-            raise TypeError(f'Spirograph indices must be integers or slices, not {key.__class__.__name__}')
+        raise TypeError(f'Spirograph indices must be integers or slices, not {key.__class__.__name__}')
     
     def __len__(self):
         return self.step_count()

@@ -65,14 +65,14 @@ if __name__ == "__main__":
     svg.Line(img.content, M, c * M2, svg.THIN_STROKE)
     c -= 0.05
     svg.Arc(img.content, c * M0, c * M2, c * r, svg.THIN_STROKE)
-    svg.ArcLabel(img.content, M, c * r, 0, u'\u03C4', offset=(-0.5, 0.5))
+    svg.ArcLabel(img.content, M, c * r, 0, '\u03C4', offset=(-0.5, 0.5))
     c -= 0.05
     svg.Line(img.content, M, c * M1, svg.SYM_STROKE)
     c -= 0.05
     svg.Arc(img.content, c * M0, c * M2, c * r, svg.THIN_STROKE)
     theta2 = gear_wheel.tau() / 4
-    svg.ArcLabel(img.content, M, c * r, -theta2, u'\u03C4/2', offset=(-2.3, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  theta2, u'\u03C4/2', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -theta2, '\u03C4/2', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  theta2, '\u03C4/2', offset=(-2.3, 0.5))
 
     #draw base angles
     c -= 0.05
@@ -81,8 +81,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.THIN_STROKE)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -phi), svg.pol2cart(c * r, phi), c * r, svg.THIN_STROKE)
-    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B2', offset=(-0.9, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B2', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -phi / 2, '\u03B2', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  phi / 2, '\u03B2', offset=(-0.9, 0.5))
 
     # draw Teilkreis angles
     c -= 0.05
@@ -90,8 +90,8 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  gear_wheel.beta_0()), svg.THIN_STROKE)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -gear_wheel.beta_0()), svg.pol2cart(c * r, gear_wheel.beta_0()), c * r, svg.THIN_STROKE)
-    svg.ArcLabel(img.content, M, c * r, -theta2 / 2, u'\u03C4/4', offset=(-2.3, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  theta2 / 2, u'\u03C4/4', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -theta2 / 2, '\u03C4/4', offset=(-2.3, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  theta2 / 2, '\u03C4/4', offset=(-2.3, 0.5))
 
     # draw head angles
     c -= 0.05
@@ -100,12 +100,12 @@ if __name__ == "__main__":
     svg.Line(img.content, M, svg.pol2cart(c * r,  phi), svg.THIN_STROKE)
     c -= 0.05
     svg.Arc(img.content, svg.pol2cart(c * r, -phi), svg.pol2cart(c * r, phi), c * r, svg.THIN_STROKE)
-    svg.ArcLabel(img.content, M, c * r, -phi / 2, u'\u03B3', offset=(-0.9, 0.5))
-    svg.ArcLabel(img.content, M, c * r,  phi / 2, u'\u03B3', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r, -phi / 2, '\u03B3', offset=(-0.9, 0.5))
+    svg.ArcLabel(img.content, M, c * r,  phi / 2, '\u03B3', offset=(-0.9, 0.5))
 
     # draw pitch angle
-    svg.ArcMeasurement(img.content, P2, 10, -gear_wheel.beta_0(), -gear_wheel.beta_0() + gear_wheel.alpha, label=u'\u03B1')
-    svg.ArcMeasurement(img.content, P5, 10, gear_wheel.beta_0() - gear_wheel.alpha, gear_wheel.beta_0(), label=u'\u03B1')
+    svg.ArcMeasurement(img.content, P2, 10, -gear_wheel.beta_0(), -gear_wheel.beta_0() + gear_wheel.alpha, label='\u03B1')
+    svg.ArcMeasurement(img.content, P5, 10, gear_wheel.beta_0() - gear_wheel.alpha, gear_wheel.beta_0(), label='\u03B1')
 
     # Center point and control points
     svg.Dot(img.content, M)

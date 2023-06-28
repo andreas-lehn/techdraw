@@ -1,17 +1,17 @@
 
-import argparse
-import svghelper as svg
-import json
-from spirograph import Spirograph
 import sys
 import os
+import json
+import argparse
+import svghelper as svg
+from spirograph import Spirograph
 
 def get_value(data: dict, key: str, default=None):
     if key in data.keys():
         result = data[key]
         del data[key]
     else:
-        if default == None:
+        if default is None:
             raise KeyError(f'Missing key: {key}')
         result = default
     return result
@@ -25,9 +25,9 @@ def parse_hook(data: dict):
     return Spirograph(ring, wheel, excenter, offset, samples), data
 
 if __name__ == "__main__":
-    prog = 'spirograph.compile'
-    description = 'Command line tool to generate SVG files form spirograph files.'
-    parser = argparse.ArgumentParser(prog=prog, description=description)
+    PROG = 'spirograph.compile'
+    DESCRIPTION = 'Command line tool to generate SVG files form spirograph files.'
+    parser = argparse.ArgumentParser(prog=PROG, description=DESCRIPTION)
     parser.add_argument('filename', type=str, help='file name')
     args = parser.parse_args()
     base, ext = os.path.splitext(args.filename)
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         with open(args.filename) as f:
             data = json.load(f, object_hook=parse_hook)
     except Exception as error:
-        print(prog + ':', error, file=sys.stderr)
+        print(PROG + ':', error, file=sys.stderr)
         sys.exit(-1)
     
     r_max = 0
