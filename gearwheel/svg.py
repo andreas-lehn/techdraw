@@ -1,11 +1,11 @@
 #!/usr/env python3
 
 import argparse
-from gearwheel import GearWheel
-import svghelper as svg
+from . import GearWheel
+import techdraw as svg
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(prog='gearwheel.svg', description='Generates an SVG image with a gear wheel.')
+    parser = argparse.ArgumentParser(prog='python -m techdraw.gearwheel.svg', description='Generates an SVG image with a gear wheel.')
     parser.add_argument('filename', type=str, help='file name')
     parser.add_argument('-m', '--modul', type=float, help='modul in mm', default=2.0)
     parser.add_argument('-t', '--teeth', type=int, help='number of teeth', default=30)

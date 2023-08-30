@@ -1,7 +1,7 @@
 
 import math
-from gearwheel import GearWheel
-import svghelper as svg
+from . import GearWheel
+import techdraw as svg
 
 if __name__ == "__main__":
     modul = 15
@@ -118,4 +118,4 @@ if __name__ == "__main__":
     svg.Dot(img.content, P6)
     svg.Dot(img.content, P7)
 
-    img.write('construction.svg')
+    img.write('techdraw/gearwheel/construction.svg')

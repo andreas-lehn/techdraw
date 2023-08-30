@@ -10,9 +10,9 @@ for details about the parameters.
 '''
 
 import argparse
-import svghelper as svg
+import techdraw as svg
 import sys
-from spirograph import Spirograph
+from . import Spirograph
 
 if __name__ == "__main__":
     PROG = 'python3 -m spirograph.gen'

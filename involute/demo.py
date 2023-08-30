@@ -1,7 +1,7 @@
 
 import numpy as np
-import svghelper as svg
-import involute
+import techdraw as svg
+from .. import involute
 
 if __name__ == "__main__":
     r = 20 # radius of bas circle
@@ -59,4 +59,4 @@ if __name__ == "__main__":
     svg.Dot(img.content, P)
     svg.Dot(img.content, Q)
 
-    img.write('involute-demo.svg')
+    img.write('techdraw/involute/demo.svg')

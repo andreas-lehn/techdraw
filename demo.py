@@ -1,6 +1,6 @@
 
 import math
-import svghelper as svg
+import techdraw as svg
 
 if __name__ == "__main__":
     r = 20

@@ -1,6 +1,6 @@
 
 import math
-import svghelper as svg
+import techdraw as svg
 
 def ggt(a: int, b: int) -> int:
     if b == 0: return 1

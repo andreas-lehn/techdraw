@@ -1,7 +1,7 @@
 #!/usr/env python3
 
 import numpy as np
-import svghelper as svg
+import techdraw as svg
 
 def draw_state(parent, pos, angle):
     svg.Dot(parent, pos)

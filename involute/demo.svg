@@ -1,10 +1,10 @@
-<svg width="150.000mm" height="100.000mm" viewBox="-50.000 -50.000 150.000 100.000" xmlns="http://www.w3.org/2000/svg" version="1.1">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="150.000mm" height="100.000mm" viewBox="-50.000 -50.000 150.000 100.000">
     <style />
     <desc />
-    <g transform="scale(1, -1)" fill="lightgrey">
+    <g transform="scale(1, -1)">
         <g transform="rotate(90.000)">
-            <path d="M 20.000 0.000 L 20.027 -0.001 L 20.109 -0.008 L 20.245 -0.026 L 20.434 -0.061 L 20.674 -0.119 L 20.963 -0.205 L 21.299 -0.324 L 21.678 -0.481 L 22.099 -0.682 L 22.556 -0.931 L 23.047 -1.232 L 23.567 -1.589 L 24.110 -2.007 L 24.673 -2.488 L 25.249 -3.035 L 25.834 -3.652 L 26.421 -4.340 L 27.005 -5.101 L 27.580 -5.937 L 28.138 -6.849 L 28.674 -7.836 L 29.181 -8.900 L 29.653 -10.040 L 30.083 -11.255 L 30.464 -12.543 L 30.790 -13.902 L 31.055 -15.331 L 31.251 -16.826 L 31.374 -18.383 L 31.416 -20.000 L 31.372 -21.672 L 31.236 -23.393 L 31.003 -25.160 L 30.668 -26.966 L 30.227 -28.805 L 29.674 -30.671 L 29.005 -32.557 L 28.218 -34.456 L 27.310 -36.361 L 26.276 -38.264 L 25.116 -40.158 L 23.827 -42.032 L 22.408 -43.881 L 20.859 -45.694 L 19.179 -47.464 L 17.370 -49.181 L 15.431 -50.836 L 13.365 -52.421 L 11.173 -53.927 L 8.859 -55.345 L 6.426 -56.666 L 3.878 -57.881 L 1.218 -58.982 L -1.547 -59.961 L -4.412 -60.810 L -7.370 -61.520 L -10.416 -62.084 L -13.542 -62.495 L -16.739 -62.747 L -20.000 -62.832" stroke="black" stroke-width="0.35" stroke-linecap="round" fill="none" />
-            <circle cx="0.000" cy="0.000" r="20.000" stroke="black" stroke-width="0.35" stroke-linecap="round" />
+            <path d="M 20.000 0.000 L 20.027 -0.001 L 20.109 -0.008 L 20.245 -0.026 L 20.434 -0.061 L 20.674 -0.119 L 20.963 -0.205 L 21.299 -0.324 L 21.678 -0.481 L 22.099 -0.682 L 22.556 -0.931 L 23.047 -1.232 L 23.567 -1.589 L 24.110 -2.007 L 24.673 -2.488 L 25.249 -3.035 L 25.834 -3.652 L 26.421 -4.340 L 27.005 -5.101 L 27.580 -5.937 L 28.138 -6.849 L 28.674 -7.836 L 29.181 -8.900 L 29.653 -10.040 L 30.083 -11.255 L 30.464 -12.543 L 30.790 -13.902 L 31.055 -15.331 L 31.251 -16.826 L 31.374 -18.383 L 31.416 -20.000 L 31.372 -21.672 L 31.236 -23.393 L 31.003 -25.160 L 30.668 -26.966 L 30.227 -28.805 L 29.674 -30.671 L 29.005 -32.557 L 28.218 -34.456 L 27.310 -36.361 L 26.276 -38.264 L 25.116 -40.158 L 23.827 -42.032 L 22.408 -43.881 L 20.859 -45.694 L 19.179 -47.464 L 17.370 -49.181 L 15.431 -50.836 L 13.365 -52.421 L 11.173 -53.927 L 8.859 -55.345 L 6.426 -56.666 L 3.878 -57.881 L 1.218 -58.982 L -1.547 -59.961 L -4.412 -60.810 L -7.370 -61.520 L -10.416 -62.084 L -13.542 -62.495 L -16.739 -62.747 L -20.000 -62.832" fill="none" stroke="black" stroke-width="0.35" stroke-linecap="round" />
+            <circle cx="0.000" cy="0.000" r="20.000" fill="lightgrey" stroke="black" stroke-width="0.35" stroke-linecap="round" />
             <line x1="-40.000" y1="0.000" x2="40.000" y2="0.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
             <line x1="0.000" y1="-40.000" x2="0.000" y2="40.000" stroke="black" stroke-width="0.2" stroke-linecap="round" stroke-dasharray="2.0 1.0 0.0 1.0" stroke-dashoffset="1.0" />
             <line x1="0.000" y1="0.000" x2="20.000" y2="-34.641" stroke="black" stroke-width="0.1" stroke-linecap="round" />
@@ -12,11 +12,11 @@
             <line x1="18.138" y1="10.472" x2="38.138" y2="-24.169" stroke="black" stroke-width="0.1" stroke-linecap="round" />
             <line x1="19.478" y1="-11.849" x2="18.660" y2="-12.321" stroke="black" stroke-width="0.1" stroke-linecap="round" />
             <g>
-                <path d="M 12.500 -21.651 A 5.000 5.000 0 0 1 14.330 -14.821" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+                <path d="M 12.500 -21.651 A 5.000 5.000 0 0 1 14.330 -14.821" fill="none" stroke="black" stroke-width="0.1" stroke-linecap="round" />
                 <circle cx="12.415" cy="-17.968" r="0.5" fill="black" />
             </g>
             <g>
-                <path d="M 23.808 -9.349 A 5.000 5.000 0 0 1 30.638 -11.179" stroke="black" stroke-width="0.1" stroke-linecap="round" fill="none" />
+                <path d="M 23.808 -9.349 A 5.000 5.000 0 0 1 30.638 -11.179" fill="none" stroke="black" stroke-width="0.1" stroke-linecap="round" />
                 <circle cx="27.491" cy="-9.263" r="0.5" fill="black" />
             </g>
             <line x1="0.000" y1="0.000" x2="10.000" y2="-17.321" stroke="black" stroke-width="0.2" stroke-linecap="round" />
@@ -24,17 +24,17 @@
                 <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="black" stroke="none">r</text>
             </g>
             <line x1="10.000" y1="-17.321" x2="28.138" y2="-6.849" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
-            <path d="M 10.000 -17.321 A 20.000 20.000 0 0 1 20.000 0.000" stroke="red" stroke-width="0.35" stroke-linecap="round" fill="none" />
+            <path d="M 10.000 -17.321 A 20.000 20.000 0 0 1 20.000 0.000" fill="none" stroke="red" stroke-width="0.35" stroke-linecap="round" />
             <g transform="translate(18.271 -8.135) rotate(-114.000)">
-                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="red" stroke="none">&#945;</text>
+                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="red" stroke="none">α</text>
             </g>
             <line x1="0.000" y1="0.000" x2="28.138" y2="-6.849" stroke="blue" stroke-width="0.2" stroke-linecap="round" />
             <g transform="translate(14.069 -3.424) rotate(-13.679)">
                 <text transform="translate(0.000 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">s</text>
             </g>
-            <path d="M 28.138 -6.849 A 28.959 28.959 0 0 1 28.959 0.000" stroke="blue" stroke-width="0.1" stroke-linecap="round" fill="none" />
+            <path d="M 28.138 -6.849 A 28.959 28.959 0 0 1 28.959 0.000" fill="none" stroke="blue" stroke-width="0.1" stroke-linecap="round" />
             <g transform="translate(28.753 -3.449) rotate(-96.840)">
-                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">&#947;</text>
+                <text transform="translate(-0.500 0.500) scale(0.25, -0.25)" fill="blue" stroke="none">γ</text>
             </g>
             <circle cx="0.000" cy="0.000" r="0.5" fill="black" />
             <circle cx="20.000" cy="0.000" r="0.5" fill="black" />

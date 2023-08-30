@@ -56,8 +56,8 @@ import os
 import sys
 import json
 import argparse
-import svghelper as svg
-from spirograph import Spirograph
+import techdraw as svg
+from . import Spirograph
 
 def get_value(data: dict, key: str, default=None):
     '''Reads a value from dict'''

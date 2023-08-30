@@ -1,7 +1,7 @@
 
 import math
-import involute
-import svghelper as svg
+import techdraw.involute as involute
+import techdraw as svg
 
 class GearWheel:
     ''' Involute gear wheel'''
