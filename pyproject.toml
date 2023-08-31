@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "techdraw"
+version = "0.0.1"
+authors = [
+  { name="Andreas Lehn", email="andreas.lehn@icloud.com" },
+]
+description = "A Python library for programmatically generating technical drawings."
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/andreas-lehn/techdraw"
+"Bug Tracker" = "https://github.com/andreas-lehn/techdraw/issues"

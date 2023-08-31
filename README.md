@@ -1,2 +1,2 @@
-# GearWheel
-Python library and code to construct gear wheels
+# techdraw
+A Python library for programmatically generating technical drawings.
