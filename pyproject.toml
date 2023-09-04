@@ -4,13 +4,16 @@ build-backend = "hatchling.build"
 
 [project]
 name = "techdraw"
-version = "0.0.1"
+version = "0.0.4"
 authors = [
   { name="Andreas Lehn", email="andreas.lehn@icloud.com" },
 ]
 description = "A Python library for programmatically generating technical drawings."
 readme = "README.md"
 requires-python = ">=3.7"
+install_requires = [
+    "numpy"
+]
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
